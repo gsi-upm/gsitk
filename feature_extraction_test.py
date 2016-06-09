@@ -1,6 +1,6 @@
 import unittest
-import sentiment_feature_extraction as sfe
-import sentiment_feature_extraction_spa as sfespa
+import feature_extraction as sfe
+
 
 class FeatureExtractionTest(unittest.TestCase):
 
