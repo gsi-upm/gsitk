@@ -11,8 +11,10 @@ import utilities
 
 class Social_Pscychologist_Features:
 
-    #This function evaluate the pscychologist features from the MRC dictionary
+    
     def identify_pscychologist_feature(features,dictionary_MRC):
+        """This function evaluate the pscychologist features from the MRC dictionary
+        """
         imagenery = 0
         age_of_acquisition = 0
         familiarity = 0
@@ -38,8 +40,10 @@ class Social_Pscychologist_Features:
         results['Concreteness'] = concreteness
         return results
 
-    #This function evaluate the NRC hashtag emotion Lexicon
+    
     def emotion_hashtag(selected_features,hashtag_emotion_lexicon):
+        """This function evaluate the NRC hashtag emotion Lexicon
+        """
         emotion_user = {}
         matches = {}
         for word in selected_features:
@@ -54,8 +58,10 @@ class Social_Pscychologist_Features:
         score_emotion = {emotion : emotion_user[emotion]/matches[emotion] for emotion in emotion_user}
         return score_emotion
 
-    # General function to pass from features selected from a dictionary to categories
+    
     def features_to_categories(features,list_categories):
+        """General function to pass from features selected from a dictionary to categories
+        """
         selected_categories = {}
         for feature in features:
             categories = list_categories[feature]
@@ -66,8 +72,10 @@ class Social_Pscychologist_Features:
                     selected_categories[category] += features[feature]
         return selected_categories
 
-    # Function to extract the number of words related to boyfriend/girlfriend category
+    
     def bf_gf_word_count (self,text,language):
+        """Function to extract the number of words related to boyfriend/girlfriend category
+        """
         if language == 'english':
             bf_words = 'wife|gf|girlfriend|dw'
             gf_words = 'husband|bf|boyfriend|hubby|dh'
@@ -83,21 +91,21 @@ class Social_Pscychologist_Features:
 
         return bf_count, gf_count
 
-
-class Negations_Features:
-    #This function is going to identify the negations that appear in the set of unigrams,
-    #and it is going to negate them in case a negation appear in the set. This ngrams negation is going
-    #to appear in all the ngrams until there is a punctuation mark that indicate the end of the negation
-    #The result is going to be dictionary with all the matches from the bag of unigrams that is has been passed as
-    #parameter, the negation of the ngrams in case there is a negation and the combinations of this unigrams to make
-    #bigrams and trigrams
-
-    #Params
-    # -tokens, list of word that it is wanted to negate and match with the bag_of_tokens
-    # -bag_of_tokens, set of tokens
-    # -stopwords, words that are wanted to skip
-    # -negations, words that indicate negation
     def identify_negations_on_unigrams(tokens,bag_of_tokens,stopwords,negations):
+        """ This function is going to identify the negations that appear in the set of unigrams,
+            and it is going to negate them in case a negation appear in the set. This ngrams negation is going
+            to appear in all the ngrams until there is a punctuation mark that indicate the end of the negation
+    
+            The result is going to be dictionary with all the matches from the bag of unigrams that is has been passed as
+            parameter, the negation of the ngrams in case there is a negation and the combinations of this unigrams to make
+            bigrams and trigrams
+
+            #Params
+            -tokens, list of word that it is wanted to negate and match with the bag_of_tokens
+            -bag_of_tokens, set of tokens
+            -stopwords, words that are wanted to skip
+            -negations, words that indicate negation
+        """
         feature_tokens = {}
         tokens_ngrams=[]
         auxiliar_tokens=[]
@@ -155,11 +163,12 @@ class Negations_Features:
         return feature_tokens
 
 
-class Emoticons_features:
 
-    #This function returns the number of emoticons, the score that each one has, the total score and if the sentence is
-    #finished with a negative, positive or neutral emoticon
+    
     def emoticons_from_dictionary(text,dict_emoticons):
+        """This function returns the number of emoticons, the score that each one has, the total score and if the sentence is
+            finished with a negative, positive or neutral emoticon
+        """
         feature_set = dict()
         feature_set['score_emoticons']=0
         feature_set['number_emoticons']=0

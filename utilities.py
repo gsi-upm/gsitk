@@ -2,27 +2,32 @@ import pandas,csv,re
 
 class Utilities:
 
-    #Combines the different input_list to create a set of Ngrams.
-    #Params
-    #   -input_list, list of string that it is wanted to combine
-    #   -n, number of times that it is wanted to combine, e.g: for bigrams 2, for trigrams 3.
+
 
     def find_ngrams(input_list, n):
+        """Combines the different input_list to create a set of Ngrams.
+           Params
+           -input_list, list of string that it is wanted to combine
+           -n, number of times that it is wanted to combine, e.g: for bigrams 2, for trigrams 3.
+        """
         return zip(*[input_list[i:] for i in range(n)])
 
     def merge_two_dicts(x, y):
-        '''Given two dicts, merge them into a new dict as a shallow copy.'''
+        """Given two dicts, merge them into a new dict as a shallow copy.
+        """
         z = x.copy()
         z.update(y)
         return z
 
     def parse_dict_to_tuples(dictionary):
+        """Converts the key value pairs of a dictionary into tuples
+        """
         tuples = [(key,dictionary[key]) for key in dictionary]
         return tuples
 
-    # Loading different dictionaries
-
     def load_EmoLex(path,lang):
+        """Loading different dictionaries
+        """
         emoLex_mapping = {}
         emoLex = pandas.read_excel(path+"NRC-Emotion-Lexicon-v0.92-InManyLanguages-web.xlsx")
 
