@@ -116,5 +116,5 @@ def read_features(name, format=None):
 
 
 def _check_features(name, format):
-    response = """- {} => format: {}\n""".format(name, format)
+    response = """- {} => format: {}""".format(name, format)
     return response

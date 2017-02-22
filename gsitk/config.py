@@ -2,4 +2,6 @@
 Configuration parameters.
 """
 
-DATA_PATH="/data"
+import os
+
+DATA_PATH=os.environ.get('DATA_PATH', "/data")

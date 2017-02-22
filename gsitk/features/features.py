@@ -21,7 +21,7 @@ def view_features(pprint=True):
         features.append(utils._check_features(name, format))
 
     if pprint:
-        print(''.join(features))
+        print('\n'.join(features))
     else:
         return features
 

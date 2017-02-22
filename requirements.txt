@@ -1,3 +1,4 @@
 pandas
 gensim
 nltk
+pytest

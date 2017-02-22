@@ -2,7 +2,7 @@
 Normalize text
 """
 
-
+import string
 from nltk import word_tokenize
 
 from gsitk.preprocess.pprocess_twitter import tokenize
