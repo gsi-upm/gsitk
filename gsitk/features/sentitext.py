@@ -144,9 +144,8 @@ def clean_pos(pos):
     return pos
 
 def load_nrc_dict():
-    logger.debug('Loading NRC-Canada...')
     nrc = pd.read_csv(os.path.join(config.DATA_PATH, \
-                                   '/NRC-emotion-lexicon-wordlevel-alphabetized-v0.92.txt'),
+                                   'NRC-emotion-lexicon-wordlevel-alphabetized-v0.92.txt'),
                      delimiter='\t',
                      header=None,
                      names=['word', 'emotion', 'value'])
@@ -307,7 +306,6 @@ def extract_features(bag_of_words,bag_of_lemmas,text):
     #
     ##NRC lexicon
     #nrc_score = get_nrc_feats(tokens)
-    #
     #feature_set = merge_two_dicts(feature_set, nrc_score)
     
     return feature_set
@@ -345,4 +343,7 @@ logger.debug('Downloading SentiWordNet...')
 download_swn()
 logger.debug('Loading SentiWordNet...')
 swn = SentiWordNet(os.path.join(config.RESOURCES_PATH, 'home/swn/www/admin/dump/SentiWordNet_3.0.0_20130122.txt'))
-logger.debug('SentiWordNet ready')
+#logger.debug('Loading NRC...')
+#nrc = load_nrc_dict()
+#logger.debug('Loaded NRC')
+
