@@ -64,7 +64,7 @@ def normalize_data(data_path):
     return data
 
 
-def prepare_data():
+def prepare_data(download=True):
     """Prepare the data. All the steps are done if they have not been already stored in local.
         1. Download
         2. Extract from the original zip file
@@ -73,7 +73,8 @@ def prepare_data():
     """
     logger.debug('Preparing data: {}'.format(NAME))
 
-    maybe_download()
+    if download:
+        maybe_download()
 
     data_path = os.path.join(config.DATA_PATH, NAME)
     file_path = os.path.join(data_path, INFO['properties']['filename'])
