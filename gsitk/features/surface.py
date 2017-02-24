@@ -16,16 +16,17 @@ from sklearn.preprocessing import normalize, scale
 from gsitk.features import sentitext as st
 
 
-z_features = ['!','#','?','pos','neu','neg','total_score','words_all_caps','words_elong',
+z_features = ['!', '#', '?', 'pos', 'neu', 'neg', 'total_score', 'words_all_caps', 'words_elong',
               'nrc_pos', 'nrc_neg', 'nrc_total']
 
 desired_feats = ('!','#','?','total_score','words_all_caps','words_elong',
                  'nrc_pos', 'nrc_neg', 'nrc_total')
 
-def dict_merge(a,b):
+def dict_merge(a, b):
     c = a.copy()
     c.update(b)
     return c
+
 
 def parse_feats(d, contains):
     f = {k: v for k,v in d.items() if contains in k}
@@ -38,7 +39,7 @@ def parse_feats(d, contains):
 
 def convert2uniform(d):
     cnlp_feats = list()
-    for i, cnlp_feat_raw in enumerate(d):
+    for cnlp_feat_raw in d:
         cnlp_feat = {k: v for k,v in cnlp_feat_raw.items() if k in desired_feats}
         cnlp_feat_plus = parse_feats(cnlp_feat_raw, 'sentiment')
         cnlp_feat = dict_merge(cnlp_feat, cnlp_feat_plus)

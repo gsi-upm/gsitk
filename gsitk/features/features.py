@@ -8,6 +8,21 @@ import glob
 from gsitk.features import utils
 
 
+class Features():
+    """
+    Class that abstracts the features. 
+    """
+    def __init__(self):
+        pass
+
+    def transform(self, X):
+        """
+        Transform the text (should be normalized) to numeric features.
+        Must be implemented by the class that inherits.
+        """
+        pass 
+
+
 def view_features(pprint=True):
     """
     Check the available features, the ones that have already been
@@ -24,4 +39,5 @@ def view_features(pprint=True):
         print('\n'.join(features))
     else:
         return features
+
 

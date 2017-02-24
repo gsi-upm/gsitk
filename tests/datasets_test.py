@@ -1,5 +1,3 @@
-import pytest
-
 from gsitk.datasets import (
     sentiment140
 )

@@ -1,0 +1,6 @@
+name: sswe
+url: "http://ir.hit.edu.cn/~dytang/paper/sswe/embedding-results.zip"
+filename: "embedding-results.zip"
+expected_bytes: 95803493
+sha256: "9e1d795c428be85bc57d0f833cb7b60b527824544c0ca1c3f30c1ea031194b16"
+data_file: "embedding-results/sswe-h.txt"
