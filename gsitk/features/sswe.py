@@ -27,9 +27,10 @@ logger = logging.getLogger(__name__)
 
 
 class SSWE(Embedding):
-    def __init__(self, convolution=[1, 0, 0]):
+    def __init__(self, convolution=[1, 0, 0], download=True):
         super(SSWE, self).__init__(convolution)
         self.info = self._load_info()
+        self._download = download
         self._download_model()
         self.model = self.load_sswe()
         self.size = self._get_size()
@@ -41,7 +42,8 @@ class SSWE(Embedding):
         return info
 
     def _download_model(self):
-        dataset_utils._maybe_download(self.info['name'],
+        if self._download:
+            dataset_utils._maybe_download(self.info['name'],
                                       self.info['url'],
                                       self.info['filename'],
                                       self.info['expected_bytes'],

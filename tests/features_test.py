@@ -1,11 +1,13 @@
+import os
 import pytest
 import numpy as np
+from gensim.models import Word2Vec
 
 from tests.preprocess_test import text_df
 
 from gsitk.preprocess import normalize
 from gsitk.features import (
-    features, utils, sentitext, surface
+    features, utils, sentitext, surface, word2vec, sswe
 )
 
 
@@ -50,3 +52,30 @@ def test_surface(norm_text):
     assert x.shape == (2, 12)
     assert sum(x[0]) == -4.0
     assert sum(x[1]) == 4.0
+
+
+def test_word2vec(norm_text):
+    path = os.path.dirname(os.path.abspath(__file__))
+    path = os.path.join(path, 'data/w2v_model')
+    model = word2vec.Word2VecFeatures(w2v_model_path=path,
+                                      w2v_format='google_txt')
+    assert isinstance(model.model, Word2Vec)
+    assert isinstance(model.model.vocab, dict)
+    assert len(model.model.vocab) > 0
+
+    x = model.transform(norm_text)
+    assert isinstance(x, np.ndarray)
+    assert x.shape == (2, model.size)
+    assert (x != 0).all()
+
+
+def test_sswe(norm_text):
+    model = sswe.SSWE(download=False)
+    assert isinstance(model.model, dict)
+    assert len(model.model) > 0
+
+    x = model.transform(norm_text)
+    assert isinstance(x, np.ndarray)
+    assert x.shape == (2, model.size)
+    assert (x != 0).all()
+
