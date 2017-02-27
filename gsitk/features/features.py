@@ -12,15 +12,21 @@ class Features():
     """
     Class that abstracts the features. 
     """
-    def __init__(self):
-        pass
-
     def transform(self, X):
         """
         Transform the text (should be normalized) to numeric features.
         Must be implemented by the class that inherits.
         """
         pass 
+
+
+def load_features(name, format=None):
+    """Reads the features."""
+    return utils.read_features(name, format)
+
+
+def save_features(features, name):
+    utils.save_features(features, name)
 
 
 def view_features(pprint=True):
