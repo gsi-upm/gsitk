@@ -2,6 +2,8 @@ properties:
         name: sentiment140
         url: "http://cs.stanford.edu/people/alecmgo/trainingandtestdata.zip"
         filename: "trainingandtestdata.zip"
+        compression:
+          type: "zip"
         expected_bytes: 81363704
         sha256: "004a3772c8a7ff9bbfeb875880f47f0679d93fc63e5cf9cff72d54a8a6162e57"
         data_file: "training.1600000.processed.noemoticon.csv"

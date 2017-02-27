@@ -96,7 +96,7 @@ def _check_dataset(path, name, count=None):
     if os.path.exists(path):
         downloaded = True
         if count is None:
-            nlines = utils.file_len(path)
+            nlines = file_len(path)
         else:
             nlines = count
     else:
