@@ -24,12 +24,12 @@ logger = logging.getLogger(__name__)
 NAME = os.path.splitext(os.path.basename(__file__))[0]
 
 
-class VaderData(Dataset):
+class Vader(Dataset):
 
     def __init__(self, info=None):
         if info is None:
             info = utils.load_info(NAME)
-        super(VaderData, self).__init__(info)
+        super(Vader, self).__init__(info)
 
     def _labelize(self,polarity):
         polarity = float(polarity)
