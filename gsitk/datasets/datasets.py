@@ -163,7 +163,8 @@ class DatasetManager():
             found = False
             logger.info(inspect.getmembers(dataset_module))
             for data_name, data_class in inspect.getmembers(dataset_module):
-                if inspect.isclass(data_class) and data_name.lower() == name:
+                if inspect.isclass(data_class) and \
+                   data_name.lower() == name.lower():
                     found = True
                     obj = data_class(info)
                     objs[name] = obj
