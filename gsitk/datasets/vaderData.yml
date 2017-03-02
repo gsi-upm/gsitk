@@ -1,0 +1,15 @@
+properties:
+        name: vaderData
+        url: "https://github.com/cjhutto/vaderSentiment/blob/master/additional_resources/hutto_ICWSM_2014.tar.gz?raw=true"
+        filename: "hutto_ICWSM_2014.tar.gz"
+        expected_bytes: 2338514
+        sha256: "d5bb07d87474b3eb8d30b4deccbc23f19d742a6c5718fbacc65485b70b95c5fa"
+        data_file: "tweets_GroundTruth.txt"
+        processed_file: "vaderData.csv"
+        compression:
+          type: "targz"
+stats:
+        instances: 4200
+        labels:
+          - 1
+          - -1

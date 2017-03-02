@@ -7,6 +7,7 @@ import os
 import logging
 import hashlib
 import zipfile
+import tarfile
 import yaml
 from six.moves import urllib
 
@@ -82,6 +83,21 @@ def extract_zip(file_path, data_path):
     with zipfile.ZipFile(file_path) as zip_:
         zip_.extractall(path=data_path)
 
+
+def extract_targz(file_path, data_path):
+    """Extract a tar file into a given path.
+
+    :param file_path: tar file to extract
+    :param data_path: path where to extract the tar
+    """
+    if not os.path.exists(file_path):
+        raise ValueError("File to extract does not exist")
+
+    if not os.path.exists(data_path):
+        raise ValueError("Extraction path does not exist")
+
+    with tarfile.open(file_path,'r:gz') as tar:
+        tar.extractall(path=data_path)
 
 def file_len(fname):
     with open(fname) as f:

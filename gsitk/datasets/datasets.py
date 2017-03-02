@@ -42,6 +42,8 @@ class Dataset():
         type_ = self.info['properties']['compression']['type']
         if type_ == 'zip':
             return utils.extract_zip
+        elif type_ == 'targz':
+            return utils.extract_targz
         else:
             return None
 
@@ -158,8 +160,8 @@ class DatasetManager():
             dataset_module = importlib.import_module(
                 'gsitk.datasets.{}'.format(name)
             )
-
             found = False
+            logger.info(inspect.getmembers(dataset_module))
             for data_name, data_class in inspect.getmembers(dataset_module):
                 if inspect.isclass(data_class) and data_name.lower() == name:
                     found = True
