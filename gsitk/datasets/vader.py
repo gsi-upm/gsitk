@@ -46,8 +46,8 @@ class Vader(Dataset):
         data = pd.read_csv(
             raw_data_path,
             header=None,
-            encoding='latin-1',
             index_col=False,
+            encoding='us-ascii',
             sep='\t',
             names = [
                 'id',
