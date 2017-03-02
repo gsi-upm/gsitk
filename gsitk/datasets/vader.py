@@ -47,7 +47,6 @@ class Vader(Dataset):
             raw_data_path,
             header=None,
             index_col=False,
-            encoding='us-ascii',
             sep='\t',
             names = [
                 'id',
