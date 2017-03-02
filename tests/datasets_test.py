@@ -2,7 +2,7 @@ import pytest
 import pandas as pd
 
 from gsitk.datasets import (
-    datasets, sentiment140, vaderData
+    datasets, sentiment140, vader
 )
 
 
@@ -38,8 +38,8 @@ def test_sentiment140():
     assert (data['text'].apply(len) > 0).all()
 
 
-def test_vaderData():
-    vader = vaderData.VaderData()
+def test_vader():
+    vader = vader.Vader()
     data = vader.prepare_data(download=False)
     assert data['polarity'].value_counts().index[0] == 1
     assert data['polarity'].value_counts().values[0] == 10
