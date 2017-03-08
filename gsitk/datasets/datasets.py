@@ -101,11 +101,11 @@ class Dataset():
             normalized = self.normalize_data()
             
             logger.debug("Storing pre-processed data...")
-            normalized.to_csv(processed_path)
+            normalized.to_pickle(processed_path)
             final_data = normalized
             
         else:
-            final_data = pd.read_csv(processed_path)[['polarity', 'text']]
+            final_data = pd.read_pickle(processed_path)[['polarity', 'text']]
             
         logger.debug('{} data is ready'.format(self.name))
         return final_data
