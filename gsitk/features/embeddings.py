@@ -16,19 +16,18 @@ class Embedding(Features):
         self.conv = conv
 
     def build_vec(self, text):
-        vecs = list()
-        for word in text:
+        vecs = np.zeros((len(text), self.size))
+        for i, word in enumerate(text):
             try:
-                v = self.model[word]
-                vecs.append(v)
+                vecs[i] = self.model[word]
             except KeyError:
                 continue
-            if self.conv[0]:
-                return np.average(vecs, axis=0)
-            if self.conv[1]:
-                return np.amax(vecs, axis=0)
-            if self.conv[2]:
-                return np.amin(vecs, axis=0)
+        if self.conv[0]:
+            return np.average(vecs, axis=0)
+        if self.conv[1]:
+            return np.amax(vecs, axis=0)
+        if self.conv[2]:
+            return np.amin(vecs, axis=0)
 
     def comments2vec(self, text):
         """
