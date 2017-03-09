@@ -1,0 +1,15 @@
+properties:
+        name: pl04
+        url: "http://www.cs.cornell.edu/people/pabo/movie-review-data/review_polarity.tar.gz"
+        filename: "review_polarity.tar.gz"
+        expected_bytes: 3127238
+        sha256: "fc0dccc2671af5db3c5d8f81f77a1ebfec953ecdd422334062df61ede36b2179"
+        data_file: "txt_sentoken/"
+        processed_file: "pl04.pck"
+        compression:
+          type: "targz"
+stats:
+        instances: 4000
+        labels:
+          - 1
+          - -1

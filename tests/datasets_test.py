@@ -44,3 +44,10 @@ def test_vader():
     assert data['polarity'].value_counts().index[0] == 1
     assert data['polarity'].value_counts().values[0] == 10
     assert (data['text'].apply(len) > 0).all()
+
+def test_pl04():
+    vad = vader.Vader()
+    data = vad.prepare_data(download=False)
+    assert data['polarity'].value_counts().index[0] == 1
+    assert data['polarity'].value_counts().values[0] == 10
+    assert (data['text'].apply(len) > 0).all()
