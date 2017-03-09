@@ -49,7 +49,7 @@ class Embedding(Features):
             v_ = np.zeros((v.shape[0],))
         else:
             v_ = v
-            return v_
+        return v_
 
 
             

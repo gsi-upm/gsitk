@@ -105,9 +105,12 @@ class Dataset():
             final_data = normalized
             
         else:
-            final_data = pd.read_pickle(processed_path)[['polarity', 'text']]
-            
+            final_data = pd.read_pickle(processed_path)
+
+        assert 'polarity' in final_data.columns
+        assert 'text' in final_data.columns
         logger.debug('{} data is ready'.format(self.name))
+
         return final_data
 
     def normalize_data(self):
