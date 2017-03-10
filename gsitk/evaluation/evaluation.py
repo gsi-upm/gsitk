@@ -4,6 +4,7 @@ Evaluation of classifiers on datasets.
 
 import logging
 from collections import namedtuple
+import copy
 import numpy as np
 import pandas as pd
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
@@ -41,7 +42,7 @@ class Evaluation():
         self.results = self._results_setup()
 
     def _results_setup(self):
-        columns = ['Dataset', 'Features', 'Model']
+        columns = ['Dataset', 'Features', 'Model', 'CV']
         columns.extend(self.metrics_defs)
         return  pd.DataFrame(columns=columns)
 
@@ -70,13 +71,13 @@ class Evaluation():
         return _labels
 
     def _select_metric_call(self, metric_name):
-        if metric_name == 'Accuracy':
+        if metric_name == 'accuracy':
             return accuracy_score
-        elif metric_name == 'Recall':
+        elif metric_name == 'recall':
             return recall_score
-        elif metric_name == 'Precision':
+        elif metric_name == 'precision':
             return precision_score
-        elif metric_name == 'F1-Score':
+        elif metric_name == 'f1':
             return f1_score
 
     def _next_i(self):
@@ -100,10 +101,69 @@ class Evaluation():
                                      predictions)
         self.predictions['{}__{}'.format(model_name, features_name)] = prediction
 
+    def _select_folds(self, fold, cv):
+        folds = np.arange(1, cv + 1)
+        return folds[np.arange(folds.shape[0]) != fold - 1]
+ 
+    def cross_evaluate_model_with_folds(self, cross_eval_tuple):
+        """
+        Evaluate with cross validation, using the pre defined folds of
+        the dataset.
+        """
+        _model = cross_eval_tuple.classifier
+        model = self.models[_model]
+        _features = cross_eval_tuple.features
+        features = self.features[_features]
+        _labels = cross_eval_tuple.labels
+        labels = self.labels[_labels]
+        dataset = self.datasets[_labels]
+
+        cv = dataset.dataframe['fold'].value_counts().shape[0]
+        logger.debug('Cross validating: dataset={}, cv={}'.format(_labels,cv))
+
+        metrics = np.zeros((cv, len(self.metrics_defs)))
+        for i in range(1, cv + 1):
+            train_folds = self._select_folds(i, cv)
+            
+            train_index = dataset.dataframe['fold'].isin(train_folds)
+            train_index = np.array(train_index[train_index].index.tolist())
+            test_index = dataset.dataframe['fold'].isin((i,))
+            test_index = np.array(test_index[test_index].index.tolist())
+
+            train_vecs = features.values[train_index]
+            test_vecs = features.values[test_index]
+            train_labels = labels[train_index].astype(int)
+            test_labels = labels[test_index].astype(int)
+
+            #return train_labels
+
+            classifier = copy.deepcopy(model.classifier)
+            classifier.fit(train_vecs, train_labels)
+            predictions = classifier.predict(test_vecs)
+
+            ms = np.zeros((len(self.metrics_defs), ))
+            for m_i, metric in enumerate(self.metrics_defs):
+                func = self._select_metric_call(metric)
+                ms[m_i] = func(test_labels, predictions)
+            metrics[i - 1, :] = ms
+
+        metrics = np.average(metrics, axis=0)
+
+        result = [_labels, _features, _model, 'static']
+        result.extend(metrics)
+        i = self._next_i()
+        self.results.loc[i, :] = result
+    
+
     def cross_evaluate_model(self, cross_eval_tuple):
         """
         Evaluate model with cross validation.
         """
+        if 'fold' in self.datasets[cross_eval_tuple.labels].dataframe.columns:
+            # If the dataset has pre-defined folds, use them
+            self.cross_evaluate_model_with_folds(cross_eval_tuple)
+            return
+
         _model = cross_eval_tuple.classifier
         model = self.models[_model]
         _features = cross_eval_tuple.features
@@ -133,7 +193,7 @@ class Evaluation():
             i = self.metrics_defs.index(metric)
             metrics[i] = '{} +/- {}'.format(avg, std)
 
-        result = [_labels, _features, _model]
+        result = [_labels, _features, _model, 'random']
         result.extend(metrics)
 
         i = self._next_i()
@@ -169,7 +229,7 @@ class Evaluation():
 
             i = self._next_i()
                 
-            result = [test_dataset_name, features_name, model_name]
+            result = [test_dataset_name, features_name, model_name, False]
             result.extend(scores)
 
             self.results.loc[i, :] = result

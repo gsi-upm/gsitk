@@ -58,8 +58,7 @@ class Pl04(Dataset):
         data_path = os.path.join(config.DATA_PATH, self.name)
         raw_data_path = os.path.join(data_path,
                                      self.info['properties']['data_file'])
-        logger.debug(raw_data_path)
-        logger.debug(type(raw_data_path))
+        logger.debug('Normalizing PL04')
         get_pol = lambda p: 1 if p == 'pos' else -1
         count = 0
         for pol in ('pos', 'neg'):

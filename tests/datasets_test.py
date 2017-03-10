@@ -51,3 +51,4 @@ def test_pl04():
     assert data['polarity'].value_counts().index[0] == 1
     assert data['polarity'].value_counts().values[0] == 10
     assert (data['text'].apply(len) > 0).all()
+    assert 'fold' in data.columns
