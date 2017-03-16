@@ -2,7 +2,7 @@ import pytest
 import pandas as pd
 
 from gsitk.datasets import (
-    datasets, sentiment140, vader, pl04
+    datasets, sentiment140, vader, pl04 , semeval14, semeval13
 )
 
 
@@ -52,3 +52,21 @@ def test_pl04():
     assert data['polarity'].value_counts().values[0] == 10
     assert (data['text'].apply(len) > 0).all()
     assert 'fold' in data.columns
+
+def test_semeval13():
+    smeval = semeval13.Semeval13()
+    data = smeval.prepare_data(download=False)
+    assert data['polarity'].value_counts().index[0] == 0
+    assert data['polarity'].value_counts().values[0] == 5
+    assert data['polarity'].value_counts().values[1] == 3
+    assert data['polarity'].value_counts().values[2] == 2
+    assert (data['text'].apply(len) > 0).all()
+def test_semeval14():
+    smeval = semeval14.Semeval14()
+    data = smeval.prepare_data(download=False)
+    assert data['polarity'].value_counts().index[0] == 0
+    assert data['polarity'].value_counts().values[0] == 5
+    assert data['polarity'].value_counts().values[1] == 3
+    assert data['polarity'].value_counts().values[2] == 1
+    assert (data['text'].apply(len) > 0).all()
+    assert (data['text'] != 'not available').all()
