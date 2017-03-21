@@ -84,7 +84,12 @@ class Dataset():
         logger.debug('Preparing data: {}'.format(self.name))
         
         if download:
-            self.maybe_download()
+            if self.info['properties'].get('download') is None or \
+               self.info['properties'].get('download') is True:
+                self.maybe_download()
+            else:
+                logger.debug('Skipping download of {}'.format(self.name))
+
             
         data_path = os.path.join(config.DATA_PATH, self.name)
         file_path = os.path.join(data_path, self.info['properties']['filename'])
