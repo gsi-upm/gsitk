@@ -1,0 +1,15 @@
+properties:
+        name: imdb
+        url: "http://ai.stanford.edu/~amaas/data/sentiment/aclImdb_v1.tar.gz"
+        filename: "aclimdb_v1.tar.gz"
+        expected_bytes: 84125825
+        sha256: "c40f74a18d3b61f90feba1e17730e0d38e8b97c05fde7008942e91923d1658fe"
+        data_file: "aclImdb/"
+        processed_file: "imdb.pck"
+        compression:
+            type: "targz"
+stats:
+    instances: 50000
+    labels:
+        - 1
+        - -1
