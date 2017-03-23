@@ -61,6 +61,7 @@ def test_semeval13():
     assert data['polarity'].value_counts().values[1] == 3
     assert data['polarity'].value_counts().values[2] == 2
     assert (data['text'].apply(len) > 0).all()
+
 def test_semeval14():
     smeval = semeval14.Semeval14()
     data = smeval.prepare_data(download=False)

@@ -1,12 +1,13 @@
 properties:
         name: semeval13
-        filename: "semeval.tar.gz"
+        filename: "semeval13.tar.gz"
         expected_bytes: 1016149
         sha256: "f3409bd5db37e35c96deebd867efca2666935ed864e7567c64b130a585d7d676"
-        data_file: "semeval/13/train.txt"
+        data_file: "train.txt"
         processed_file: "semeval13.pck"
         compression:
           type: "targz"
+        download: False
 stats:
         instances: 6259
         labels:
