@@ -21,18 +21,25 @@ class Evaluation():
     """
     def __init__(self, datasets, features, models, tuples):
         self.Dataset = namedtuple('Dataset', ['name','dataframe'])
+
         self.Prediction = namedtuple('Prediction', ['name',
                                                     'dataset',
                                                     'features',
                                                     'model',
                                                     'values'])
         self.Label = namedtuple('Label', ['name', 'values'])
+
         self.Metric = namedtuple('Metric', ['type',
                                             'dataset',
                                             'features',
                                             'model',
                                             'value'])
-        self.metrics_defs = ['accuracy', 'precision', 'recall', 'f1']
+
+        self.metrics_defs = ['accuracy', 'precision', 'recall',
+                             'f1', 'f1_weighted', 'f1_micro', 'f1_macro']
+
+        self.folds_defs = ['train', 'dev', 'test']
+
         self.models = self._models_setup(models)
         self.features = self._features_setup(features)
         self.datasets = self._datasets_setup(datasets)
@@ -88,6 +95,11 @@ class Evaluation():
             i += 1
         return i
 
+    def _print_metric(self, average, deviation):
+        avg = round(100 * average, 3)
+        std = round(100 * deviation, 3)
+        return "{} +/- {}".format(avg, std)
+
     def evaluate_model(self, features_name, model_name):
         """Predict from features."""
         logger.debug('Model {} predicting from features {}'.format(model_name, features_name))
@@ -135,8 +147,6 @@ class Evaluation():
             train_labels = labels[train_index].astype(int)
             test_labels = labels[test_index].astype(int)
 
-            #return train_labels
-
             classifier = copy.deepcopy(model.classifier)
             classifier.fit(train_vecs, train_labels)
             predictions = classifier.predict(test_vecs)
@@ -147,22 +157,28 @@ class Evaluation():
                 ms[m_i] = func(test_labels, predictions)
             metrics[i - 1, :] = ms
 
-        metrics = np.average(metrics, axis=0)
+        average = np.average(metrics, axis=0)
+        std = np.std(metrics, axis=0)
+        scores = []
+        for i in range(len(average)):
+            scores.append(self._print_metric(average[i], std[i]))
 
         result = [_labels, _features, _model, 'static']
-        result.extend(metrics)
+        result.extend(scores)
         i = self._next_i()
         self.results.loc[i, :] = result
-    
 
-    def cross_evaluate_model(self, cross_eval_tuple):
+    def cross_evaluate_model(self, cross_eval_tuple, multi_core):
         """
         Evaluate model with cross validation.
         """
         if 'fold' in self.datasets[cross_eval_tuple.labels].dataframe.columns:
             # If the dataset has pre-defined folds, use them
-            self.cross_evaluate_model_with_folds(cross_eval_tuple)
-            return
+            folds_names =  self.datasets[cross_eval_tuple.labels].dataframe['folds'].unique()
+            if not set(folds_names) == set(self.folds_defs):
+                # The folds are not predefined (train, dev, test)
+                self.cross_evaluate_model_with_folds(cross_eval_tuple)
+                return
 
         _model = cross_eval_tuple.classifier
         model = self.models[_model]
@@ -176,29 +192,29 @@ class Evaluation():
                 _model, _features, folds, _labels)
         )
 
+        n_jobs = -1 if multi_core else 1
+        logger.debug('Using n_jobs={}'.format(n_jobs))
+
         metrics = [None] * len(self.metrics_defs)
         for metric in cross_eval_tuple.metrics:
-            #
-            # Implement multicore!
-            #
-            value = cross_val_score(
-                model.classifier,
-                features.values,
-                labels,
-                scoring=metric,
-                cv=folds
-            )
-
+            args = [model.classifier, features.values, labels]
+            kwargs = {'scoring': metric, 'cv': folds, 'n_jobs': n_jobs}
+            try:
+                value = cross_val_score(*args, **kwargs)
+            except: # If multi processing is not supported
+                logger.debug('Fallback to n_jobs=1')
+                del kwargs['n_jobs']
+                value = cross_val_score(*args, **kwargs)
+                 
             avg, std = round(np.average(value), 4), round(np.std(value), 4)
             i = self.metrics_defs.index(metric)
-            metrics[i] = '{} +/- {}'.format(avg, std)
+            metrics[i] = self._print_metric(avg, std)
 
         result = [_labels, _features, _model, 'random']
         result.extend(metrics)
 
         i = self._next_i()
         self.results.loc[i, :] = result
-
 
 
     def evaluate(self, multi_core=True):
@@ -211,7 +227,7 @@ class Evaluation():
             if isinstance(tuple, EvalTuple):
                 self.evaluate_model(tuple.features, tuple.classifier)
             elif isinstance(tuple, CrossEvalTuple):
-                self.cross_evaluate_model(tuple)
+                self.cross_evaluate_model(tuple, multi_core)
             else:
                 raise ValueError('tuple is not correct')
 
