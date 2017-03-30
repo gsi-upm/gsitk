@@ -86,6 +86,18 @@ class Evaluation():
             return precision_score
         elif metric_name == 'f1':
             return f1_score
+        elif metric_name == 'f1_weighted':
+            return lambda labels, preds: f1_score(
+                labels, preds, average='weighted'
+            )
+        elif metric_name == 'f1_micro':
+            return lambda labels, preds: f1_score(
+                labels, preds, average='micro'
+            )
+        elif metric_name == 'f1_macro':
+            return lambda labels, preds: f1_score(
+                labels, preds, average='macro'
+            )
 
     def _next_i(self):
         i = self.results.shape[0]
@@ -174,7 +186,7 @@ class Evaluation():
         """
         if 'fold' in self.datasets[cross_eval_tuple.labels].dataframe.columns:
             # If the dataset has pre-defined folds, use them
-            folds_names =  self.datasets[cross_eval_tuple.labels].dataframe['folds'].unique()
+            folds_names =  self.datasets[cross_eval_tuple.labels].dataframe['fold'].unique()
             if not set(folds_names) == set(self.folds_defs):
                 # The folds are not predefined (train, dev, test)
                 self.cross_evaluate_model_with_folds(cross_eval_tuple)
