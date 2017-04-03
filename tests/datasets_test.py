@@ -2,7 +2,7 @@ import pytest
 import pandas as pd
 
 from gsitk.datasets import (
-    datasets, sentiment140, vader, pl04 , semeval14, semeval13, imdb, imdb_unsup
+    datasets, sentiment140, vader, pl04 , semeval14, semeval13, imdb, imdb_unsup, sst
 )
 
 
@@ -84,4 +84,13 @@ def test_imdb():
 def test_imdb_unsup():
     imdb_data = imdb_unsup.Imdb_unsup()
     data = imdb_data.prepare_data(download=False)
+    assert (data['text'].apply(len) > 0).all()
+
+
+def test_sst():
+    sentitree = sst.Sst()
+    data = sentitree.prepare_data(download=False)
+    assert data['polarity'].value_counts().index[0] == 1
+    assert data['polarity'].value_counts().values[0] == 7
+    assert data['polarity'].value_counts().values[1] == 3
     assert (data['text'].apply(len) > 0).all()
