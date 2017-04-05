@@ -5,3 +5,4 @@ gensim
 nltk
 pyyaml
 pytest
+pytreebank

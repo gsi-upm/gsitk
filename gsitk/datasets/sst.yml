@@ -1,0 +1,16 @@
+properties:
+        name: sst
+        url: "https://nlp.stanford.edu/sentiment/trainDevTestTrees_PTB.zip"
+        filename: "trainDevTestTrees_PTB.zip"
+        expected_bytes: 789539
+        sha256: "5c613a4f673fc74097d523a2c83f38e0cc462984d847b82c7aaf36b01cbbbfcc"
+        data_file: "trees"
+        processed_file: "sst.pck"
+        compression:
+          type: "zip"
+stats:
+        instances: 11855
+        labels:
+          - 1
+          - -1
+
