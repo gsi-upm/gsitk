@@ -2,6 +2,7 @@ import os
 import pytest
 import numpy as np
 from gensim.models import Word2Vec
+from gensim.models.keyedvectors import KeyedVectors
 
 from tests.preprocess_test import text_df
 
@@ -59,7 +60,8 @@ def test_word2vec(norm_text):
     path = os.path.join(path, 'data/w2v_model')
     model = word2vec.Word2VecFeatures(w2v_model_path=path,
                                       w2v_format='google_txt')
-    assert isinstance(model.model, Word2Vec)
+    assert isinstance(model.model, Word2Vec) or \
+        isinstance(model.model, KeyedVectors)
     assert isinstance(model.model.vocab, dict)
     assert len(model.model.vocab) > 0
 

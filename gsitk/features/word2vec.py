@@ -13,6 +13,7 @@ Compatible with Gensim and Google word2vec format.
 import os
 import numpy as np
 from gensim.models import Word2Vec
+from gensim.models.keyedvectors import KeyedVectors
 
 from gsitk.features.embeddings import Embedding
 
@@ -41,8 +42,8 @@ class Word2VecFeatures(Embedding):
         if self.w2v_format == 'gensim':
             w2v = Word2Vec.load(self.w2v_model_path)
         elif self.w2v_format == 'google_txt':
-            w2v = Word2Vec.load_word2vec_format(self.w2v_model_path,
-                                                binary=False)
+            w2v = KeyedVectors.load_word2vec_format(self.w2v_model_path,
+                                                    binary=False)
         elif self.w2v_format == 'google_bin':
             w2v = Word2Vec.load_word2vec_format(self.w2v_model_path,
                                                 binary=True)

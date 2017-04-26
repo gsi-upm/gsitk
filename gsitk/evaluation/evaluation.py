@@ -74,7 +74,7 @@ class Evaluation():
     def _labels_setup(self):
         _labels = dict()
         for dataset_name, dataset_obj in self.datasets.items():
-            _labels[dataset_name] = dataset_obj.dataframe['polarity'].values
+            _labels[dataset_name] = dataset_obj.dataframe['polarity'].values.astype(int)
         return _labels
 
     def _select_metric_call(self, metric_name):
@@ -143,7 +143,7 @@ class Evaluation():
         dataset = self.datasets[_labels]
 
         cv = dataset.dataframe['fold'].value_counts().shape[0]
-        logger.debug('Cross validating: dataset={}, cv={}'.format(_labels,cv))
+        logger.debug('Cross validating: dataset={}, cv={}, feats={}'.format(_labels,cv, _features))
 
         metrics = np.zeros((cv, len(self.metrics_defs)))
         for i in range(1, cv + 1):
