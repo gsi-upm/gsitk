@@ -6,3 +6,5 @@ nltk
 pyyaml
 pytest
 pytreebank
+beautifulsoup4
+lxml

@@ -2,7 +2,8 @@ import pytest
 import pandas as pd
 
 from gsitk.datasets import (
-    datasets, sentiment140, vader, pl04 , semeval14, semeval13, imdb, imdb_unsup, sst
+    datasets, sentiment140, vader, pl04 , semeval14, semeval13, imdb, imdb_unsup, \
+    sst, multidomain
 )
 
 
@@ -93,4 +94,13 @@ def test_sst():
     assert data['polarity'].value_counts().index[0] == 1
     assert data['polarity'].value_counts().values[0] == 7
     assert data['polarity'].value_counts().values[1] == 3
+    assert (data['text'].apply(len) > 0).all()
+
+
+def test_multidomain():
+    multi = multidomain.Multidomain()
+    data = multi.prepare_data(download=False)
+    pol_val_count = data['polarity'].value_counts()
+    assert pol_val_count.index[0] == 1
+    assert pol_val_count.values[0] > 0
     assert (data['text'].apply(len) > 0).all()

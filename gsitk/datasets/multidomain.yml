@@ -1,0 +1,16 @@
+properties:
+        name: multidomain
+        url: "https://www.cs.jhu.edu/~mdredze/datasets/sentiment/unprocessed.tar.gz" 
+        filename: "unprocessed.tar.gz"
+        expected_bytes: 1586365438
+        sha256: "4d9c99686edbdbcce7713915d970480acee733c60098d6fc8c80bba00d51c359"
+        data_file: "sorted_data/"
+        processed_file: "multidomain.pck"
+        compression:
+          type: "targz"
+        download: True
+stats:
+        instances: 38548
+        labels:
+          - 1
+          - -1
