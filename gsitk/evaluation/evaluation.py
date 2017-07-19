@@ -10,7 +10,7 @@ import pandas as pd
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 from sklearn.cross_validation import cross_val_score
 
-from gsitk.pipe import EvalTuple, CrossEvalTuple
+from gsitk.pipe import EvalTuple, CrossEvalTuple, _EvalPipeline
 
 logger = logging.getLogger(__name__)
 
@@ -35,8 +35,8 @@ class Evaluation():
                                             'model',
                                             'value'])
 
-        self.metrics_defs = ['accuracy', 'precision', 'recall',
-                             'f1', 'f1_weighted', 'f1_micro', 'f1_macro']
+        self.metrics_defs = ['accuracy', 'precision_macro', 'recall_macro',
+                             'f1_weighted', 'f1_micro', 'f1_macro']
 
         self.folds_defs = ['train', 'dev', 'test']
 
@@ -82,8 +82,16 @@ class Evaluation():
             return accuracy_score
         elif metric_name == 'recall':
             return recall_score
+        elif metric_name == 'recall_macro':
+            return lambda labels, preds: recall_score(
+                labels, preds, average='macro'
+            )
         elif metric_name == 'precision':
             return precision_score
+        elif metric_name == 'precision_macro':
+            return lambda labels, preds: precision_score(
+                labels, preds, average='macro'
+            )
         elif metric_name == 'f1':
             return f1_score
         elif metric_name == 'f1_weighted':
@@ -125,6 +133,26 @@ class Evaluation():
                                      predictions)
         self.predictions['{}__{}'.format(model_name, features_name)] = prediction
 
+    def evaluate_pipeline(self, tuple):
+        """Predict from dataset using pipeline"""
+        logger.debug('Pipeline {} predicting from dataset {}'.format(
+            tuple.pipeline.named_steps, tuple.dataset
+        ))
+        if not tuple.features is None:
+            _input = self.features[tuple.features].values
+            input_name = self.features[tuple.features].name
+        else:
+            _input = self.datasets[tuple.dataset].dataframe['text'].values
+            input_name = tuple.dataset
+
+        predictions = tuple.pipeline.predict(_input)
+        prediction = self.Prediction('{}__{}'.format(tuple.name, input_name),
+                                     tuple.dataset,
+                                     tuple.name,
+                                     tuple.name,
+                                     predictions)
+        self.predictions['{}__{}'.format(tuple.name, input_name)] = prediction
+        
     def _select_folds(self, fold, cv):
         folds = np.arange(1, cv + 1)
         return folds[np.arange(folds.shape[0]) != fold - 1]
@@ -240,6 +268,8 @@ class Evaluation():
                 self.evaluate_model(tuple.features, tuple.classifier)
             elif isinstance(tuple, CrossEvalTuple):
                 self.cross_evaluate_model(tuple, multi_core)
+            elif isinstance(tuple,  _EvalPipeline):
+                self.evaluate_pipeline(tuple)
             else:
                 raise ValueError('tuple is not correct')
 
@@ -253,6 +283,7 @@ class Evaluation():
             scores = list()
             for metric in self.metrics_defs:
                 func = self._select_metric_call(metric)
+                logger.debug('evaluating on metric {}'.format(func))
                 scores.append(func(labels, preds))
 
             i = self._next_i()

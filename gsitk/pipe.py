@@ -19,3 +19,8 @@ CrossEvalTuple = namedtuple('CrossEvalTuple',
                                 'metrics',
                                 'folds'
                             ])
+
+_EvalPipeline = namedtuple('EvalPipeline', ['name', 'pipeline', 'dataset', 'features'])
+
+def EvalPipeline(name, pipeline, dataset, features=None):
+    return _EvalPipeline(name, pipeline, dataset, features)
