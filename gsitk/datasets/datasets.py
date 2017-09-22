@@ -114,6 +114,10 @@ class Dataset():
 
         assert 'polarity' in final_data.columns
         assert 'text' in final_data.columns
+
+        # Labels must be int values
+        final_data['polarity'] = final_data['polarity'].values.astype(int)
+
         logger.debug('{} data is ready'.format(self.name))
 
         return final_data

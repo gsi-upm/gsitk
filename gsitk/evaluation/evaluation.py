@@ -274,7 +274,13 @@ class Evaluation():
                 raise ValueError('tuple is not correct')
 
         for prediction in self.predictions.values():
-            labels = self.labels[prediction.dataset]
+            labels = None
+            if 'fold' in self.datasets[prediction.dataset].dataframe.columns:
+                # If the dataset has pre-defined folds, use them
+                test_indices = (self.datasets[prediction.dataset].dataframe['fold'] == 'test').values
+                labels = self.labels[prediction.dataset][test_indices]
+            else:
+                labels = self.labels[prediction.dataset]
             preds = prediction.values
             test_dataset_name = prediction.dataset
             features_name = prediction.features
