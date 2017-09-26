@@ -45,7 +45,7 @@ class Word2VecFeatures(Embedding):
             w2v = KeyedVectors.load_word2vec_format(self.w2v_model_path,
                                                     binary=False)
         elif self.w2v_format == 'google_bin':
-            w2v = Word2Vec.load_word2vec_format(self.w2v_model_path,
+            w2v = KeyedVectors.load_word2vec_format(self.w2v_model_path,
                                                 binary=True)
         else:
             raise ValueError("w2v_format={} is not valid.".format(

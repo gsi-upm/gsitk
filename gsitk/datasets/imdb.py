@@ -12,6 +12,7 @@ In Proceedings of the 49th Annual Meeting of the Association for Computational L
 import sys
 import os
 import logging
+import codecs
 import pandas as pd
 import numpy as np
 from glob import glob
@@ -57,7 +58,7 @@ class Imdb(Dataset):
         count = 0
         if unsup:
             for file in islice(glob(os.path.join(path, '*')), limit):
-                with open(file, 'r') as f:
+                with codecs.open(file, 'r', 'utf-8') as f:
                     text = f.read()
                     id_, rating = self._extract_metadata(file)
                     polarity = None
@@ -69,7 +70,7 @@ class Imdb(Dataset):
         
         for pol in pols:
             for file in islice(glob(os.path.join(path, '{}/{}/*'.format(relative_path, pol))),limit):
-                with open(file, 'r') as f:
+                with codecs.open(file, 'r', encoding='utf-8') as f:
                     text = f.read()
                     id_, rating = self._extract_metadata(file)
                     polarity = None
