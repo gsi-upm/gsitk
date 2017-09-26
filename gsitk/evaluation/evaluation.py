@@ -141,8 +141,14 @@ class Evaluation():
         if not tuple.features is None:
             _input = self.features[tuple.features].values
             input_name = self.features[tuple.features].name
-        else:
-            _input = self.datasets[tuple.dataset].dataframe['text'].values
+        else: # No features
+            if 'fold' in self.datasets[tuple.dataset].dataframe.columns:
+                # If the dataset has pre-defined folds, use them
+                test_indices = (self.datasets[tuple.dataset].dataframe['fold'] == 'test').values
+                _input = self.datasets[tuple.dataset].dataframe['text'].values[test_indices]
+            else:
+                _input = self.datasets[tuple.dataset].dataframe['text'].values
+
             input_name = tuple.dataset
 
         predictions = tuple.pipeline.predict(_input)

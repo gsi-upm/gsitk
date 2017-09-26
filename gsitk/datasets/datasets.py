@@ -116,7 +116,13 @@ class Dataset():
         assert 'text' in final_data.columns
 
         # Labels must be int values
-        final_data['polarity'] = final_data['polarity'].values.astype(int)
+        try:
+            final_data['polarity'] = final_data['polarity'].values.astype(int)
+        except TypeError as e:
+            if final_data['polarity'].value_counts().shape == (0,):
+                pass
+            else:
+                raise e
 
         logger.debug('{} data is ready'.format(self.name))
 

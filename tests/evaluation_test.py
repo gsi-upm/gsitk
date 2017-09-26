@@ -30,8 +30,9 @@ def test_data():
 
 def test_simple_eval(pipeline_classifier, test_data):
     # Train the pipeline
-    pipeline_classifier.fit(test_data['text'].values,
-                            test_data['polarity'].values)
+    train_indices = (test_data['fold'] == 'train').values
+    pipeline_classifier.fit(test_data['text'].values[train_indices],
+                            test_data['polarity'].values[train_indices])
 
     # Declare evaluation tuples
     ev_tuples = [
