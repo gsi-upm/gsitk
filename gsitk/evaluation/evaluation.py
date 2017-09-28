@@ -41,7 +41,7 @@ class Evaluation():
         self.Label = namedtuple('Label', ['name', 'values'])
 
         self.Metric = namedtuple('Metric', ['type',
-                                            'dataset',
+                                            ollar algoritmos para la resolu'dataset',
                                             'features',
                                             'model',
                                             'value'])
@@ -209,7 +209,7 @@ class Evaluation():
         
     def _select_folds(self, fold, cv):
         folds = np.arange(1, cv + 1)
-        return folds[np.arange(folds.shape[0]) != fold - 1]
+        return list(folds[np.arange(folds.shape[0]) != fold - 1])
  
     def cross_evaluate_model_with_folds(self, cross_eval_tuple):
         """
@@ -240,7 +240,7 @@ class Evaluation():
             train_labels = labels[train_index].astype(int)
             test_labels = labels[test_index].astype(int)
 
-            classifier = copy.deepcopy(model.classifier)
+            classifier = copy.deepcopy(model)
             classifier.fit(train_vecs, train_labels)
             predictions = classifier.predict(test_vecs)
 
