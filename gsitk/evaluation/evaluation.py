@@ -4,22 +4,33 @@ Evaluation of classifiers on datasets.
 
 import logging
 from collections import namedtuple
+import itertools
 import copy
 import numpy as np
 import pandas as pd
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 from sklearn.cross_validation import cross_val_score
 
-from gsitk.pipe import EvalTuple, CrossEvalTuple, _EvalPipeline
+from gsitk.pipe import EvalTuple, CrossEvalTuple, _EvalPipeline, EvalPipeline
 
 logger = logging.getLogger(__name__)
+
+
+class Prediction():
+    def __init__(self, name, dataset, features, model, values, description):
+        self.name = name
+        self.dataset = dataset
+        self.features = features
+        self.model = model
+        self.values = values
+        self.description = description
 
 
 class Evaluation():
     """
     Models an evaluation process.
     """
-    def __init__(self, datasets, features, models, tuples):
+    def __init__(self, tuples=None, datasets=None, pipelines=None, features=None):
         self.Dataset = namedtuple('Dataset', ['name','dataframe'])
 
         self.Prediction = namedtuple('Prediction', ['name',
@@ -40,14 +51,16 @@ class Evaluation():
 
         self.folds_defs = ['train', 'dev', 'test']
 
-        self.models = self._models_setup(models)
+        #self.models = self._models_setup(models)
         self.features = self._features_setup(features)
         self.datasets = self._datasets_setup(datasets)
-        self.tuples = tuples
+        self.pipelines = self._pipelines_setup(pipelines) if not pipelines is None else pipelines
+        self.tuples = tuples if not tuples is None else self.generate_tuples()
         self.predictions = dict()
         self.labels = self._labels_setup()
         self.results = self._results_setup()
-
+        self.descriptions = dict()
+        
     def _results_setup(self):
         columns = ['Dataset', 'Features', 'Model', 'CV']
         columns.extend(self.metrics_defs)
@@ -66,6 +79,8 @@ class Evaluation():
         return _models
 
     def _features_setup(self, features):
+        if features is None:
+            return None
         _features = dict()
         for features_ in features:
             _features[features_.name] = features_
@@ -76,6 +91,13 @@ class Evaluation():
         for dataset_name, dataset_obj in self.datasets.items():
             _labels[dataset_name] = dataset_obj.dataframe['polarity'].values.astype(int)
         return _labels
+
+    def _pipelines_setup(self, pipelines):
+        _pipelines = dict()
+        for pipeline in pipelines:
+            assert isinstance(pipeline.name, str)
+            _pipelines[pipeline.name] = pipeline
+        return _pipelines
 
     def _select_metric_call(self, metric_name):
         if metric_name == 'accuracy':
@@ -108,30 +130,54 @@ class Evaluation():
             )
 
     def _next_i(self):
-        i = self.results.shape[0]
-        if i == 0:
-            i = 0
-        else:
-            i += 1
-        return i
-
+        return self.results.shape[0]
+        
     def _print_metric(self, average, deviation):
         avg = round(100 * average, 3)
         std = round(100 * deviation, 3)
         return "{} +/- {}".format(avg, std)
 
-    def evaluate_model(self, features_name, model_name):
+    def _generate_pipeline_description(self, pipeline):
+        steps = []
+        for step in pipeline.steps:
+            name = None
+            try:
+                name = pipeline.named_steps[step[0]].name
+            except AttributeError:
+                # It does not have a name
+                pass
+
+            if not name is None:
+                steps.append('{}({})'.format(step[0], name))
+            else:
+                steps.append('{}'.format(step[0]))
+
+        return ' --> '.join(steps)
+
+    def _add_metadata(self):
+        for i, desc in self.descriptions.items():
+            self.results.loc[i, 'Description'] = desc
+
+    def generate_tuples(self):
+        tuples = []
+        for combination in itertools.product(self.datasets.keys(), self.pipelines.keys()):
+            tuples.append(
+                EvalPipeline(self.pipelines[combination[1]], combination[0])
+            )
+        return tuples
+
+    def evaluate_model(self, features_name, model):
         """Predict from features."""
-        logger.debug('Model {} predicting from features {}'.format(model_name, features_name))
+        logger.debug('Model {} predicting from features {}'.format(model.name, features_name))
         _features = self.features[features_name]
-        _model = self.models[model_name]
-        predictions = _model.classifier.predict(_features.values)
-        prediction = self.Prediction('{}__{}'.format(model_name, features_name),
+        #_model = self.models[model_name]
+        predictions = model.predict(_features.values)
+        prediction = self.Prediction('{}__{}'.format(model.name, features_name),
                                      _features.dataset,
                                      _features.name,
-                                     _model.name,
+                                     model.name,
                                      predictions)
-        self.predictions['{}__{}'.format(model_name, features_name)] = prediction
+        self.predictions['{}__{}'.format(model.name, features_name)] = prediction
 
     def evaluate_pipeline(self, tuple):
         """Predict from dataset using pipeline"""
@@ -152,11 +198,13 @@ class Evaluation():
             input_name = tuple.dataset
 
         predictions = tuple.pipeline.predict(_input)
-        prediction = self.Prediction('{}__{}'.format(tuple.name, input_name),
+        description = self._generate_pipeline_description(tuple.pipeline)
+        prediction = Prediction('{}__{}'.format(tuple.name, input_name),
                                      tuple.dataset,
+                                     None,
                                      tuple.name,
-                                     tuple.name,
-                                     predictions)
+                                     predictions,
+                                     description)
         self.predictions['{}__{}'.format(tuple.name, input_name)] = prediction
         
     def _select_folds(self, fold, cv):
@@ -168,8 +216,7 @@ class Evaluation():
         Evaluate with cross validation, using the pre defined folds of
         the dataset.
         """
-        _model = cross_eval_tuple.classifier
-        model = self.models[_model]
+        model = cross_eval_tuple.classifier
         _features = cross_eval_tuple.features
         features = self.features[_features]
         _labels = cross_eval_tuple.labels
@@ -209,7 +256,7 @@ class Evaluation():
         for i in range(len(average)):
             scores.append(self._print_metric(average[i], std[i]))
 
-        result = [_labels, _features, _model, 'static']
+        result = [_labels, _features, model.name, 'static']
         result.extend(scores)
         i = self._next_i()
         self.results.loc[i, :] = result
@@ -226,8 +273,7 @@ class Evaluation():
                 self.cross_evaluate_model_with_folds(cross_eval_tuple)
                 return
 
-        _model = cross_eval_tuple.classifier
-        model = self.models[_model]
+        model = cross_eval_tuple.classifier
         _features = cross_eval_tuple.features
         features = self.features[_features]
         _labels = cross_eval_tuple.labels
@@ -256,7 +302,7 @@ class Evaluation():
             i = self.metrics_defs.index(metric)
             metrics[i] = self._print_metric(avg, std)
 
-        result = [_labels, _features, _model, 'random']
+        result = [_labels, _features, model.name, 'random']
         result.extend(metrics)
 
         i = self._next_i()
@@ -299,8 +345,17 @@ class Evaluation():
                 scores.append(func(labels, preds))
 
             i = self._next_i()
-                
+
             result = [test_dataset_name, features_name, model_name, False]
             result.extend(scores)
 
             self.results.loc[i, :] = result
+
+            try:
+                description = prediction.description
+                self.descriptions[i] = description
+            except AttributeError:
+                # If prediction has no description, do not add to results table
+                pass
+
+        self._add_metadata()
