@@ -41,7 +41,7 @@ class Evaluation():
         self.Label = namedtuple('Label', ['name', 'values'])
 
         self.Metric = namedtuple('Metric', ['type',
-                                            ollar algoritmos para la resolu'dataset',
+                                            'dataset',
                                             'features',
                                             'model',
                                             'value'])
