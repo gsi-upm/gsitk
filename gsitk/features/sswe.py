@@ -23,10 +23,12 @@ from gsitk import config
 from gsitk.datasets import utils as dataset_utils
 from gsitk.features.embeddings import Embedding
 
+from sklearn.base import TransformerMixin
+
 logger = logging.getLogger(__name__)
 
 
-class SSWE(Embedding):
+class SSWE(Embedding, TransformerMixin):
     def __init__(self, convolution=[1, 0, 0], download=True):
         super(SSWE, self).__init__(convolution)
         self.info = self._load_info()
@@ -88,3 +90,6 @@ class SSWE(Embedding):
         vecs = self.check_vector(vecs) 
 
         return vecs
+
+    def fit(self, x, y=None):
+        return self
