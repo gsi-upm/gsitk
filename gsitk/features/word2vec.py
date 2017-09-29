@@ -17,8 +17,9 @@ from gensim.models.keyedvectors import KeyedVectors
 
 from gsitk.features.embeddings import Embedding
 
+from sklearn.base import TransformerMixin
 
-class Word2VecFeatures(Embedding):
+class Word2VecFeatures(Embedding, TransformerMixin):
     """
     Implements the word2vec operations.
     """
@@ -68,3 +69,8 @@ class Word2VecFeatures(Embedding):
         vecs = self.check_vector(vecs)
 
         return vecs
+
+    def fit(self, x, y=None):
+        return self
+
+
