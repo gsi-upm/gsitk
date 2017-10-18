@@ -1,4 +1,15 @@
+import pip
 from distutils.core import setup
+from pip.req import parse_requirements
+
+try:
+    install_reqs = parse_requirements(
+        "requirements.txt", session=pip.download.PipSession())
+except AttributeError:
+    install_reqs = parse_requirements("requirements.txt")
+
+install_reqs = [str(ir.req) for ir in install_reqs]
+
 
 setup(name = 'gsitk',
       packages = ['gsitk'], # this must be the same as the name above
