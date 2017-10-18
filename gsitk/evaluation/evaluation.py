@@ -281,7 +281,7 @@ class Evaluation():
         folds = cross_eval_tuple.folds
         logger.debug(
             """Cross evaluating: model={}, features={}, folds={}, labels={}""".format(
-                _model, _features, folds, _labels)
+                model, _features, folds, _labels)
         )
 
         n_jobs = -1 if multi_core else 1
@@ -289,7 +289,7 @@ class Evaluation():
 
         metrics = [None] * len(self.metrics_defs)
         for metric in cross_eval_tuple.metrics:
-            args = [model.classifier, features.values, labels]
+            args = [model, features.values, labels]
             kwargs = {'scoring': metric, 'cv': folds, 'n_jobs': n_jobs}
             try:
                 value = cross_val_score(*args, **kwargs)
