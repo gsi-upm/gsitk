@@ -13,11 +13,11 @@ install_reqs = [str(ir.req) for ir in install_reqs]
 
 setup(name = 'gsitk',
       packages = ['gsitk'], # this must be the same as the name above
-      version = '0.1',
+      version = '0.1.1',
       description = 'gsitk is a library on top of scikit-learn that eases the development process on NLP machine learning driven projects.',
       author = 'Oscar Araque',
       email = 'oscar.aiborra@gmail.com',
       url = 'https://github.com/gsi-upm/gsitk', # URL to the github repo
-      download_url = 'https://github.com/gsi-upm/gsitk/tarball/0.1',
+      download_url = 'https://github.com/gsi-upm/gsitk/tarball/0.1.1',
       keywords = ['sentiment analysis', 'nlp', 'machine learning'], # list of keywords that represent your package
       classifiers = [], )
