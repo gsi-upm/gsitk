@@ -3,12 +3,13 @@ import pytest
 import numpy as np
 from gensim.models import Word2Vec
 from gensim.models.keyedvectors import KeyedVectors
+from gensim.models import Doc2Vec
 
 from tests.preprocess_test import text_df
 
 from gsitk.preprocess import normalize
 from gsitk.features import (
-    features, utils, sentitext, surface, word2vec, sswe
+    features, utils, sentitext, surface, word2vec, sswe, doc2vec
 )
 
 
@@ -81,3 +82,16 @@ def test_sswe(norm_text):
     assert x.shape == (2, model.size)
     assert (x != 0).all()
 
+
+def test_doc2vec(norm_text):
+    path = os.path.dirname(os.path.abspath(__file__))
+    path = os.path.join(path, 'data/d2v_model')
+    model = doc2vec.Doc2VecFeatures(d2v_model_path=path)
+    assert isinstance(model.model, Doc2Vec)
+    assert isinstance(model.model.vector_size, int)
+    assert model.model.vector_size > 0
+
+    x = model.transform(norm_text)
+    assert isinstance(x, np.ndarray)
+    assert x.shape == (2, model.size)
+    assert (x != 0).all()

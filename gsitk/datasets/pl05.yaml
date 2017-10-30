@@ -1,7 +1,7 @@
 properties:
         name: pl05
         url: "http://www.cs.cornell.edu/people/pabo/movie-review-data/rt-polaritydata.tar.gz"
-        filename: "rt_polaritydata.tar.gz"
+        filename: "rt-polaritydata.tar.gz"
         expected_bytes: 487770
         sha256: "a05befe52aafda71d458d188a1c54506a998b1308613ba76bbda2e5029409ce9"
         data_file: "rt-polaritydata/"
