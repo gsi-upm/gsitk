@@ -1,0 +1,7 @@
+include requirements.txt
+include README.md
+graft gsitk/datasets
+graft gsitk/resources
+graft gsitk/features
+graft gsitk/preprocess
+graft gsitk/evaluation
