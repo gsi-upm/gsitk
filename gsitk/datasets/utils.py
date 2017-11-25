@@ -9,6 +9,7 @@ import hashlib
 import zipfile
 import tarfile
 import yaml
+import shutil
 from six.moves import urllib
 
 from gsitk import config
@@ -38,7 +39,7 @@ def load_info(name, given_path=False):
     return info
 
 
-def _maybe_download(data_name, url, filename, expected_bytes, sha256=None):
+def _maybe_download(data_name, url, filename, expected_bytes, sha256=None, move=False):
     """Download the dataset if it is not already stored locally.
 
     :return:
@@ -51,9 +52,15 @@ def _maybe_download(data_name, url, filename, expected_bytes, sha256=None):
         logger.debug("Saving data in {}".format(data_path))
         if not os.path.exists(data_path):
             os.makedirs(data_path)
-        logger.debug("Downloading... {}".format(filename))
-        filename, _ = urllib.request.urlretrieve(url, file_path)
-        logger.debug("Downloaded {}".format(filename))
+        if not move:
+            logger.debug("Downloading... {}".format(filename))
+            filename, _ = urllib.request.urlretrieve(url, file_path)
+            logger.debug("Downloaded {}".format(filename))
+        else:
+            logger.debug("Moving {} to {}".format(filename, data_path))
+            shutil.copy(os.path.join(config.RESOURCES_PATH, filename),
+                        data_path)
+
 
     statinfo = os.stat(file_path)
 

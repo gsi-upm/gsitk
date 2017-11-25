@@ -25,12 +25,13 @@ class Dataset():
         self.info = info
         self.name = self.info['properties']['name']
 
-    def maybe_download(self):
+    def maybe_download(self, move=False):
         utils._maybe_download(data_name=self.name,
                               url=self.info['properties']['url'],
                               filename=self.info['properties']['filename'],
                               expected_bytes=self.info['properties']['expected_bytes'],
-                              sha256=self.info['properties']['sha256'])
+                              sha256=self.info['properties']['sha256'],
+                              move=move)
 
     def extract_function(self):
         """
@@ -86,7 +87,14 @@ class Dataset():
         if download:
             if self.info['properties'].get('download') is None or \
                self.info['properties'].get('download') is True:
-                self.maybe_download()
+
+                if self.info['properties'].get('copy') is None or \
+                   self.info['properties'].get('copy') is True:
+                    # In case the dataset is batteries included, just copy it
+                    self.maybe_download(move=True)
+                else:
+                    # Download data from original repository
+                    self.maybe_download()
             else:
                 logger.debug('Skipping download of {}'.format(self.name))
 
@@ -112,17 +120,17 @@ class Dataset():
         else:
             final_data = pd.read_pickle(processed_path)
 
-        assert 'polarity' in final_data.columns
+        #assert 'polarity' in final_data.columns Nope Nope
         assert 'text' in final_data.columns
 
         # Labels must be int values
-        try:
-            final_data['polarity'] = final_data['polarity'].values.astype(int)
-        except TypeError as e:
-            if final_data['polarity'].value_counts().shape == (0,):
-                pass
-            else:
-                raise e
+        #try:
+        #    final_data['polarity'] = final_data['polarity'].values.astype(int)
+        #except TypeError as e:
+        #    if final_data['polarity'].value_counts().shape == (0,):
+        #        pass
+        #    else:
+        #        raise e
 
         logger.debug('{} data is ready'.format(self.name))
 

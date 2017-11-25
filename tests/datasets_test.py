@@ -3,7 +3,7 @@ import pandas as pd
 
 from gsitk.datasets import (
     datasets, sentiment140, vader, pl04 , semeval14, semeval13, imdb, imdb_unsup, \
-    sst, multidomain
+    sst, multidomain, semeval07
 )
 
 
@@ -103,3 +103,11 @@ def test_multidomain():
     assert pol_val_count.index[0] == 1
     assert pol_val_count.values[0] > 0
     assert (data['text'].apply(len) > 0).all()
+
+def test_semeval07():
+    se07 = semeval07.Semeval07()
+    data = se07.prepare_data(download=False)
+    assert 'valence' in data.columns
+    assert len(set(['anger','disgust', 'fear','joy','sadness','surprise']) & \
+               set(data.columns)) == 6
+    assert set(data['fold'].value_counts().index) == set(['dev','test'])

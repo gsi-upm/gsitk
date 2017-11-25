@@ -1,0 +1,17 @@
+properties:
+        name: semeval07
+        filename: "semeval07.tar.gz"
+        expected_bytes: 48447
+        sha256: "9f19caf2af6617b321373b70ac6e39a257ac215aa9945a0b61ac54d5200573ba"
+        url: None
+        data_file: None
+        processed_file: "semeval07.pck"
+        compression:
+          type: "targz"
+        download: True
+        copy: True
+stats:
+        instances: None
+        labels:
+          - 1
+          - -1
