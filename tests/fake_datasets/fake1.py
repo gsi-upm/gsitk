@@ -31,8 +31,12 @@ class Fake1(Dataset):
             index_col=False,
         )
 
+        if len(data) < 1:
+            return data
+
         text_data = normalize.normalize_text(data)
         data = pd.concat([data['polarity'], text_data], axis=1)
+        data.columns = ['polarity', 'text']
         # Remove text that was not fetched from source
         remove = lambda l: l != ['not', 'available']
         data = data.loc[data['text'].apply(remove)].reset_index(drop=True)
