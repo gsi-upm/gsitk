@@ -15,22 +15,14 @@ import logging
 import pandas as pd
 from bs4 import BeautifulSoup
 
-from gsitk import config
 from gsitk.datasets import utils
 from gsitk.datasets.datasets import Dataset
 from gsitk.preprocess import normalize
 
 logger = logging.getLogger(__name__)
 
-NAME = os.path.splitext(os.path.basename(__file__))[0]
-
 
 class Semeval07(Dataset):
-
-    def __init__(self, info=None):
-        if info is None:
-            info = utils.load_info(NAME) 
-        super(Semeval07, self).__init__(info)
 
     def _read_xml_file(self, file_path):
         with open(file_path, 'r') as f:
@@ -57,17 +49,16 @@ class Semeval07(Dataset):
         return annot
 
     def normalize_data(self):
-        data_path = os.path.join(config.DATA_PATH, self.name)
         
-        dev_text = self._read_xml_file(os.path.join(data_path, 'trial/affectivetext_trial.xml'))
-        dev_valence = self._read_valence_annotation(os.path.join(data_path, 'trial/affectivetext_trial.valence.gold'))
-        dev_emotion = self._read_emo_annotation(os.path.join(data_path, 'trial/affectivetext_trial.emotions.gold'))
+        dev_text = self._read_xml_file(os.path.join(self.data_path, 'trial/affectivetext_trial.xml'))
+        dev_valence = self._read_valence_annotation(os.path.join(self.data_path, 'trial/affectivetext_trial.valence.gold'))
+        dev_emotion = self._read_emo_annotation(os.path.join(self.data_path, 'trial/affectivetext_trial.emotions.gold'))
         dev = pd.concat([dev_text, dev_valence, dev_emotion], axis=1)
         dev['fold'] = 'dev'
 
-        test_text = self._read_xml_file(os.path.join(data_path, 'test/affectivetext_test.xml'))
-        test_valence = self._read_valence_annotation(os.path.join(data_path, 'key/affectivetext_test.valence.gold'))
-        test_emotion = self._read_emo_annotation(os.path.join(data_path, 'key/affectivetext_test.emotions.gold'))
+        test_text = self._read_xml_file(os.path.join(self.data_path, 'test/affectivetext_test.xml'))
+        test_valence = self._read_valence_annotation(os.path.join(self.data_path, 'key/affectivetext_test.valence.gold'))
+        test_emotion = self._read_emo_annotation(os.path.join(self.data_path, 'key/affectivetext_test.emotions.gold'))
         test = pd.concat([test_text, test_valence, test_emotion], axis=1)
         test['fold'] = 'test'
 

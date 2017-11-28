@@ -15,7 +15,6 @@ import pandas as pd
 import numpy as np
 from glob import glob
 from itertools import islice
-from gsitk import config
 from gsitk.datasets import utils
 from gsitk.datasets.datasets import Dataset
 from gsitk.preprocess import normalize
@@ -23,20 +22,12 @@ from gsitk.datasets.imdb import Imdb
 
 logger = logging.getLogger(__name__)
 
-NAME = os.path.splitext(os.path.basename(__file__))[0]
 
 class Imdb_unsup(Imdb):
 
-    def __init__(self, info= None):
-        if info is None:
-            info = utils.load_info(NAME)
-        super(Imdb_unsup, self).__init__(info)
-
-
     def normalize_data(self):
         dataset = pd.DataFrame(columns=['id', 'text', 'polarity'])
-        data_path = os.path.join(config.DATA_PATH, self.name)
-        raw_data_path = os.path.join(data_path, self.info['properties']['data_file'])
-        self.populate_data(path=raw_data_path, dataframe=dataset, unsup=True)
+        data_path = os.path.join(self.data_path, self.info['properties']['data_file'])
+        self.populate_data(path=data_path, dataframe=dataset, unsup=True)
         return dataset
 

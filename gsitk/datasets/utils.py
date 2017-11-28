@@ -10,9 +10,10 @@ import zipfile
 import tarfile
 import yaml
 import shutil
+import sys
+import importlib
 from six.moves import urllib
 
-from gsitk import config
 
 logger = logging.getLogger(__name__)
 
@@ -44,7 +45,7 @@ def _maybe_download(data_name, url, filename, expected_bytes, sha256=None, move=
 
     :return:
     """
-    data_path = os.path.join(config.DATA_PATH, data_name)
+    data_path = os.path.join(self.config.DATA_PATH, data_name)
     file_path = os.path.join(data_path, filename)
 
     logger.debug("Checking data path: {}".format(data_path))
@@ -58,7 +59,7 @@ def _maybe_download(data_name, url, filename, expected_bytes, sha256=None, move=
             logger.debug("Downloaded {}".format(filename))
         else:
             logger.debug("Moving {} to {}".format(filename, data_path))
-            shutil.copy(os.path.join(config.RESOURCES_PATH, filename),
+            shutil.copy(os.path.join(self.config.RESOURCES_PATH, filename),
                         data_path)
 
 
@@ -130,3 +131,12 @@ def _check_dataset(path, name, count=None):
     \t # instances: {}\n\n""".format(name, downloaded, nlines)
 
     return response
+
+
+def load_module(name, root=None):
+    if root:
+        sys.path.append(root)
+    tmp = importlib.import_module(name)
+    if root:
+        sys.path.remove(root)
+    return tmp

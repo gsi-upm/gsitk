@@ -13,7 +13,6 @@ import os
 import logging
 import pandas as pd
 
-from gsitk import config
 from gsitk.datasets import utils
 from gsitk.datasets.datasets import Dataset
 from gsitk.preprocess import normalize
@@ -21,23 +20,14 @@ from gsitk.preprocess import normalize
 logger = logging.getLogger(__name__)
 
 
-NAME = os.path.splitext(os.path.basename(__file__))[0]
-
-
 class Sentiment140(Dataset):
 
-    def __init__(self, info=None):
-        if info is None:
-            info = utils.load_info(NAME) 
-        super(Sentiment140, self).__init__(info)
-
     def normalize_data(self):
-        data_path = os.path.join(config.DATA_PATH, self.name)
-        raw_data_path = os.path.join(data_path,
+        raw_datapath = os.path.join(self.data_path,
                                      self.info['properties']['data_file'])
 
         data = pd.read_csv(
-            raw_data_path,
+            raw_datapath,
             header=None,
             encoding='latin-1',
             index_col=False,

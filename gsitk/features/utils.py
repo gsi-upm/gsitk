@@ -10,7 +10,8 @@ import glob
 import numpy as np
 import pandas as pd
 
-from gsitk import config
+from gsitk.config import default
+config = default()
 
 logger = logging.getLogger(__name__)
 
@@ -32,19 +33,19 @@ def detect_saving_format(filename):
         return 'pickle'
 
 
-def _read_numpy_ndarray(name):
+def _read_numpy_ndarray(name, features_path=features_path):
     path = os.path.join(features_path, name)
     with open(path, 'r') as f:
         array = np.load(path)
     return array
 
 
-def _read_pandas_dataframe(name):
+def _read_pandas_dataframe(name, features_path=features_path):
     path = os.path.join(features_path, name)
     pass
 
 
-def _read_pickle(name):
+def _read_pickle(name, features_path=features_path):
     path = os.path.join(features_path, name)
     with open(path, 'rb') as f:
         from_pickle = pickle.loads(f)
@@ -68,14 +69,14 @@ def _save_as_pickle(to_pickle, path):
         pickle.dump(to_pickle, f)
 
 
-def save_features(features, name):
+def save_features(features, name, folder=config.DATA_PATH, features_path=features_path):
     """Save the features in the <data_folder>/features directory."""
 
     if not os.path.exists(features_path):
         logger.debug('{} path does not exist. Creating...'.format(features_path))
         os.makedirs(features_path)
 
-    path = os.path.join(config.DATA_PATH, 'features/', name)
+    path = os.path.join(folder, 'features/', name)
 
     if isinstance(features, np.ndarray):
         _save_numpy_ndarray(features, path)
@@ -85,7 +86,7 @@ def save_features(features, name):
         _save_as_pickle(features, path)
 
 
-def read_features(name, format=None):
+def read_features(name, format=None, features_path=features_path):
     """Read the features stored in path."""
 
     path = os.path.join(features_path, name)

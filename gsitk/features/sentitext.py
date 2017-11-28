@@ -19,7 +19,9 @@ from six.moves import urllib
 from nltk.corpus import wordnet as wn
 from nltk import word_tokenize
 from gsitk.preprocess.pprocess_twitter import tokenize
-from gsitk import config
+from gsitk.config import default
+
+config = default()
 
 logger = logging.getLogger(__name__)
 
@@ -35,9 +37,9 @@ def delete_special_chars(text):
     text = re.sub('[0-9]', '', text)
     return text.strip()
 
-def load_stopwords():
+def load_stopwords(folder=config.RESOURCES_PATH):
     stopwords = list()
-    with open(os.path.join(config.RESOURCES_PATH, 'sentitext_stopwords.txt'),"rt") as f:
+    with open(os.path.join(folder, 'sentitext_stopwords.txt'),"rt") as f:
         lines = f.readlines()
         for line in lines:
             stopwords.append(re.sub("\n","",line))
@@ -143,8 +145,8 @@ def clean_pos(pos):
         pos = pos_tags[pos]
     return pos
 
-def load_nrc_dict():
-    nrc = pd.read_csv(os.path.join(config.DATA_PATH, \
+def load_nrc_dict(folder=config.DATA_PATH):
+    nrc = pd.read_csv(os.path.join(folder, \
                                    'NRC-emotion-lexicon-wordlevel-alphabetized-v0.92.txt'),
                      delimiter='\t',
                      header=None,
@@ -328,13 +330,13 @@ def prepare_data(data):
     return features_list
 
 
-def download_swn():
+def download_swn(folder=config.RESOURCES_PATH):
     url = 'http://sentiwordnet.isti.cnr.it/SentiWordNet_3.0.0.tgz'
     name = 'SentiWordNet_3.0.0.tgz'
-    path = os.path.join(config.RESOURCES_PATH, name)
+    path = os.path.join(folder, name)
     filename, _ = urllib.request.urlretrieve(url, path)
-    with tarfile.open(os.path.join(config.RESOURCES_PATH, name)) as f:
-        f.extractall(config.RESOURCES_PATH)
+    with tarfile.open(os.path.join(folder, name)) as f:
+        f.extractall(folder)
 
 
 logger.debug('Loading stopwords...')

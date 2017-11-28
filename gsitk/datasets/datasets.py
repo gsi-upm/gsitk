@@ -7,23 +7,36 @@ import inspect
 import logging
 import yaml
 import glob
-import importlib
 import hashlib
 import zipfile
 from six.moves import urllib
 import pandas as pd
 
-from gsitk import config
+from gsitk.config import default
 from gsitk.datasets import utils
 
 logger = logging.getLogger(__name__)
 
 
 class Dataset():
-    def __init__(self, info):
+    def __init__(self, info=None, config=None):
         """Inheritor class must assign these values."""
+        if info is None:
+            info = utils.load_info(self.__class__.__name__.lower())
         self.info = info
         self.name = self.info['properties']['name']
+        if not config:
+            config = default()
+            config.DATA_PATH = os.path.join(config.DATA_PATH,
+                                            self.name)
+        self.config = config
+        self.data_path = self.config.DATA_PATH
+
+    @property
+    def data(self):
+        if not hasattr(self, '_data') or not self._data:
+            self._data = self.prepare_data(download=self.info['properties'].get('url', None))
+        return self._data
 
     def maybe_download(self, move=False):
         utils._maybe_download(data_name=self.name,
@@ -68,8 +81,7 @@ class Dataset():
 
     def check_dataset(self):
         """Check the dataset, giving stats."""
-        data_path = os.path.join(config.DATA_PATH, self.name)
-        processed_path = os.path.join(data_path, self.info['properties']['processed_file'])
+        processed_path = os.path.join(self.data_path, self.info['properties']['processed_file'])
 
         return utils._check_dataset(processed_path, self.name)
 
@@ -99,15 +111,14 @@ class Dataset():
                 logger.debug('Skipping download of {}'.format(self.name))
 
             
-        data_path = os.path.join(config.DATA_PATH, self.name)
-        file_path = os.path.join(data_path, self.info['properties']['filename'])
-        processed_path = os.path.join(data_path, self.info['properties']['processed_file'])
+        data_file = os.path.join(self.data_path, self.info['properties']['data_file'])
+        processed_path = os.path.join(self.data_path, self.info['properties']['processed_file'])
         
-        
-        if not os.path.exists(os.path.join(data_path, self.info['properties']['data_file'])):
+        if not os.path.exists(data_file):
+            file_path = os.path.join(self.data_path, self.info['properties']['filename'])
             extract_func = self.extract_function()
             if not extract_func is None:
-                extract_func(file_path, data_path)
+                extract_func(file_path, self.data_path)
             
         if not os.path.exists(processed_path):
             logger.debug("Preprocessing {} data".format(self.name))
@@ -159,7 +170,7 @@ class DatasetManager():
             name = info['properties']['name']
             processed_name = info['properties']['processed_file']
             count = info['stats'].get('instances', None)
-            stored_path = os.path.join(config.DATA_PATH, name, processed_name)
+            stored_path = os.path.join(self.config.DATA_PATH, name, processed_name)
             response.append(utils._check_dataset(stored_path, name, count=count))
 
         if pprint:
@@ -167,37 +178,50 @@ class DatasetManager():
         else:
             return response
 
+    def find_datasets(self, path=None):
+        path = path or os.path.dirname(os.path.abspath(__file__))
+        extensions = ['yml', 'yml']
+        info_files = []
+        for ext in extensions:
+            info_files.extend([dataset for dataset in \
+                               glob.glob(os.path.join(path,
+                                                      '*.{}'.format(ext)))])
+        return info_files
+
+    def get_dataset(self, info, root=None, data_path=None):
+
+        if not isinstance(info, dict):
+            root = root or os.path.dirname(os.path.abspath(info))
+            info = utils.load_info(info, given_path=True)
+        name = info['properties']['name']
+        module_name = info['properties'].get('module',  name)
+        dataset_module = utils.load_module(module_name, root=root)
+        obj = None
+        logger.info(inspect.getmembers(dataset_module))
+        config = None
+        if data_path:
+            config = default()
+            config.DATA_PATH = root
+        for data_name, data_class in inspect.getmembers(dataset_module):
+            if inspect.isclass(data_class) and \
+               data_name.lower() == module_name.lower():
+                obj = data_class(info, config)
+                break
+        if not obj:
+            raise ImportError(('Module {} not found '
+                               'the desired class.').format(name))
+        return obj
 
     def get_datasets(self):
         """Get all the available dataset names."""
-        path = os.path.dirname(os.path.abspath(__file__))
-        info_files = [dataset for dataset in \
-                    glob.glob(os.path.join(path, '*.yaml'))]
-        info_files.extend([dataset for dataset in \
-                         glob.glob(os.path.join(path, '*.yml'))])
-
-        infos = dict() 
+        info_files = self.find_datasets()
+        infos = dict()
         objs = dict()
-        for info_name in info_files:
-            info = utils.load_info(info_name, given_path=True)
-            name = info['properties']['name']
-            infos[name] = info
-
-            dataset_module = importlib.import_module(
-                'gsitk.datasets.{}'.format(name)
-            )
-            found = False
-            logger.info(inspect.getmembers(dataset_module))
-            for data_name, data_class in inspect.getmembers(dataset_module):
-                if inspect.isclass(data_class) and \
-                   data_name.lower() == name.lower():
-                    found = True
-                    obj = data_class(info)
-                    objs[name] = obj
-                    break
-            if not found:
-                raise ImportError(('Module gsitk.datasets.{} does not contain '
-                                   'the desired class.').format(name))
+        for info in info_files:
+            dataset = self.get_dataset(info)
+            info = dataset.info
+            infos[info['properties']['name']] = info
+            objs[info['properties']['name']] = dataset
 
         return infos, objs
 

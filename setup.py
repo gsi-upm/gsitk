@@ -25,6 +25,8 @@ setup(name = 'gsitk',
       download_url =
       'https://github.com/gsi-upm/gsitk/tarball/{}'.format(VERSION),
       keywords = ['sentiment analysis', 'nlp', 'machine learning'], # list of keywords that represent your package
+      setup_requires=['pytest-runner'],
+      tests_require=['pytest'],
       classifiers = [],
       install_requires=install_reqs,
       include_package_data=True
