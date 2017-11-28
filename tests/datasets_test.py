@@ -92,7 +92,7 @@ def test_sst():
     sentitree = sst.Sst()
     data = sentitree.prepare_data(download=False)
     assert data['polarity'].value_counts().index[0] == 1
-    assert data['polarity'].value_counts().values[0] == 7
+    assert data['polarity'].value_counts().values[0] == 5
     assert data['polarity'].value_counts().values[1] == 3
     assert (data['text'].apply(len) > 0).all()
 

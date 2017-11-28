@@ -56,7 +56,7 @@ class Sst(Dataset):
         train = self.convert_treebank(stanford_treebank['train'], 'train')
         dev = self.convert_treebank(stanford_treebank['dev'], 'dev')
         test = self.convert_treebank(stanford_treebank['test'], 'test')
-        data = pd.concat([train,dev,test],     for i in expected:         assert i in respignore_index=True)       
+        data = pd.concat([train,dev,test], ignore_index=True)       
         
         # Remove directory to avoid pytreebank library error 
         #shutil.rmtree(raw_datapath)
