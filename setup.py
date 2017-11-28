@@ -20,7 +20,7 @@ setup(name = 'gsitk',
       version = VERSION,
       description = 'gsitk is a library on top of scikit-learn that eases the development process on NLP machine learning driven projects.',
       author = 'Oscar Araque',
-      email = 'oscar.aiborra@gmail.com',
+      author_email = 'oscar.aiborra@gmail.com',
       url = 'https://github.com/gsi-upm/gsitk', # URL to the github repo
       download_url =
       'https://github.com/gsi-upm/gsitk/tarball/{}'.format(VERSION),
