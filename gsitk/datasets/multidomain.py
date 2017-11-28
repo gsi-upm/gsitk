@@ -17,27 +17,20 @@ import codecs
 import pandas as pd
 from bs4 import BeautifulSoup
 from glob import glob
-from gsitk import config
-from gsitk.datasets import utils
 from gsitk.datasets.datasets import Dataset
 from gsitk.preprocess import simple
 
 logger = logging.getLogger(__name__)
 
-NAME = os.path.splitext(os.path.basename(__file__))[0]
 
 class Multidomain(Dataset):
-    def __init__(self, info=None):
-        if info is None:
-            info = utils.load_info(NAME)
-        super(Multidomain, self).__init__(info)
-        self.polarities = {
-            5.0: 1,
-            4.0: 1,
-            3.0: 0,
-            2.0: -1,
-            1.0: -1
-        }
+    polarities = {
+        5.0: 1,
+        4.0: 1,
+        3.0: 0,
+        2.0: -1,
+        1.0: -1
+    }
 
     def read_file(self, file_path):
         texts = []
@@ -87,8 +80,7 @@ class Multidomain(Dataset):
         return df
 
     def normalize_data(self):
-        data_path = os.path.join(config.DATA_PATH, self.name)
-        categories_path = os.path.join(data_path, self.info['properties']['data_file'])
+        categories_path = os.path.join(self.data_path, self.info['properties']['data_file'])
 
         categories_df = []
         for category_path in glob(os.path.join(categories_path, '*')):

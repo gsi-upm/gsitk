@@ -19,11 +19,13 @@ import logging
 import csv
 import numpy as np
 
-from gsitk import config
+from gsitk.config import default
 from gsitk.datasets import utils as dataset_utils
 from gsitk.features.embeddings import Embedding
 
 from sklearn.base import TransformerMixin
+
+config = default()
 
 logger = logging.getLogger(__name__)
 
@@ -51,8 +53,8 @@ class SSWE(Embedding, TransformerMixin):
                                       self.info['expected_bytes'],
                                       self.info['sha256'])
 
-    def load_sswe(self):
-        data_path = os.path.join(config.DATA_PATH,
+    def load_sswe(self, path=config.DATA_PATH):
+        data_path = os.path.join(path,
                                  self.info['name'])
         file_path = os.path.join(data_path, self.info['data_file'])
         zip_path = os.path.join(data_path, self.info['filename'])

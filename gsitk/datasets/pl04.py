@@ -15,7 +15,6 @@ import logging
 import pandas as pd
 import numpy as np
 from glob import glob
-from gsitk import config
 from gsitk.datasets import utils
 from gsitk.datasets.datasets import Dataset
 from gsitk.preprocess import normalize
@@ -23,17 +22,11 @@ from gsitk.preprocess import normalize
 logger = logging.getLogger(__name__)
 
 
-NAME = os.path.splitext(os.path.basename(__file__))[0]
 fold_limits = zip(np.arange(0, 1000, 100), np.arange(99, 1000, 100))
 folds = {i+1: limit  for i, limit in enumerate(fold_limits)}
 
 
 class Pl04(Dataset):
-
-    def __init__(self, info=None):
-        if info is None:
-            info = utils.load_info(NAME)
-        super(Pl04, self).__init__(info)
 
     def _read_file(self, path, binary=False):
         with open(path, 'r') as f:
@@ -55,14 +48,13 @@ class Pl04(Dataset):
 
     def normalize_data(self):
         dataset = pd.DataFrame(columns=['id', 'fold', 'text', 'polarity'])
-        data_path = os.path.join(config.DATA_PATH, self.name)
-        raw_data_path = os.path.join(data_path,
+        raw_datapath = os.path.join(self.data_path,
                                      self.info['properties']['data_file'])
         logger.debug('Normalizing PL04')
         get_pol = lambda p: 1 if p == 'pos' else -1
         count = 0
         for pol in ('pos', 'neg'):
-            for file in glob(os.path.join(raw_data_path, '{}/*'.format(pol))):
+            for file in glob(os.path.join(raw_datapath, '{}/*'.format(pol))):
                 text = self._read_file(file)
                 cv, id_ = self._get_file_cv_id(file)
                 fold = self._choose_fold(cv, folds)

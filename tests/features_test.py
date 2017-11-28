@@ -19,7 +19,8 @@ def test_view_features():
         "- test_numpy => format: numpy",
         "- test_pickle => format: pickle"
     ]
-    assert set(resp) - set(expected) == set()
+    for i in expected:
+        assert i in resp
 
 
 def test_read_features():

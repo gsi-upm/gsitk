@@ -92,3 +92,9 @@ ENV/
 
 # Data files
 gsitk/data
+
+# Hidden files
+.*
+
+# Pickles
+*.pck

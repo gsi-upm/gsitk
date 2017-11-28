@@ -10,46 +10,29 @@ In Proceedings of the 8th international workshop on semantic evaluation (SemEval
 
 import os
 import logging
-import re
 import pandas as pd
 
-from gsitk.datasets import utils
 from gsitk.datasets.datasets import Dataset
 from gsitk.preprocess import normalize
 
 logger = logging.getLogger(__name__)
 
 
-class Semeval14(Dataset):
+class Fake1(Dataset):
 
     def normalize_data(self):
-        raw_datapath = os.path.join(self.data_path,
+        raw_data_path = os.path.join(self.data_path,
                                      self.info['properties']['data_file'])
 
         data = pd.read_csv(
-            raw_datapath,
-            header=None,
+            raw_data_path,
             encoding='utf-8',
             sep='\t',
             index_col=False,
-            names = [
-                'tweet_id',
-                'user_id',
-                'polarity',
-                'text',
-                
-            ]
         )
 
-        # Convert the raw polarity values to a [-1,1] range
-        pol_conv = {
-            "negative": -1,
-            "neutral": 0,
-            "positive": 1
-        }
-
-        data['polarity'].replace(pol_conv, inplace=True)
-        # Tokenize and clean the test
+        if len(data) < 1:
+            return data
 
         text_data = normalize.normalize_text(data)
         data = pd.concat([data['polarity'], text_data], axis=1)

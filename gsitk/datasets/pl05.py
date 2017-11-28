@@ -16,7 +16,6 @@ import codecs
 import pandas as pd
 import numpy as np
 from glob import glob
-from gsitk import config
 from gsitk.datasets import utils
 from gsitk.datasets.datasets import Dataset
 from gsitk.preprocess import normalize
@@ -24,19 +23,11 @@ from gsitk.preprocess import normalize
 logger = logging.getLogger(__name__)
 
 
-NAME = os.path.splitext(os.path.basename(__file__))[0]
-
 class Pl05(Dataset):
-
-    def __init__(self, info=None):
-        if info is None:
-            info = utils.load_info(NAME)
-        super(Pl05, self).__init__(info)
 
     def normalize_data(self):
         dataset = pd.DataFrame(columns=['id', 'text', 'polarity'])
-        data_path = os.path.join(config.DATA_PATH, self.name)
-        data_path = os.path.join(data_path, self.info['properties']['data_file'])
+        self.data_path = os.path.join(self.data_path, self.info['properties']['data_file'])
 
         logger.debug('Normalizing PL05')
 
@@ -44,7 +35,7 @@ class Pl05(Dataset):
 
         texts = list()
         polarities = list()
-        for f in glob(os.path.join(data_path, '*')):
+        for f in glob(os.path.join(self.data_path, '*')):
             polarity = get_pol(f.split('.')[-1])
             with codecs.open(f, 'r', encoding='ISO-8859-2') as f_:
                 lines = f_.readlines()

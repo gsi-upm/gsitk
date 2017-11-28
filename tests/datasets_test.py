@@ -1,3 +1,4 @@
+import os
 import pytest
 import pandas as pd
 
@@ -104,6 +105,7 @@ def test_multidomain():
     assert pol_val_count.values[0] > 0
     assert (data['text'].apply(len) > 0).all()
 
+
 def test_semeval07():
     se07 = semeval07.Semeval07()
     data = se07.prepare_data(download=False)
@@ -111,3 +113,40 @@ def test_semeval07():
     assert len(set(['anger','disgust', 'fear','joy','sadness','surprise']) & \
                set(data.columns)) == 6
     assert set(data['fold'].value_counts().index) == set(['dev','test'])
+
+
+def test_find_datasets(dataset_manager):
+    '''Dataset definition files should be discoverable'''
+    dm = dataset_manager
+    root = os.path.dirname(__file__)
+    fake_folder = os.path.join(root, 'fake_datasets')
+    fake1_path = os.path.join(fake_folder, 'fake1.yml')
+    datasets = dm.find_datasets(fake_folder)
+    assert fake1_path in datasets
+
+
+def test_get_dataset_local_data(dataset_manager):
+    '''The dataset manager should be able to load datasets from a given location'''
+    dm = dataset_manager
+    data_path = os.path.join(os.path.dirname(__file__), 'fake_datasets')
+    fake1_path = os.path.join(data_path, 'fake1.yml')
+
+    fake1 = dm.get_dataset(fake1_path, data_path=data_path)
+
+    assert fake1.info
+
+    assert len(fake1.data) == fake1.info['stats']['instances']
+
+def test_get_dataset_global_data(dataset_manager):
+    '''
+    The dataset manager should be able to load datasets from
+    a given location, using data from DATA_FOLDER'''
+    dm = dataset_manager
+    data_path = os.path.join(os.path.dirname(__file__), 'fake_datasets')
+    fake2_path = os.path.join(data_path, 'fake2.yml')
+
+    fake2 = dm.get_dataset(fake2_path)
+
+    assert fake2.info
+
+    assert len(fake2.data) == fake2.info['stats']['instances']

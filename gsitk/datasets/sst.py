@@ -16,22 +16,15 @@ import logging
 import shutil
 import pandas as pd
 import pytreebank
-from gsitk import config
 from gsitk.datasets import utils
 from gsitk.datasets.datasets import Dataset
 from gsitk.preprocess import normalize
 
 logger = logging.getLogger(__name__)
 
-NAME = os.path.splitext(os.path.basename(__file__))[0]
-
 
 class Sst(Dataset):
-    def __init__(self, info=None):
-        if info is None:
-            info = utils.load_info(NAME)
-        super(Sst, self).__init__(info) 
-        self.polarities = {0:-1, 1:-1, 2:0, 3:1, 4:1}
+    polarities = {0:-1, 1:-1, 2:0, 3:1, 4:1}
     
     def _say_progress(self, subset, count):
         '''
@@ -53,21 +46,20 @@ class Sst(Dataset):
         return parsed
 
     def normalize_data(self):
-        data_path = os.path.join(config.DATA_PATH, self.name)
-        raw_data_path = os.path.join(data_path,
+        raw_datapath = os.path.join(self.data_path,
                                      self.info['properties']['data_file'])
-        trees_path = os.path.join(data_path, 'trainDevTestTrees_PTB') 
+        trees_path = os.path.join(self.data_path, 'trainDevTestTrees_PTB') 
         if not os.path.isdir(trees_path):
             os.mkdir(trees_path)
-        shutil.move(raw_data_path, trees_path)
-        stanford_treebank = pytreebank.load_sst(data_path)
+        shutil.move(raw_datapath, trees_path)
+        stanford_treebank = pytreebank.load_sst(self.data_path)
         train = self.convert_treebank(stanford_treebank['train'], 'train')
         dev = self.convert_treebank(stanford_treebank['dev'], 'dev')
         test = self.convert_treebank(stanford_treebank['test'], 'test')
         data = pd.concat([train,dev,test], ignore_index=True)       
         
         # Remove directory to avoid pytreebank library error 
-        #shutil.rmtree(raw_data_path)
+        #shutil.rmtree(raw_datapath)
         
         # Tokenize and clean the test
         text_data = normalize.normalize_text(data)

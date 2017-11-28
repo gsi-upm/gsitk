@@ -20,11 +20,13 @@ setup(name = 'gsitk',
       version = VERSION,
       description = 'gsitk is a library on top of scikit-learn that eases the development process on NLP machine learning driven projects.',
       author = 'Oscar Araque',
-      email = 'oscar.aiborra@gmail.com',
+      author_email = 'oscar.aiborra@gmail.com',
       url = 'https://github.com/gsi-upm/gsitk', # URL to the github repo
       download_url =
       'https://github.com/gsi-upm/gsitk/tarball/{}'.format(VERSION),
       keywords = ['sentiment analysis', 'nlp', 'machine learning'], # list of keywords that represent your package
+      setup_requires=['pytest-runner'],
+      tests_require=['pytest'],
       classifiers = [],
       install_requires=install_reqs,
       include_package_data=True
