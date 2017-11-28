@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 
 
 class Sst(Dataset):
-    polarities = {0:-1, 1:-1, 2:0, 3:1, 4:1}
+    polarities = {0:-2, 1:-1, 2:0, 3:1, 4:2}
     
     def _say_progress(self, subset, count):
         '''
@@ -56,7 +56,7 @@ class Sst(Dataset):
         train = self.convert_treebank(stanford_treebank['train'], 'train')
         dev = self.convert_treebank(stanford_treebank['dev'], 'dev')
         test = self.convert_treebank(stanford_treebank['test'], 'test')
-        data = pd.concat([train,dev,test], ignore_index=True)       
+        data = pd.concat([train,dev,test],     for i in expected:         assert i in respignore_index=True)       
         
         # Remove directory to avoid pytreebank library error 
         #shutil.rmtree(raw_datapath)

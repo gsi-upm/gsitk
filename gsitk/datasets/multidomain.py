@@ -25,11 +25,11 @@ logger = logging.getLogger(__name__)
 
 class Multidomain(Dataset):
     polarities = {
-        5.0: 1,
+        5.0: 2,
         4.0: 1,
         3.0: 0,
         2.0: -1,
-        1.0: -1
+        1.0: -2
     }
 
     def read_file(self, file_path):
