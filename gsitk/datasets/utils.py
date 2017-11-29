@@ -40,12 +40,11 @@ def load_info(name, given_path=False):
     return info
 
 
-def _maybe_download(data_name, url, filename, expected_bytes, sha256=None, move=False):
+def _maybe_download(data_path, url, filename, expected_bytes, sha256=None, move=False):
     """Download the dataset if it is not already stored locally.
 
     :return:
     """
-    data_path = os.path.join(self.config.DATA_PATH, data_name)
     file_path = os.path.join(data_path, filename)
 
     logger.debug("Checking data path: {}".format(data_path))

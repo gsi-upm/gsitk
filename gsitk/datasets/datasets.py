@@ -39,7 +39,7 @@ class Dataset():
         return self._data
 
     def maybe_download(self, move=False):
-        utils._maybe_download(data_name=self.name,
+        utils._maybe_download(data_path=self.config.DATA_PATH,
                               url=self.info['properties']['url'],
                               filename=self.info['properties']['filename'],
                               expected_bytes=self.info['properties']['expected_bytes'],
