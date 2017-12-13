@@ -13,6 +13,9 @@ import shutil
 import sys
 import importlib
 from six.moves import urllib
+from gsitk.config import default
+
+config = default()
 
 
 logger = logging.getLogger(__name__)
@@ -40,7 +43,8 @@ def load_info(name, given_path=False):
     return info
 
 
-def _maybe_download(data_path, url, filename, expected_bytes, sha256=None, move=False):
+def _maybe_download(data_path, url, filename, expected_bytes, sha256=None, move=False,
+                    resources_path=config.RESOURCES_PATH):
     """Download the dataset if it is not already stored locally.
 
     :return:
@@ -58,8 +62,7 @@ def _maybe_download(data_path, url, filename, expected_bytes, sha256=None, move=
             logger.debug("Downloaded {}".format(filename))
         else:
             logger.debug("Moving {} to {}".format(filename, data_path))
-            shutil.copy(os.path.join(self.config.RESOURCES_PATH, filename),
-                        data_path)
+            shutil.copy(os.path.join(resources_path, filename), data_path)
 
 
     statinfo = os.stat(file_path)
