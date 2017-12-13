@@ -101,8 +101,7 @@ class Dataset():
             if self.info['properties'].get('download') is None or \
                self.info['properties'].get('download') is True:
 
-                if self.info['properties'].get('copy') is None or \
-                   self.info['properties'].get('copy') is True:
+                if self.info['properties'].get('copy') is True:
                     # In case the dataset is batteries included, just copy it
                     self.maybe_download(move=True)
                 else:
@@ -181,7 +180,7 @@ class DatasetManager():
 
     def find_datasets(self, path=None):
         path = path or os.path.dirname(os.path.abspath(__file__))
-        extensions = ['yml', 'yml']
+        extensions = ['yml', 'yaml']
         info_files = []
         for ext in extensions:
             info_files.extend([dataset for dataset in \
