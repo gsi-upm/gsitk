@@ -1,0 +1,14 @@
+properties:
+        name: sts
+        url: "https://raw.githubusercontent.com/oaraque/world_mood/master/sts_gold_v03/sts_gold_tweet.csv"
+        filename: "sts_gold_tweet.tsv"
+        expected_bytes: 205093
+        sha256: "529d473c1abedfda15c567fec0fb94d7209a2057410376a2fc29b32fc6fef48f"
+        data_file: "sts_gold_tweet.tsv"
+        processed_file: "sts.pck"
+        compression: ~
+stats:
+        instances: 4200
+        labels:
+          - 1
+          - -1

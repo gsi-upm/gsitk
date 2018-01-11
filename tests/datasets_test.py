@@ -4,7 +4,7 @@ import pandas as pd
 
 from gsitk.datasets import (
     datasets, sentiment140, vader, pl04 , semeval14, semeval13, imdb, imdb_unsup, \
-    sst, multidomain, semeval07
+    sst, multidomain, semeval07, sts
 )
 
 
@@ -114,6 +114,14 @@ def test_semeval07():
                set(data.columns)) == 6
     assert set(data['fold'].value_counts().index) == set(['dev','test'])
 
+
+def test_sts():
+    sts_data = sts.STS()
+    data = sts_data.prepare_data(download=False)
+    pol_val_count = data['polarity'].value_counts()
+    assert data.shape[0] > 0
+    assert pol_val_count.index.shape[0] > 0
+    assert pol_val_count.values.shape[0] > 0
 
 def test_find_datasets(dataset_manager):
     '''Dataset definition files should be discoverable'''
