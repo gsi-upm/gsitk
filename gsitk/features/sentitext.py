@@ -1,3 +1,8 @@
+###
+# DEPRECATED, PLEASE DO NOT USE THIS
+###
+
+
 from nltk.corpus import stopwords
 from gsitk.features.sentiwn import SentiWordNet
 import re

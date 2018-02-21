@@ -59,6 +59,15 @@ def tokenize(text):
     return text.lower()
 
 
+def normalize_text(data):
+    text_data = data['text'].apply(tokenize)
+    return text_data
+
+
+def preprocess(text):
+    return tokenize(text)
+
+
 if __name__ == '__main__':
     _, text = sys.argv
     if text == "test":

@@ -21,10 +21,13 @@ def clean_str(string):
     string = re.sub(r"\)", " ) ", string)
     string = re.sub(r"\?", " ? ", string)
     string = re.sub(r"\s{2,}", " ", string)
-    return string.strip().lower()
+    return string.strip().lower().split(' ')
 
 
 def normalize_text(data):
     text_data = data['text'].apply(clean_str)
-    text_data = text_data.str.split(' ')
     return text_data
+
+
+def preprocess(text):
+    return clean_str(text)

@@ -43,7 +43,7 @@ class Multidomain(Dataset):
             parser = BeautifulSoup(f, 'lxml')
             
         for text in parser.find_all('review_text'):
-            text = simple.clean_str(text.text).split(' ')
+            text = simple.clean_str(text.text)
             texts.append(text)
             
         for rating in parser.find_all('rating'):

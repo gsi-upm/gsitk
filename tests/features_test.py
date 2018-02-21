@@ -41,12 +41,12 @@ def norm_text(text_df):
     return normalize.normalize_text(text_df)
 
 
-def test_sentitext(norm_text):
-    st = sentitext.prepare_data(norm_text)
-    assert len(st) > 0
-    for st_i in st:
-        assert len(st_i.keys()) > 0
-        assert isinstance(st_i['total_score'], float)
+#def test_sentitext(norm_text):
+#    st = sentitext.prepare_data(norm_text)
+#    assert len(st) > 0
+#    for st_i in st:
+#        assert len(st_i.keys()) > 0
+#        assert isinstance(st_i['total_score'], float)
 
 
 def test_surface(norm_text):
