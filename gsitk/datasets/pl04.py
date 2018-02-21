@@ -4,10 +4,9 @@ Processing of the PL04 dataset.
 URL:
 http://www.cs.cornell.edu/people/pabo/movie-review-data/
 REF:
-B. Pang, L. Lee, S. Vaithyanathan
-Thumbs up?: sentiment classification using machine learning techniques
-Proceedings of the ACL-02 conference on empirical methods in natural language processing-Volume 10, 
-Association for Computational Linguistics (2002), pp. 79–86
+Bo Pang and Lillian Lee, 
+A Sentimental Education: Sentiment Analysis Using Subjectivity Summarization Based on Minimum Cuts
+Proceedings of ACL 2004. 
 """
 
 import os
