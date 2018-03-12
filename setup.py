@@ -14,7 +14,6 @@ except AttributeError:
 
 install_reqs = [str(ir.req) for ir in install_reqs]
 
-
 setup(name = 'gsitk',
       packages = ['gsitk'], # this must be the same as the name above
       version = VERSION,
