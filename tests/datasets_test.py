@@ -1,4 +1,5 @@
 import os
+import sys
 import pytest
 import pandas as pd
 
@@ -158,3 +159,39 @@ def test_get_dataset_global_data(dataset_manager):
     assert fake2.info
 
     assert len(fake2.data) == fake2.info['stats']['instances']
+
+def test_get_dataset_pollutes(dataset_manager):
+    '''
+    The dataset manager should not pollute the import namespace when loading
+    a dataset
+    '''
+    dm = dataset_manager
+    data_path = os.path.join(os.path.dirname(__file__), 'fake_datasets')
+    fake1_path = os.path.join(data_path, 'fake1.yml')
+
+    fake1 = dm.get_dataset(fake1_path)
+
+    try:
+        import fake1
+        raise Exception('The global environment has been poluted')
+    except ImportError:
+        pass
+
+
+def test_get_dataset_existing_module(dataset_manager):
+    '''
+    The dataset manager should be able to load a dataset even if its name collides
+    with an existing module.
+    '''
+    sys.path.append(os.path.dirname(os.path.realpath(__file__)))
+    from fake3 import is_dataset
+
+    assert not is_dataset
+
+    dm = dataset_manager
+    data_path = os.path.join(os.path.dirname(__file__), 'fake_datasets')
+    fake3_path = os.path.join(data_path, 'fake3.yml')
+
+    fake3_dataset = dm.get_dataset(fake3_path)
+
+    assert fake3_dataset.is_dataset

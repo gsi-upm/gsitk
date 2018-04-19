@@ -1,0 +1,10 @@
+# Load a dataset using processing code from
+# a custom module (fake1.py) and data from
+# the default DATA_PATH
+properties:
+        name: fake3
+        module: fake3
+        data_file: "fake3.tsv"
+        processed_file: "fake3.pck"
+stats:
+        instances: 0
