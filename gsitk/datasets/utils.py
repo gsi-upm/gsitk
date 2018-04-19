@@ -12,6 +12,7 @@ import yaml
 import shutil
 import sys
 import importlib
+from localimport import localimport
 from six.moves import urllib
 from gsitk.config import default
 
@@ -136,9 +137,19 @@ def _check_dataset(path, name, count=None):
 
 
 def load_module(name, root=None):
-    if root:
-        sys.path.append(root)
-    tmp = importlib.import_module(name)
-    if root:
-        sys.path.remove(root)
+    if not root:
+        return importlib.import_module(name)
+    root = os.path.realpath(root)
+    oldmodule = None
+    if name in sys.modules:
+        modulepath = os.path.realpath(sys.modules[name].__file__)
+        relative = os.path.relpath(modulepath, root)
+        inroot = not (relative == os.pardir or relative.startswith(os.pardir + os.sep))
+        if not inroot:
+            oldmodule = sys.modules[name]
+        del sys.modules[name]
+    with localimport(root) as _loader:
+        tmp = importlib.import_module(name)
+    if oldmodule:
+        sys.modules[name] = oldmodule
     return tmp
