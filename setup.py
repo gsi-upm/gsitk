@@ -1,18 +1,17 @@
-import pip
-#from distutils.core import setup
 from setuptools import setup
-from pip.req import parse_requirements
 
 VERSION = '0.1.8'
 
 
-try:
-    install_reqs = parse_requirements(
-        "requirements.txt", session=pip.download.PipSession())
-except AttributeError:
-    install_reqs = parse_requirements("requirements.txt")
+def parse_requirements(filename):
+    """ load requirements from a pip requirements file """
+    with open(filename, 'r') as f:
+        lineiter = list(line.strip() for line in f)
+    return [line for line in lineiter if line and not line.startswith("#")]
 
-install_reqs = [str(ir.req) for ir in install_reqs]
+
+install_reqs = parse_requirements("requirements.txt")
+
 
 setup(name = 'gsitk',
       packages = ['gsitk'], # this must be the same as the name above
