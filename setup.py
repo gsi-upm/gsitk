@@ -3,7 +3,7 @@ import pip
 from setuptools import setup
 from pip.req import parse_requirements
 
-VERSION = '0.1.7.1'
+VERSION = '0.1.8'
 
 
 try:
