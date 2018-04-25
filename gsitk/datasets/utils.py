@@ -12,7 +12,6 @@ import yaml
 import shutil
 import sys
 import importlib
-from localimport import localimport
 from six.moves import urllib
 from gsitk.config import default
 
@@ -148,8 +147,10 @@ def load_module(name, root=None):
         if not inroot:
             oldmodule = sys.modules[name]
         del sys.modules[name]
-    with localimport(root) as _loader:
-        tmp = importlib.import_module(name)
+    sys.path.insert(0, root)
+    tmp = importlib.import_module(name)
+    del sys.path[0]
+    del sys.modules[name]
     if oldmodule:
         sys.modules[name] = oldmodule
     return tmp
