@@ -1,6 +1,6 @@
 from setuptools import setup
 
-VERSION = '0.1.8.1'
+VERSION = '0.1.8.2'
 
 
 def parse_requirements(filename):
