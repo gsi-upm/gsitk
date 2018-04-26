@@ -8,4 +8,3 @@ pytest
 pytreebank
 beautifulsoup4
 lxml
-localimport
