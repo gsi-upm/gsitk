@@ -10,4 +10,5 @@ test:
   - python3 -m nltk.downloader averaged_perceptron_tagger
   - python3 -m nltk.downloader wordnet
   - python3 -m nltk.downloader vader_lexicon
+  - python3 -m nltk.downloader wordnet_ic  
   - python3 setup.py test
