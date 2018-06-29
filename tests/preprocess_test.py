@@ -1,6 +1,6 @@
 import pytest
 
-from gsitk.preprocess import normalize, simple, Preprocesser, embeddings_trick
+from gsitk.preprocess import normalize, simple, Preprocesser, embeddings_trick, stopwords
 
 
 @pytest.fixture
@@ -8,6 +8,7 @@ def text_df():
     import pandas as pd
     with open('tests/data/test_dataset.txt') as f:
         text = f.readlines()
+    text = [t.strip() for t in text]
     df = pd.DataFrame(columns=['text'],
                       data=text)
     return df
@@ -52,3 +53,8 @@ def test_embeddings_tricker():
     assert trans == [['!', ',', 'it', '.', 'to', 'the', 'and', 'repeat'],
                      ['the', 'and', 'repeat', 'allcaps', 'the', 'the', ',', 'it']]
 
+
+def test_stopwords_remover(text_df):
+    stop = stopwords.StopWordsRemover(type='nltk', language='english')
+    trans = stop.fit_transform(text_df['text'].values)
+    assert trans == ['The cat mat.', 'My dog running garden, happy! :)'] 
