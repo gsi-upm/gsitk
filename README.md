@@ -59,7 +59,7 @@ model = simon.simon_pipeline(simon_transformer=simon_model, percentile=25)
 
 ## Word2VecFeatures
 
-This feature extractor implements the generic word vector model presented in (this paper)[https://www.sciencedirect.com/science/article/pii/S0957417417300751].
+This feature extractor implements the generic word vector model presented in [this paper](https://www.sciencedirect.com/science/article/pii/S0957417417300751).
 An example of use is shown below:
 
 ```python
@@ -99,3 +99,10 @@ author = "Oscar Araque and Ignacio Corcuera-Platas and J. Fernando Sánchez-Rada
 keywords = "Ensemble, Deep learning, Sentiment analysis, Machine learning, Natural language processing"
 }
 ```
+
+# Acknowledgements
+
+This research work is supported by the EC through the H2020 project MixedEmotions (Grant Agreement no: 141111),
+the Spanish Ministry of Economy under the R&D project Semola (TEC2015-68284-R)
+and the project EmoSpaces (RTC-2016-5053-7); by ITEA3 project SOMEDI (15011);
+and by MOSI-AGIL-CM (grant P2013/ICE-3019, co-funded by EU Structural Funds FSE and FEDER).
