@@ -5,6 +5,22 @@ It uses _numpy_, _pandas_ and related libraries to easy the development.
 
 _gsitk_ manages datasets, features, classifiers and evaluation techniques, so that writing an evaluation pipeline results fast and simple.
 
+# Installation and use
+
+## Installation
+_gsitk_ can be installed via pip, which is the recommended way:
+```
+pip install gsitk
+```
+
+Alternatively, gsitk can be installed by cloning this repository.
+
+## Using _gsitk_
+
+_gsitk_ saves into disk the datasets and some other necessary resources.
+By default, all these data are stored in `/data`.
+The environment variable `$DATA_PATH` can be set in order to specify an alternative directory.
+
 # Feature extractors
 
 ## SIMON feature extractor
@@ -38,4 +54,48 @@ simon_model = simon.Simon(lexicon=lexicon, n_lexicon_words=200, embedding=embedd
 model = simon.simon_pipeline(simon_transformer=simon_model, percentile=25)
 
 # model also implemtens fit() and transform()
+```
+
+
+## Word2VecFeatures
+
+This feature extractor implements the generic word vector model presented in (this paper)[https://www.sciencedirect.com/science/article/pii/S0957417417300751].
+An example of use is shown below:
+
+```python
+from gsitk.features.word2vec import Word2VecFeatures
+
+
+text = [
+    ['my', 'cat', 'is', 'totally', 'happy'],
+    ['my', 'dog', 'is', 'very', 'sad'],
+]
+
+# path is set to a Word2Vec model
+# convolution parameter encondes pooling operation [average, maximum, minimum]
+
+w2v_extractor = Word2VecFeatures(w2v_model_path=path, w2v_format='google_txt', convolution=[1,0,0])
+X = model.transform(text)
+# X is and array containing extrated features
+```
+
+# Cite 
+
+In you use this module, please cite the following papers:
+
+* Enhancing deep learning sentiment analysis with ensemble techniques in social applications
+
+```
+@article{ARAQUE2017236,
+title = "Enhancing deep learning sentiment analysis with ensemble techniques in social applications",
+journal = "Expert Systems with Applications",
+volume = "77",
+pages = "236 - 246",
+year = "2017",
+issn = "0957-4174",
+doi = "https://doi.org/10.1016/j.eswa.2017.02.002",
+url = "http://www.sciencedirect.com/science/article/pii/S0957417417300751",
+author = "Oscar Araque and Ignacio Corcuera-Platas and J. Fernando Sánchez-Rada and Carlos A. Iglesias",
+keywords = "Ensemble, Deep learning, Sentiment analysis, Machine learning, Natural language processing"
+}
 ```
