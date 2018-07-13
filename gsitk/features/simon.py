@@ -45,8 +45,8 @@ class Simon(TransformerMixin, BaseEstimator):
         
         lexicon = list()
         for lexicon_split in self._lexicon_split:
-            lex_words = sorted([(word_i, count[word_i]) for word_i in lexicon_split \
-                                if word_i in count], key=lambda x: x[1], reverse=True)
+            lex_words = sorted([(word_i, count[word_i]) for word_i in lexicon_split],
+                                key=lambda x: x[1], reverse=True)
             lex_words = lex_words[:self.n_lexicon_words] 
             lexicon.append(lex_words)
         self.lexicon = list(itertools.chain.from_iterable(lexicon))
