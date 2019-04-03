@@ -13,7 +13,7 @@ import numpy as np
 from collections import defaultdict
 
 from sklearn.preprocessing import normalize, scale
-from gsitk.features import sentitext as st
+#from gsitk.features import sentitext as st
 
 
 z_features = ['!', '#', '?', 'pos', 'neu', 'neg', 'total_score', 'words_all_caps', 'words_elong',
@@ -61,8 +61,9 @@ def transform(X):
         ['my', 'dog', 'run', 'in', 'the', 'rain']
     ]
     """
-    senti = st.prepare_data(X)
-    uniform = convert2uniform(senti)
-    z = to_z(uniform)
-    scaled = scale(z)
-    return scaled
+    raise NotImplementedError
+    #senti = st.prepare_data(X)
+    #uniform = convert2uniform(senti)
+    #z = to_z(uniform)
+    #scaled = scale(z)
+    #return scaled

@@ -9,7 +9,7 @@ from tests.preprocess_test import text_df
 
 from gsitk.preprocess import normalize
 from gsitk.features import (
-    features, utils, sentitext, surface, word2vec, sswe, doc2vec, simon
+    features, utils, surface, word2vec, sswe, doc2vec, simon
 )
 
 
