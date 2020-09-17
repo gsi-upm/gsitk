@@ -30,6 +30,7 @@ from nltk.corpus.reader.wordnet import information_content
 import math
 import sys
 from collections import Counter
+from collections.abc import Hashable
 
 
 import json
@@ -103,7 +104,7 @@ class memoized(object):
       self.func = func
       self.cache = {}
    def __call__(self, *args):
-      if not isinstance(args, collections.Hashable):
+      if not isinstance(args, Hashable):
          # uncacheable. a list, for instance.
          # better to not cache than blow up.
          return self.func(*args)

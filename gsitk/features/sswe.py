@@ -42,7 +42,7 @@ class SSWE(Embedding, TransformerMixin):
     def _load_info(self):
         path = os.path.dirname(os.path.abspath(__file__))
         with open(os.path.join(path, 'sswe.yml'), 'r') as f:
-            info = yaml.load(f)
+            info = yaml.load(f, Loader=yaml.FullLoader)
         return info
 
     def _download_model(self):

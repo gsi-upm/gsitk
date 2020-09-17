@@ -92,9 +92,7 @@ def test_imdb_unsup():
 def test_sst():
     sentitree = sst.Sst()
     data = sentitree.prepare_data(download=False)
-    assert data['polarity'].value_counts().index[0] == 1
-    assert data['polarity'].value_counts().values[0] == 5
-    assert data['polarity'].value_counts().values[1] == 3
+    assert sorted(data['polarity'].value_counts().index) == [-2, -1, 0, 1, 2]
     assert (data['text'].apply(len) > 0).all()
 
 

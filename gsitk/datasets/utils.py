@@ -34,11 +34,11 @@ def load_info(name, given_path=False):
             raise FileNotFoundError("{}".format(name))
 
         with open(os.path.join(path, '{}{}'.format(name, ext)), 'r') as f:
-            info = yaml.load(f)
+            info = yaml.load(f, Loader=yaml.FullLoader)
 
     else:
         with open(name, 'r') as f:
-            info = yaml.load(f)
+            info = yaml.load(f, Loader=yaml.FullLoader)
 
     return info
 

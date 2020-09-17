@@ -9,7 +9,7 @@ from tests.preprocess_test import text_df
 
 from gsitk.preprocess import normalize
 from gsitk.features import (
-    features, utils, surface, word2vec, sswe, doc2vec, simon
+    features, utils, word2vec, sswe, doc2vec, simon
 )
 
 
@@ -47,23 +47,6 @@ def embedding_model():
     path = os.path.join(path, 'data/w2v_model')
     model = KeyedVectors.load_word2vec_format(path)
     return model
-
-
-#def test_sentitext(norm_text):
-#    st = sentitext.prepare_data(norm_text)
-#    assert len(st) > 0
-#    for st_i in st:
-#        assert len(st_i.keys()) > 0
-#        assert isinstance(st_i['total_score'], float)
-
-
-def test_surface(norm_text):
-    x = surface.transform(norm_text)
-    assert isinstance(x, np.ndarray)
-    assert x.shape == (2, 12)
-    assert sum(x[0]) == -4.0
-    assert sum(x[1]) == 4.0
-
 
 def test_word2vec(norm_text, embedding_model):
     path = os.path.dirname(os.path.abspath(__file__))
@@ -127,9 +110,9 @@ def mock_labels():
 
 def check_features(feats):
     assert feats.shape[0] > 0
-    assert feats.sum() != 0
     assert feats.shape[1] > 0
-    assert feats.sum() != 0
+    assert feats.min() != 0
+    assert feats.max() != 0
 
 def test_simon(embedding_model, mock_lexicon, mock_input):
     model = simon.Simon(lexicon=mock_lexicon, n_lexicon_words=2, embedding=embedding_model)
