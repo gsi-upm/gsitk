@@ -98,3 +98,6 @@ gsitk/data
 
 # Pickles
 *.pck
+
+# mkdocs site
+site/
