@@ -3,4 +3,9 @@ theme: readthedocs
 nav:
   - Home: index.md
   - About: about.md
-
+  - User guide:
+      - Datasets: datasets.md
+      - Preprocessing: preprocessing.md
+      - Feature extraction: features.md
+      - Evaluation basics: evaluation-basic.md
+      - Evaluation advanced: evaluation-advanced.md

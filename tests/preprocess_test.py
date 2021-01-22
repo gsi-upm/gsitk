@@ -1,6 +1,7 @@
 import pytest
+from sklearn.pipeline import Pipeline
 
-from gsitk.preprocess import normalize, simple, Preprocesser, embeddings_trick, stopwords
+from gsitk.preprocess import normalize, simple, Preprocesser, embeddings_trick, stopwords, JoinTransformer
 
 
 @pytest.fixture
@@ -58,3 +59,20 @@ def test_stopwords_remover(text_df):
     stop = stopwords.StopWordsRemover(type='nltk', language='english')
     trans = stop.fit_transform(text_df['text'].values)
     assert trans == ['The cat mat.', 'My dog running garden, happy! :)'] 
+
+
+def test_jointransformer():
+    to_join = [['a', 'b', 'c'], ['x', 'y', 'z']]
+    resp = JoinTransformer().fit_transform(to_join)
+    assert resp[0] == 'a b c'
+    assert resp[1] == 'x y z'
+
+def test_preprocess_pipeline(text_df):
+    pipe = Pipeline([
+        ('simple', Preprocesser(simple)),
+        ('join', JoinTransformer())
+    ])
+    preprocessed = pipe.fit_transform(text_df['text'].values)
+    assert preprocessed[0] == 'the cat is on the mat .'
+    assert preprocessed[1] == 'my dog is running through the garden , he is so happy ! )'
+
