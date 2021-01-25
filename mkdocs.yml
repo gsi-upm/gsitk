@@ -7,5 +7,4 @@ nav:
       - Datasets: datasets.md
       - Preprocessing: preprocessing.md
       - Feature extraction: features.md
-      - Evaluation basics: evaluation-basic.md
-      - Evaluation advanced: evaluation-advanced.md
+      - Evaluation : evaluation.md
