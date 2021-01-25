@@ -54,7 +54,7 @@ from gsitk.features import simon
 simon_model = simon.Simon(lexicon=lexicon, n_lexicon_words=200, embedding=embedding_model)
 model = simon.simon_pipeline(simon_transformer=simon_model, percentile=25)
 
-# model also implemtens fit() and transform()
+# model also implements fit() and transform()
 ```
 
 

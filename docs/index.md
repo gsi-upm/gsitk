@@ -4,6 +4,7 @@ _gsitk_ is a library on top of scikit-learn that eases the development process o
 It uses _numpy_, _pandas_ and related libraries to easy the development.
 
 _gsitk_ manages datasets, features, classifiers and evaluation techniques, so that writing an evaluation pipeline results fast and simple.
+It is designed to be compatible with scikit-learn's [Pipeline](https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline).
 
 # Installation and use
 
@@ -54,7 +55,7 @@ from gsitk.features import simon
 simon_model = simon.Simon(lexicon=lexicon, n_lexicon_words=200, embedding=embedding_model)
 model = simon.simon_pipeline(simon_transformer=simon_model, percentile=25)
 
-# model also implemtens fit() and transform()
+# model also implements fit() and transform()
 ```
 
 

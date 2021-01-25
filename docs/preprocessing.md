@@ -79,6 +79,7 @@ preprocessing_pipe.fit_transform(texts)
  'will no one rid me of this turbulent priest ?']
 ```
 
+
 ## Stop word removal
 
 Removing stop words is a pervasive task in NLP.
@@ -95,7 +96,7 @@ texts = [
 StopWordsRemover().fit_transform(texts)
 ```
 
-```
+```python
 # output:
 ['cat crazy , mat !', 'one rid turbulent priest ?']
 ```
@@ -113,7 +114,7 @@ texts = [
 StopWordsRemover(language='spanish').fit_transform(texts)
 ```
 
-```
+```python
 # output:
 ['clavel blanco rosa roja , majestad escoja',
  'diez cañones banda viento popa toda vela']
@@ -126,6 +127,30 @@ In short, it consists on replacing certain words by others using a word embeddin
 It is used to expand an existing emotion dictionary.
 In any way, we consider it is an useful technique, and has been implemented in _gsitk_, making it easier to replicate the mentioned paper.
 
+This technique is used to avoid OOV (Out Of Vocabulary) issues when using a limited lexicon.
+Consider the following reduces sentiment analysis example:
 
-TODO
+```python
+from gsitk.preprocess.embeddings_trick import EmbeddingsTricker
+
+et = EmbeddingsTricker(
+    model_path='projects/data/WordEmbeddings/eng/GoogleNews-vectors-negative300.bin',
+    w2v_format='google_bin',
+    vocabulary=['my', 'cat', 'is', 'dog'],
+)
+
+ex_text = [
+    ['my', 'cat', 'is', 'glad'],
+    ['my', 'dog', 'is', 'saddening']
+]
+
+et.fit_transform(ex_text)
+```
+
+```
+# output
+[['my', 'cat', 'is', 'happy'], ['my', 'dog', 'is', 'sad']]
+```
+
+For more details on how to load and use the word embeddings for `EmbeddingsTricker`, see [features](features.md#word2vecfeatures).
 
