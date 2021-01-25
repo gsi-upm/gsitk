@@ -47,7 +47,8 @@ class SSWE(Embedding, TransformerMixin):
 
     def _download_model(self):
         if self._download:
-            dataset_utils._maybe_download(self.info['name'],
+            import pdb; pdb.set_trace()
+            dataset_utils._maybe_download(os.path.join(config.DATA_PATH, self.info['name']),
                                       self.info['url'],
                                       self.info['filename'],
                                       self.info['expected_bytes'],
