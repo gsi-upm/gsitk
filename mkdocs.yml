@@ -1,8 +1,8 @@
-site_name: GSItk Documentation - by Oscar
+site_name: GSItk Documentation
 theme: readthedocs
 nav:
   - Home: index.md
-  - About: about.md
+  - Publications: publications.md
   - User guide:
       - Datasets: datasets.md
       - Preprocessing: preprocessing.md

@@ -20,6 +20,9 @@ For more on this, see [this section](#persist-and-load)
 This implementation corresponds to the M<sub>G</sub> presented in [Araque et al., 2017].
 It uses a pre-trained word embedding model to extract a vector for each word, and then applies a pooling function to all words, obtaining document-level representation.
 By default, the pooling function is the _average_.
+
+![Word2VecFeatures model](img/mg.jpg)
+
 The following example shows the use of the implementation:
 
 ```python
@@ -44,7 +47,7 @@ X = model.transform(text)
 The parameters are configured as follows:
 
 * `w2v_model_path`: must contain a string path to a pre-trained word embedding model.
-* `w2v_format`: can be `gensim`, `google_txt`, `google_bin`, depending on the model's format. `gensim` is aimed to use [gensim models](https://radimrehurek.com/gensim/). `google_txt` and `google_bin` specify the use of the word2vec model for textual and binary representations, in that order.
+* `w2v_format`: can be `gensim`, `google_txt`, `google_bin`, depending on the model's format. `gensim` is aimed to use [gensim models](https://radimrehurek.com/gensim/). `google_txt` and `google_bin` specify the use of the word2vec model for textual and binary representations, respectively.
 * `convolution`: specifies the pooling function used. The coding is `[average, maximum, minimum]`. For example, `[1,0,0]` computes the average, `[1, 0, 1]` computes the average and minimum. 
 
 
@@ -71,10 +74,12 @@ d2v_features = model.transform(text)
 
 The parameter that is inserted into the `Doc2VecFeatures` is the path to the model.
 
-## Simon
+## SIMON
 
 This module implements the SIMilarity-based sentiment projectiON (SIMON) model, described in [Araque et al., 2019].
 The main idea of the SIMON method is that given a domain lexicon, the input text is measured against it, computing a vector that encodes the similarity between the input text and the lexicon. Such a vector encodes the similarity, as given by the word embedding model, of each of the words of the analyzed text to the lexicon words.
+
+![SIMON representation](img/simon.jpg)
 
 To use SIMON, two things are needed:
 
