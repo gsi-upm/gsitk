@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Evaluation - GSItk Documentation</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../css/theme.css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Evaluation";
+    var mkdocs_page_input_path = "evaluation.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> GSItk Documentation</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../publications/">Publications</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">User guide</span></p>
+                <ul class="current">
+                    <li class="toctree-l1"><a class="reference internal" href="../datasets/">Datasets</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../preprocessing/">Preprocessing</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../features/">Feature extraction</a>
+                    </li>
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Evaluation</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#basic-evaluation">Basic Evaluation</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#advanced-evaluation">Advanced Evaluation</a>
+    </li>
+    </ul>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../classifiers/">Classifiers</a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">GSItk Documentation</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>User guide &raquo;</li>
+        
+      
+    
+    <li>Evaluation</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="evaluation">Evaluation</h1>
+<p><em>gsitk</em> implements several functionalities for managing complex evaluation scenarios in Sentiment Analysis.
+Evaluating new models, and comparing them against previous works is the bread and butter of progress in Sentiment Analysis (see <a href="http://nlpprogress.com/english/sentiment_analysis.html">this</a>, por example).
+This way of progress makes the technicalities of the evaluation difficult to replicate, and costly to perform.
+In this sense, <em>gsitk</em> offers a number of functionalities to aid practitioners and researches in performing evaluation in the field of Sentiment Analysis.</p>
+<p>We divide the evaluation documentation in two:</p>
+<ul>
+<li><a href="#basic-evaluation">Basic Evaluation</a></li>
+<li><a href="#advanced-evaluation">Advanced Evaluation</a></li>
+</ul>
+<h2 id="basic-evaluation">Basic Evaluation</h2>
+<p>As many of <em>gsitk</em>'s modules, the evaluation methods are compatible with scikit-learn's <a href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline">Pipelines</a>.
+In fact, the we work with the evaluation interfaces as we do with these Pipelines.
+Let's perform a simple evaluation with <em>gsitk</em> from the beginning.
+First, we load the evaluation datasets:</p>
+<pre><code class="python">from gsitk.datasets.datasets import DatasetManager
+
+dm = DatasetManager()
+data = dm.prepare_datasets(['vader', 'pl05'])
+</code></pre>
+
+<p>Following, we define the models we want to evaluate.
+We define two pipelines (<code>pipeline</code> and <code>pipeline2</code>) that use scikit components.
+Observe that we are naming the pipelines and the pipelines' steps through the <code>name</code> property. 
+This will be useful to locate each model.
+For <code>pipeline2</code>, we do not name the pipeline's steps.</p>
+<pre><code class="python">from sklearn.pipeline import Pipeline
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.feature_extraction.text import TfidfTransformer
+from sklearn.linear_model import SGDClassifier
+
+pipeline = Pipeline([
+    ('vect', CountVectorizer()),
+    ('tfidf', TfidfTransformer()),
+    ('clf', SGDClassifier()),
+])
+
+pipeline.fit(data_ready['vader']['text'].values,
+             data_ready['vader']['polarity'].values.astype(int))
+pipeline.name = 'pipeline_trained'
+pipeline.named_steps['vect'].name = 'myvect'
+pipeline.named_steps['tfidf'].name = 'mytfidf'
+pipeline.named_steps['clf'].name = 'mylogisticregressor'
+
+
+pipeline2 = Pipeline([
+    ('vect', CountVectorizer()),
+    ('tfidf', TfidfTransformer()),
+    ('clf', SGDClassifier()),
+])
+
+pipeline2.fit(data_ready['pl05']['text'].values,
+              data_ready['pl05']['polarity'].values.astype(int))
+pipeline2.name = 'pipeline_trained2'
+</code></pre>
+
+<p>At this point, we may need to adapt the datasets so that the text is represented by a string, not a list of tokens:</p>
+<pre><code class="python">data_ready = {}
+for data_k, data_v in data.items():
+    data_ready[data_k] = data_v.copy()
+    data_ready[data_k]['text'] = data_v['text'].apply(' '.join).values
+</code></pre>
+
+<p>At this point we are ready to perform the evaluation.
+For this purpose, we use the <code>Evaluation</code> class, which is defined by the following parameters:</p>
+<ul>
+<li><code>tuples</code>: used in <a href="#advanced-evaluation">Advanced Evaluation</a>.</li>
+<li><code>datasets</code>: a <code>dict</code> of the datasets to use for the evaluation.</li>
+<li><code>pipelines</code>: a <code>list</code> of scikit pipelines that represent the models to evaluate.</li>
+</ul>
+<pre><code class="python">from gsitk.evaluation.evaluation import Evaluation
+
+# define datasets for evaluation
+datasets_evaluation = {
+    'vader': data_ready['vader'],
+    'pl05': data_ready['pl05']
+}
+
+# configure evaluation
+ev = Evaluation(tuples=None,
+                datasets=datasets_evaluation,
+                pipelines=[pipeline, pipeline2])
+
+# perform evaluation, this can take a little long
+ev.evaluate()
+
+# results are stored in ev, and are in pandas DataFrame format
+ev.results
+</code></pre>
+
+<p>The output is shown below:</p>
+<pre><code>|   | Dataset | Features | Model                    | CV    | accuracy | precision_macro | recall_macro | f1_weighted | f1_micro | f1_macro | Description                                       |
+|---|---------|----------|--------------------------|-------|----------|-----------------|--------------|-------------|----------|----------|---------------------------------------------------|
+| 0 | vader   | None     | pipeline_trained__vader  | False | 0.992143 | 0.992596        | 0.988998     | 0.992128    | 0.992143 | 0.990772 | vect(myvect) --&gt; tfidf(mytfidf) --&gt; clf(mylogi... |
+| 1 | vader   | None     | pipeline_trained2__vader | False | 0.596429 | 0.630961        | 0.649194     | 0.608576    | 0.596429 | 0.59155  | vect --&gt; tfidf --&gt; clf                            |
+| 2 | pl05    | None     | pipeline_trained__pl05   | False | 0.578962 | 0.585842        | 0.579002     | 0.570405    | 0.578962 | 0.570422 | vect(myvect) --&gt; tfidf(mytfidf) --&gt; clf(mylogi... |
+| 3 | pl05    | None     | pipeline_trained2__pl05  | False | 0.926788 | 0.926838        | 0.926787     | 0.926786    | 0.926788 | 0.926786 | vect --&gt; tfidf --&gt; clf                            |
+</code></pre>
+
+<p>In the results table we can observe how the designed models obtain different metrics in the evaluation datasets.
+Also, the names we used when defining the models are used to identify each pipeline.</p>
+<p>When configured as in the example, <code>Evaluation</code> uses already trained models to predict on the defined datasets.
+For a more configurable framework, see <a href="#advanced-evaluation">Advanced Evaluation</a>.</p>
+<h2 id="advanced-evaluation">Advanced Evaluation</h2>
+<p>Of course, more complex evaluation methods normally need to be done.
+For this, <em>gsitk</em>'s evaluation framework has a more advanced interface.</p>
+<p>Internally, the evaluation process uses evaluation tuples (<code>EvalTuple</code>), which are a method for specifying which datasets, features and classifiers we want to evaluate. For evaluating a set of models that predict from a set of features, a `EvalTuple`` are specified. The next example evaluates a simple logistic regressions model that uses word2vec features to predict the sentiment of the IMDB dataset.</p>
+<p>We prepare the data and extract the features we want to evaluate:</p>
+<pre><code class="python">
+from gsitk.datasets.datasets import DatasetManager
+from gsitk.features.word2vec import Word2VecFeatures
+
+dm = DatasetManager()
+data = dm.prepare_datasets(['imdb',])
+
+w2v_feat = Word2VecFeatures(w2v_model_path='/data/w2vmodel_500d_5mc')
+transformed = w2v_feat.transform(data['imdb']['text'].values)
+</code></pre>
+
+<p>We define the machine learning model to use:</p>
+<pre><code class="python">from sklearn.linear_model import SGDClassifier
+
+sgd = SGDClassifier()
+
+# transformed is the features extracted from the IMDB dataset
+# to properly evaluate, separate in train and test 
+# using the original dataset fold
+train_indices = (data['imdb']['fold'] == 'train').values
+test_indices =(data['imdb']['fold'] == 'test').values
+
+transformed_train = transformed[train_indices]
+transformed_test = transformed[test_indices]
+
+
+sgd.fit(transformed_train, data['imdb']['polarity'][train_indices])
+</code></pre>
+
+<p>After this, we prepare the model, features and EvalTuple for the evaluation:</p>
+<pre><code class="python">from gsitk.pipe import Model, Features, EvalTuple
+
+models = [Model(name='sgd', classifier=sgd)]
+
+feats = [Features(name='w2v__imdb_test', dataset='imdb', values=transformed_test)]
+
+ets = [EvalTuple(classifier='sgd', features='w2v__imdb_test', labels='imdb')]
+</code></pre>
+
+<p>Finally, we just need to perform the evaluation:</p>
+<pre><code class="python">from gsitk.evaluation.evaluation import Evaluation
+
+ev = Evaluation(datasets=data, features=feats, models=models, tuples=ets)
+
+# run the evaluation
+ev.evaluate()
+
+# view the results
+ev.results
+</code></pre>
+
+<p>The output is:</p>
+<pre><code>|   | Dataset | Features       | Model | CV    | accuracy | precision_macro | recall_macro | f1_weighted | f1_micro | f1_macro |
+|---|---------|----------------|-------|-------|----------|-----------------|--------------|-------------|----------|----------|
+| 0 | imdb    | w2v__imdb_test | sgd   | False | 0.76164  | 0.782904        | 0.76164      | 0.757075    | 0.76164  | 0.757075 |
+</code></pre>
+
+<p>From the output, we can see how the evaluation has been done.
+Through the shown tools, we can define more complex evaluation procedures, adapting to the needs of practitioners and researchers.</p>
+<p>If we want to perform <a href="https://en.wikipedia.org/wiki/Cross-validation_(statistics)">cross-validation</a>, there is a specific evaluation tuple for that: the <code>CrossEvalTuple</code>, which has the same interface as the <code>EvalTuple</code>.</p>
+<hr />
+<p>The full example is shown below:</p>
+<pre><code class="python">from gsitk.datasets.datasets import DatasetManager
+from gsitk.features.word2vec import Word2VecFeatures
+from sklearn.linear_model import SGDClassifier
+from gsitk.pipe import Model, Features, EvalTuple
+from gsitk.evaluation.evaluation import Evaluation
+
+dm = DatasetManager()
+data = dm.prepare_datasets(['imdb',])
+
+
+w2v_feat = Word2VecFeatures(w2v_model_path='/data/w2vmodel_500d_5mc')
+transformed = w2v_feat.transform(data['imdb']['text'].values)
+
+
+sgd = SGDClassifier()
+
+# transformed is the features extracted from the IMDB dataset
+# to properly evaluate, separate in train and test 
+# using the original dataset fold
+train_indices = (data['imdb']['fold'] == 'train').values
+test_indices =(data['imdb']['fold'] == 'test').values
+
+transformed_train = transformed[train_indices]
+transformed_test = transformed[test_indices]
+
+sgd.fit(transformed_train, data['imdb']['polarity'][train_indices])
+
+models = [Model(name='sgd', classifier=sgd)]
+feats = [Features(name='w2v__imdb_test', dataset='imdb', values=transformed_test)]
+ets = [EvalTuple(classifier='sgd', features='w2v__imdb_test', labels='imdb')]
+
+ev = Evaluation(datasets=data, features=feats, models=models, tuples=ets)
+
+# run the evaluation
+ev.evaluate()
+
+# view the results
+ev.results
+</code></pre>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../classifiers/" class="btn btn-neutral float-right" title="Classifiers">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../features/" class="btn btn-neutral" title="Feature extraction"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../features/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../classifiers/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

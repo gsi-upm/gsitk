@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Datasets - GSItk Documentation</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../css/theme.css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Datasets";
+    var mkdocs_page_input_path = "datasets.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> GSItk Documentation</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../publications/">Publications</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">User guide</span></p>
+                <ul class="current">
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Datasets</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#dataset-manager-interface">Dataset Manager interface</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#available-datasets">Available datasets</a>
+    </li>
+    </ul>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../preprocessing/">Preprocessing</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../features/">Feature extraction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../evaluation/">Evaluation</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../classifiers/">Classifiers</a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">GSItk Documentation</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>User guide &raquo;</li>
+        
+      
+    
+    <li>Datasets</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="datasets">Datasets</h1>
+<p><em>gsitk</em> has a functionality suite for downloading, processing, and working with NLP datasets.
+This allows researchers to work seamlessly with common datasets without delving into the details of data munging.</p>
+<h2 id="dataset-manager-interface">Dataset Manager interface</h2>
+<p>Datasets can be accessed through the <code>DatasetManager</code>, an interface for dataset functionalities.
+The manager is accessed in the following manner:</p>
+<pre><code class="python3">from gsitk.datasets.datasets import DatasetManager
+
+dm = DatasetManager()
+</code></pre>
+
+<p>Dataset preparation includes downloading the data (if necessary) and pre-processing it.
+This is the main functionality of the <code>DatasetManager</code>, and can be accessed in this way:</p>
+<pre><code class="python3">data = dm.prepare_datasets()
+</code></pre>
+
+<p>The <code>prepare_datasets</code> methods downloads <strong>all</strong> available datasets (if necessary) and pre-process them, loading them into memory.
+Alternatively, it is possible to load a selection of datasets specifying theirs names:</p>
+<pre><code class="python3">data = dm.prepare_datasets(['vader', 'pl05'])
+</code></pre>
+
+<p>This example loads the <a href="https://github.com/cjhutto/vaderSentiment"><em>vader</em></a> and <a href="http://www.cs.cornell.edu/people/pabo/movie-review-data/"><em>PL05</em></a> datasets.
+The <code>prepare_datasets</code> method returns a <em>dict</em> that contains the datasets.
+Each key corresponds the a dataset name, and the value is a <a href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html">pandas Dataframe</a>.</p>
+<pre><code class="python3">&gt;&gt;&gt; data = dm.prepare_datasets(['vader', 'pl05'])
+
+&gt;&gt;&gt; type(data)
+&lt;class 'dict'&gt;
+
+&gt;&gt;&gt; data.keys()
+dict_keys(['vader', 'pl05'])
+
+&gt;&gt;&gt; type(data['vader'])
+pandas.core.frame.DataFrame
+
+&gt;&gt;&gt; data['vader'].head()
+   polarity                                               text
+0         1  [somehow, i, was, blessed, with, some, really,...
+1         1       [yay, ., another, good, phone, interview, .]
+2         1  [we, were, number, deep, last, night, amp, the...
+3         1            [lmao, allcaps, ,, amazing, allcaps, !]
+4        -1  [two, words, that, should, die, this, year, :,...
+</code></pre>
+
+<p>Datasets are stored in pandas format, all operations are so you can make all pandas-related operations:</p>
+<pre><code class="python3">&gt;&gt;&gt; data['vader']['polarity'].value_counts()
+ 1    2901
+-1    1299
+Name: polarity, dtype: int64
+</code></pre>
+
+<h2 id="available-datasets">Available datasets</h2>
+<p>Here we publish a list of the available datasets in <em>gsitk</em>.</p>
+<ul>
+<li>IMDB [<code>imdb</code>]<ul>
+<li><a href="http://ai.stanford.edu/~amaas/data/sentiment/">Link</a></li>
+<li>50,000 sentiment analysis movie review instances, annotated with <em>negative</em> and <em>positive</em>.</li>
+</ul>
+</li>
+<li>IMDB un-supervised [<code>imdb_unsup</code>]<ul>
+<li><a href="http://ai.stanford.edu/~amaas/data/sentiment/">Link</a></li>
+<li>Additional unlabeled data, accompanying the IMDB dataset.</li>
+</ul>
+</li>
+<li>Multi-Domain Sentiment Dataset (version 2.0) [<code>multidomain</code>]<ul>
+<li><a href="https://www.cs.jhu.edu/~mdredze/datasets/sentiment/">Link</a></li>
+<li>Product review from amazon. There are several domains.</li>
+</ul>
+</li>
+<li>PL04 [<code>pl04</code>]<ul>
+<li><a href="http://www.cs.cornell.edu/people/pabo/movie-review-data/">Link</a></li>
+<li>1000 positive and 1000 negative processed reviews. Introduced in Pang/Lee ACL 2004. </li>
+</ul>
+</li>
+<li>PL05 [<code>pl05</code>]<ul>
+<li><a href="http://www.cs.cornell.edu/people/pabo/movie-review-data/">Link</a></li>
+<li>5331 positive and 5331 negative processed sentences / snippets. Introduced in Pang/Lee ACL 2005.</li>
+</ul>
+</li>
+<li>SemEval 2007 [<code>semeval07</code>]<ul>
+<li>Included in <em>gsitk</em>. No download necessary.</li>
+<li>Affective Text task dataset. <a href="https://web.eecs.umich.edu/~mihalcea/affectivetext/">Link</a>.</li>
+<li>Annotated with emotions (e.g. joy, fear, surprise) and polarity orientation (positive/negative).</li>
+</ul>
+</li>
+<li>SemEval 2013 [<code>semeval13</code>]<ul>
+<li>For legal reasons, this dataset needs to be obtained by the author. <em>gsitk</em> can process it then.</li>
+<li>Sentiment analysis task datasets from SemEval 2013. <a href="https://www.cs.york.ac.uk/semeval-2013/task2.html">Link</a></li>
+</ul>
+</li>
+<li>SemEval 2014 [<code>semeval14</code>]<ul>
+<li>For legal reasons, this dataset needs to be obtained by the author. <em>gsitk</em> can process it then.</li>
+<li>Sentiment analysis task datasets from SemEval 2014. <a href="http://alt.qcri.org/semeval2014/task9/">Link</a></li>
+</ul>
+</li>
+<li>Sentiment140 [<code>sentiment140</code>]<ul>
+<li><a href="http://help.sentiment140.com/">Link</a></li>
+<li>Dataset with 1,6 million tweets annotated with sentiment.</li>
+</ul>
+</li>
+<li>Stanford Sentiment Treebank (SST) [<code>sst</code>]<ul>
+<li><a href="https://nlp.stanford.edu/sentiment/">Link</a></li>
+<li>Detailed dataset with varied sentiment annotations.</li>
+</ul>
+</li>
+<li>STS-Gold copurs [<code>sts</code>]<ul>
+<li><a href="https://github.com/pollockj/world_mood/tree/master/sts_gold_v03">Link</a></li>
+<li>Contains a dataset of tweets that have been human-annotated with sentiment labels. </li>
+</ul>
+</li>
+<li>Vader [<code>vader</code>]<ul>
+<li><a href="https://github.com/cjhutto/vaderSentiment">Link</a></li>
+<li>A dataset of tweets annotated with sentiment. Used for the creation of the <em>vader</em> tools.</li>
+</ul>
+</li>
+</ul>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../preprocessing/" class="btn btn-neutral float-right" title="Preprocessing">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../publications/" class="btn btn-neutral" title="Publications"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../publications/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../preprocessing/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

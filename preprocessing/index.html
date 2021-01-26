@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Preprocessing - GSItk Documentation</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../css/theme.css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Preprocessing";
+    var mkdocs_page_input_path = "preprocessing.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> GSItk Documentation</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../publications/">Publications</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">User guide</span></p>
+                <ul class="current">
+                    <li class="toctree-l1"><a class="reference internal" href="../datasets/">Datasets</a>
+                    </li>
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Preprocessing</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#direct-use">Direct use</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#preprocesser-interface">Preprocesser interface</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#stop-word-removal">Stop word removal</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#embeddings-trick">Embeddings trick</a>
+    </li>
+    </ul>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../features/">Feature extraction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../evaluation/">Evaluation</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../classifiers/">Classifiers</a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">GSItk Documentation</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>User guide &raquo;</li>
+        
+      
+    
+    <li>Preprocessing</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="pre-processing">Pre-processing</h1>
+<p>As a NLP-centered software, <em>gsitk</em> has various functionalities for pre-processing tasks.
+Pre-processing is a central part of data munging in NLP, and more specifically, in sentiment analysis.
+In order to ease this kind of operation, <em>gsitk</em> offers the following type of pre-processers:</p>
+<ul>
+<li><strong>Simple</strong>: the simple and more efficient pre-processor. Indicated for processing large datasets, as it is the fastest. Based on regular expressions that parse English text.</li>
+<li><strong>Pre-process Twitter</strong>: a processor indicated for parsing Twitter text. Also based on regular expressions, extracts common emoji as special tokens, and transforms hashtags and mentions, normalizing them.</li>
+<li><strong>Normalize</strong>: An all-purpose pre-processor. It is not as efficient as the other options, and performs word tokenization based on NLTK.</li>
+</ul>
+<h2 id="direct-use">Direct use</h2>
+<p>The more straight-forward way to use the pre-processing utilities is presented as follows:</p>
+<pre><code class="python3">from gsitk.preprocess import simple, pprocess_twitter, normalize
+
+text = &quot;My grandmother is an apple. Please, believe me!&quot;
+twitter_text = &quot;@POTUS please let me enter to the USA #thanks&quot;
+
+print('simple', simple.preprocess(text))
+print('twitter', pprocess_twitter.preprocess(twitter_text))
+print('normalize', normalize.preprocess(text))
+</code></pre>
+
+<p>These lines of code would output the following. Note how the Twitter data is transformed, normalizing the mention to an user and a hashtag.</p>
+<pre><code>simple ['my', 'grandmother', 'is', 'an', 'apple', '.', 'please', ',', 'believe', 'me', '!']
+twitter &lt;user&gt; please let me enter to the usa &lt;allcaps&gt; &lt;hastag&gt; thanks
+normalize ['my', 'grandmother', 'is', 'an', 'apple', '.', 'please', ',', 'believe', 'me', '!']
+</code></pre>
+
+<h2 id="preprocesser-interface">Preprocesser interface</h2>
+<p>To facilitate the use of the preprocessing functions, <em>gsitk</em> offers an interface that is compatible with <a href="https://scikit-learn.org/stable/modules/compose.html">scikit-learn Pipelines</a>: the <code>Preprocesser</code>.
+A simple script using this interface is:</p>
+<pre><code class="python3">from gsitk.preprocess import pprocess_twitter, Preprocesser
+
+texts = [
+    &quot;@POTUS please let me enter to the USA #thanks&quot;,
+    &quot;If only Bradley's arm was longer. Best photo ever. #oscars&quot;
+]
+Preprocesser(pprocess_twitter).transform(texts)
+</code></pre>
+
+<pre><code># output:
+array(['&lt;user&gt; please let me enter to the usa &lt;allcaps&gt; &lt;hastag&gt; thanks',
+       &quot;if only bradley's arm was longer. best photo ever. &lt;hastag&gt; oscars&quot;],
+      dtype='&lt;U66')
+</code></pre>
+
+<p>The compatibility with scikit Pipelines can be used to ease the use of preprocessing.
+For example:</p>
+<pre><code class="python3">from sklearn.pipeline import Pipeline
+from gsitk.preprocess import normalize, Preprocesser, JoinTransformer
+
+texts = [
+    &quot;This cat is crazy, he is not on the mat!&quot;,
+    &quot;Will no one rid me of this turbulent priest?&quot;
+]
+
+preprocessing_pipe = Pipeline([
+    ('twitter', Preprocesser(normalize)),
+    ('join', JoinTransformer())
+])
+
+preprocessing_pipe.fit_transform(texts)
+</code></pre>
+
+<pre><code># output:
+['this cat is crazy , he is not on the mat !',
+ 'will no one rid me of this turbulent priest ?']
+</code></pre>
+
+<h2 id="stop-word-removal">Stop word removal</h2>
+<p>Removing stop words is a pervasive task in NLP.
+<em>gsitk</em> includes a functionality for this, using the stop word collections in NLTK.</p>
+<pre><code class="python3">from gsitk.preprocess.stopwords import StopWordsRemover
+
+texts = [
+    &quot;this cat is crazy , he is not on the mat !&quot;,
+    &quot;will no one rid me of this turbulent priest ?&quot;
+]
+
+StopWordsRemover().fit_transform(texts)
+</code></pre>
+
+<pre><code class="python"># output:
+['cat crazy , mat !', 'one rid turbulent priest ?']
+</code></pre>
+
+<p>As it uses the NLTK stop word collections, several languages can be parsed, as in this Spanish example.</p>
+<pre><code class="python3">from gsitk.preprocess.stopwords import StopWordsRemover
+
+texts = [
+    &quot;entre el clavel blanco y la rosa roja , su majestad escoja&quot;,
+    &quot;con diez cañones por banda viento en popa a toda vela&quot;,
+]
+
+StopWordsRemover(language='spanish').fit_transform(texts)
+</code></pre>
+
+<pre><code class="python"># output:
+['clavel blanco rosa roja , majestad escoja',
+ 'diez cañones banda viento popa toda vela']
+</code></pre>
+
+<h2 id="embeddings-trick">Embeddings trick</h2>
+<p>The paper <em>DepecheMood++: a Bilingual Emotion Lexicon Built Through Simple Yet Powerful Techniques</em> (<a href="https://doi.org/10.1109/TAFFC.2019.2934444">link here</a>) introduces a technique called the <strong>Embeddings trick</strong>.
+In short, it consists on replacing certain words by others using a word embedding model.
+It is used to expand an existing emotion dictionary.
+In any way, we consider it is an useful technique, and has been implemented in <em>gsitk</em>, making it easier to replicate the mentioned paper.</p>
+<p>This technique is used to avoid OOV (Out Of Vocabulary) issues when using a limited lexicon.
+Consider the following reduces sentiment analysis example:</p>
+<pre><code class="python">from gsitk.preprocess.embeddings_trick import EmbeddingsTricker
+
+et = EmbeddingsTricker(
+    model_path='projects/data/WordEmbeddings/eng/GoogleNews-vectors-negative300.bin',
+    w2v_format='google_bin',
+    vocabulary=['my', 'cat', 'is', 'dog'],
+)
+
+ex_text = [
+    ['my', 'cat', 'is', 'glad'],
+    ['my', 'dog', 'is', 'saddening']
+]
+
+et.fit_transform(ex_text)
+</code></pre>
+
+<pre><code># output
+[['my', 'cat', 'is', 'happy'], ['my', 'dog', 'is', 'sad']]
+</code></pre>
+
+<p>For more details on how to load and use the word embeddings for <code>EmbeddingsTricker</code>, see <a href="../features/#word2vecfeatures">features</a>.</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../features/" class="btn btn-neutral float-right" title="Feature extraction">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../datasets/" class="btn btn-neutral" title="Datasets"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../datasets/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../features/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

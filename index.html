@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="None">
+  
+  
+  <link rel="shortcut icon" href="img/favicon.ico">
+  <title>GSItk Documentation</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="css/theme.css" />
+  <link rel="stylesheet" href="css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Home";
+    var mkdocs_page_input_path = "index.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="js/jquery-2.1.1.min.js" defer></script>
+  <script src="js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href="." class="icon icon-home"> GSItk Documentation</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="./search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul class="current">
+                    <li class="toctree-l1 current"><a class="reference internal current" href=".">Home</a>
+    <ul class="current">
+    </ul>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="publications/">Publications</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">User guide</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="datasets/">Datasets</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="preprocessing/">Preprocessing</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="features/">Feature extraction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="evaluation/">Evaluation</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="classifiers/">Classifiers</a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href=".">GSItk Documentation</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Home</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="gsitk-project">GSITK project</h1>
+<p><em>gsitk</em> is a library on top of scikit-learn that eases the development process on NLP machine learning driven projects.
+It uses <em>numpy</em>, <em>pandas</em> and related libraries to easy the development.</p>
+<p><em>gsitk</em> manages datasets, features, classifiers and evaluation techniques, so that writing an evaluation pipeline results fast and simple.
+It is designed to be compatible with scikit-learn's <a href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline">Pipeline</a>.</p>
+<h1 id="installation-and-use">Installation and use</h1>
+<h2 id="installation">Installation</h2>
+<p><em>gsitk</em> can be installed via pip, which is the recommended way:</p>
+<pre><code>pip install gsitk
+</code></pre>
+
+<p>Alternatively, gsitk can be installed by cloning this repository.</p>
+<h2 id="using-gsitk">Using <em>gsitk</em></h2>
+<p><em>gsitk</em> saves into disk the datasets and some other necessary resources.
+By default, all these data are stored in <code>/data</code>.
+The environment variable <code>$DATA_PATH</code> can be set in order to specify an alternative directory.</p>
+<h1 id="feature-extraction-examples">Feature extraction examples</h1>
+<h2 id="simon-feature-extractor">SIMON feature extractor</h2>
+<p><em>gsitk</em> includes the implementation of the SIMON feature extractor, presented in <a href="https://doi.org/10.1016/j.knosys.2018.12.005">this paper</a>.
+To use it, two things are needed:</p>
+<ul>
+<li>A sentiment lexicon</li>
+<li>A word embeddings model that is <a href="https://radimrehurek.com/gensim/"><em>gensim</em></a> compatible.</li>
+</ul>
+<p>For example, using only the lexicon from <a href="https://dl.acm.org/citation.cfm?id=1014073">Bing Liu</a> and a <a href="https://code.google.com/archive/p/word2vec/">embeddings model</a> that is in the current directory:</p>
+<pre><code class="python">from gsitk.features import simon
+from nltk.corpus import opinion_lexicon
+from gensim.models.keyedvectors import KeyedVectors
+
+lexicon = [list(opinion_lexicon.positive()), list(opinion_lexicon.negative())]
+
+embedding_model = KeyedVectors.load_word2vec_format('GoogleNews-vectors-negative300.bin', binary=True)
+
+simon_transformer = simon.Simon(lexicon=lexicon, n_lexicon_words=200, embedding=embedding_model)
+
+# simon_transformer has the fit() and transform() methods, so it can be used in a Pipeline
+</code></pre>
+
+<p>To enhance performance, it is recommendable to use a more complete scikit-learn pipe that implements normalization and feature selection in conjuction with the SIMON feature extraction.</p>
+<pre><code class="python">from gsitk.features import simon
+
+simon_model = simon.Simon(lexicon=lexicon, n_lexicon_words=200, embedding=embedding_model)
+model = simon.simon_pipeline(simon_transformer=simon_model, percentile=25)
+
+# model also implements fit() and transform()
+</code></pre>
+
+<h2 id="word2vecfeatures">Word2VecFeatures</h2>
+<p>This feature extractor implements the generic word vector model presented in <a href="https://doi.org/10.1016/j.eswa.2017.02.002">this paper</a>.
+An example of use is shown below:</p>
+<pre><code class="python">from gsitk.features.word2vec import Word2VecFeatures
+
+
+text = [
+    ['my', 'cat', 'is', 'totally', 'happy'],
+    ['my', 'dog', 'is', 'very', 'sad'],
+]
+
+# path is set to a Word2Vec model
+# convolution parameter encondes pooling operation [average, maximum, minimum]
+
+w2v_extractor = Word2VecFeatures(w2v_model_path=path, w2v_format='google_txt', convolution=[1,0,0])
+X = model.transform(text)
+# X is and array containing extrated features
+</code></pre>
+
+<h1 id="cite">Cite</h1>
+<p>In you use this module, please cite the following papers:</p>
+<ul>
+<li>Enhancing Deep Learning Sentiment Analysis with Ensemble Techniques in Social Applications</li>
+</ul>
+<pre><code>@article{ARAQUE2017236,
+title = &quot;Enhancing deep learning sentiment analysis with ensemble techniques in social applications&quot;,
+journal = &quot;Expert Systems with Applications&quot;,
+volume = &quot;77&quot;,
+pages = &quot;236 - 246&quot;,
+year = &quot;2017&quot;,
+issn = &quot;0957-4174&quot;,
+doi = &quot;https://doi.org/10.1016/j.eswa.2017.02.002&quot;,
+url = &quot;http://www.sciencedirect.com/science/article/pii/S0957417417300751&quot;,
+author = &quot;Oscar Araque and Ignacio Corcuera-Platas and J. Fernando Sánchez-Rada and Carlos A. Iglesias&quot;,
+keywords = &quot;Ensemble, Deep learning, Sentiment analysis, Machine learning, Natural language processing&quot;
+}
+</code></pre>
+
+<ul>
+<li>A Semantic Similarity-based Perspective of Affect Lexicons for Sentiment Analysis</li>
+</ul>
+<pre><code>@article{ARAQUE2019346,
+title = &quot;A semantic similarity-based perspective of affect lexicons for sentiment analysis&quot;,
+journal = &quot;Knowledge-Based Systems&quot;,
+volume = &quot;165&quot;,
+pages = &quot;346 - 359&quot;,
+year = &quot;2019&quot;,
+issn = &quot;0950-7051&quot;,
+doi = &quot;https://doi.org/10.1016/j.knosys.2018.12.005&quot;,
+url = &quot;http://www.sciencedirect.com/science/article/pii/S0950705118305926&quot;,
+author = &quot;Oscar Araque and Ganggao Zhu and Carlos A. Iglesias&quot;,
+keywords = &quot;Sentiment analysis, Sentiment lexicon, Semantic similarity, Word embeddings&quot;,
+}
+</code></pre>
+
+<h1 id="support">Support</h1>
+<p>If you find bugs or want to make feature requests, please post an issue <a href="https://github.com/gsi-upm/gsitk/issues/">here</a>.
+This project is under active development.</p>
+<h1 id="acknowledgements">Acknowledgements</h1>
+<p>This research work is supported by the EC through the H2020 project MixedEmotions (Grant Agreement no: 141111),
+the Spanish Ministry of Economy under the R&amp;D project Semola (TEC2015-68284-R)
+and the project EmoSpaces (RTC-2016-5053-7); by ITEA3 project SOMEDI (15011);
+and by MOSI-AGIL-CM (grant P2013/ICE-3019, co-funded by EU Structural Funds FSE and FEDER).</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="publications/" class="btn btn-neutral float-right" title="Publications">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+      
+        <span style="margin-left: 15px"><a href="publications/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '.';</script>
+    <script src="js/theme.js" defer></script>
+      <script src="search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>
+
+<!--
+MkDocs version : 1.1.2
+Build Date UTC : 2021-01-26 16:47:43.623050+00:00
+-->
