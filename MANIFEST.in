@@ -5,3 +5,4 @@ graft gsitk/resources
 graft gsitk/features
 graft gsitk/preprocess
 graft gsitk/evaluation
+graft gsitk/classifiers
