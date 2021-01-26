@@ -1,7 +1,6 @@
 import pytest
 import numpy as np
 
-# from gsitk.classifiers.vader import VaderClassifier
 from gsitk.classifiers import VaderClassifier, LexiconSum
 
 @pytest.fixture

@@ -8,4 +8,4 @@ nav:
       - Preprocessing: preprocessing.md
       - Feature extraction: features.md
       - Evaluation : evaluation.md
-      - Classifiers: classifiers.md 
+      - Classifiers: classifiers.md
