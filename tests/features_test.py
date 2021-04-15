@@ -141,6 +141,11 @@ def test_simon(embedding_model, mock_lexicon, mock_input):
     model = simon.Simon(lexicon=mock_lexicon, n_lexicon_words=2, wordnet_metric='wpath')
     check_features(model.fit_transform(mock_input))
 
+def test_simon_oov(embedding_model, mock_lexicon):
+    oov_input = [['sad', 'cat'], ['happy', 'dog']]
+    model = simon.Simon(lexicon=mock_lexicon, n_lexicon_words=3, embedding=embedding_model)
+    check_features(model.fit_transform(oov_input))
+
 def test_simon_pipeline(embedding_model, mock_lexicon, mock_input, mock_labels):
     simon_model = simon.Simon(lexicon=mock_lexicon, n_lexicon_words=2, embedding=embedding_model)
     model = simon.simon_pipeline(simon_transformer=simon_model, percentile=50)

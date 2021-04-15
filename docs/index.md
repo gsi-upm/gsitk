@@ -87,37 +87,27 @@ In you use this module, please cite the following papers:
 
 * Enhancing Deep Learning Sentiment Analysis with Ensemble Techniques in Social Applications
 
-```
-@article{ARAQUE2017236,
-title = "Enhancing deep learning sentiment analysis with ensemble techniques in social applications",
-journal = "Expert Systems with Applications",
-volume = "77",
-pages = "236 - 246",
-year = "2017",
-issn = "0957-4174",
-doi = "https://doi.org/10.1016/j.eswa.2017.02.002",
-url = "http://www.sciencedirect.com/science/article/pii/S0957417417300751",
-author = "Oscar Araque and Ignacio Corcuera-Platas and J. Fernando Sánchez-Rada and Carlos A. Iglesias",
-keywords = "Ensemble, Deep learning, Sentiment analysis, Machine learning, Natural language processing"
-}
-```
+>> Oscar Araque, Ignacio Corcuera-Platas, J. Fernando Sánchez-Rada, Carlos A. Iglesias.
+> Enhancing deep learning sentiment analysis with ensemble techniques in social applications,
+> Expert Systems with Applications,
+> Volume 77,
+> 2017,
+> Pages 236-246,
+> ISSN 0957-4174.
+
+>> [https://doi.org/10.1016/j.eswa.2017.02.002](https://doi.org/10.1016/j.eswa.2017.02.002).
 
 * A Semantic Similarity-based Perspective of Affect Lexicons for Sentiment Analysis
 
-```
-@article{ARAQUE2019346,
-title = "A semantic similarity-based perspective of affect lexicons for sentiment analysis",
-journal = "Knowledge-Based Systems",
-volume = "165",
-pages = "346 - 359",
-year = "2019",
-issn = "0950-7051",
-doi = "https://doi.org/10.1016/j.knosys.2018.12.005",
-url = "http://www.sciencedirect.com/science/article/pii/S0950705118305926",
-author = "Oscar Araque and Ganggao Zhu and Carlos A. Iglesias",
-keywords = "Sentiment analysis, Sentiment lexicon, Semantic similarity, Word embeddings",
-}
-```
+>> Oscar Araque, Ganggao Zhu, Carlos A. Iglesias.
+> A semantic similarity-based perspective of affect lexicons for sentiment analysis,
+> Knowledge-Based Systems,
+> Volume 165,
+> 2019,
+> Pages 346-359,
+> ISSN 0950-7051.
+
+>> [https://doi.org/10.1016/j.knosys.2018.12.005](https://doi.org/10.1016/j.knosys.2018.12.005).
 
 # Support 
 

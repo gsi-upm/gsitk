@@ -146,7 +146,11 @@ class Simon(TransformerMixin, BaseEstimator):
         M = list()
         for i, x_i in enumerate(x):
             V = self._extract_embeddings(x_i)
-            M_i = np.dot(V, self.L.T)
+            if len(V) > 0: # V words may be outside embedding vocabulary
+                M_i = np.dot(V, self.L.T)
+            else:
+                M_i = np.zeros((self.L.T.shape[1],))
+
             if self.weighting:
                 M_i = self.W * M_i
             if self._pooling is None:
