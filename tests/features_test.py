@@ -122,11 +122,15 @@ def mock_input():
 def mock_labels():
     return [1, 0]
 
-def check_features(feats):
+def check_features(feats, zeros=False):
     assert feats.shape[0] > 0
     assert feats.shape[1] > 0
-    assert feats.min() != 0
-    assert feats.max() != 0
+    if not zeros:
+        assert feats.min() != 0
+        assert feats.max() != 0
+    else:
+        assert feats.min() == 0
+        assert feats.max() == 0
 
 def test_simon(embedding_model, mock_lexicon, mock_input):
     model = simon.Simon(lexicon=mock_lexicon, n_lexicon_words=2, embedding=embedding_model)
@@ -144,7 +148,7 @@ def test_simon(embedding_model, mock_lexicon, mock_input):
 def test_simon_oov(embedding_model, mock_lexicon):
     oov_input = [['sad', 'cat'], ['happy', 'dog']]
     model = simon.Simon(lexicon=mock_lexicon, n_lexicon_words=3, embedding=embedding_model)
-    check_features(model.fit_transform(oov_input))
+    check_features(model.fit_transform(oov_input), zeros=True)
 
 def test_simon_pipeline(embedding_model, mock_lexicon, mock_input, mock_labels):
     simon_model = simon.Simon(lexicon=mock_lexicon, n_lexicon_words=2, embedding=embedding_model)

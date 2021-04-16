@@ -150,6 +150,8 @@ class Simon(TransformerMixin, BaseEstimator):
                 M_i = np.dot(V, self.L.T)
             else:
                 M_i = np.zeros((self.L.T.shape[1],))
+                M.append(M_i)
+                continue
 
             if self.weighting:
                 M_i = self.W * M_i
@@ -172,9 +174,9 @@ class Simon(TransformerMixin, BaseEstimator):
             for j, word in enumerate(x_i):
                 m_i_j = [self.wns.word_similarity(word, lex_word, self.wordnet_metric) \
                          for lex_word in self.lex_words]
-                #m_i_j = self._fetch_from_cache(word) 
+                #m_i_j = self._fetch_from_cache(word)
                 M_i[j] = np.array(m_i_j)
-            
+
             if self._pooling is None:
                 M.append(M_i)
             else:
@@ -208,7 +210,7 @@ class Simon(TransformerMixin, BaseEstimator):
 
         if self.sentiment_weights:
             return self.S * M
-        
+
         return M
 
 
