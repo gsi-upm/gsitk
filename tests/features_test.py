@@ -18,6 +18,7 @@ import numpy as np
 from gensim.models import Word2Vec
 from gensim.models.keyedvectors import KeyedVectors
 from gensim.models import Doc2Vec
+from sklearn.pipeline import Pipeline
 
 from tests.preprocess_test import text_df
 
@@ -68,8 +69,10 @@ def test_word2vec(norm_text, embedding_model):
     model = word2vec.Word2VecFeatures(w2v_model_path=path, w2v_format='google_txt')
     assert isinstance(model.model, Word2Vec) or \
         isinstance(model.model, KeyedVectors)
-    assert isinstance(model.model.vocab, dict)
-    assert len(model.model.vocab) > 0
+    assert isinstance(model.model.key_to_index, dict)
+    assert isinstance(model.model.index_to_key, list)
+    assert len(model.model.key_to_index) > 0
+    assert len(model.model.index_to_key) > 0
 
     x = model.transform(norm_text)
     assert isinstance(x, np.ndarray)
@@ -154,3 +157,32 @@ def test_simon_pipeline(embedding_model, mock_lexicon, mock_input, mock_labels):
     simon_model = simon.Simon(lexicon=mock_lexicon, n_lexicon_words=2, embedding=embedding_model)
     model = simon.simon_pipeline(simon_transformer=simon_model, percentile=50)
     check_features(model.fit_transform(mock_input, mock_labels))
+
+def test_simon_sklearn_pipeline(embedding_model, mock_lexicon, mock_input):
+    model = simon.Simon(lexicon=mock_lexicon, n_lexicon_words=3, embedding=embedding_model)
+    pipeline = Pipeline([
+        ('simon', model),
+    ])
+    pipeline.fit(mock_input)
+    check_features(pipeline.transform(mock_input))
+
+    model = simon.Simon(lexicon=mock_lexicon, n_lexicon_words=3, embedding=embedding_model)
+    pipeline = Pipeline([
+        ('simon', model),
+    ])
+    check_features(pipeline.fit_transform(mock_input))
+
+def test_simon_sklearn_pipeline_steps(embedding_model, mock_lexicon, mock_input):
+    model = simon.Simon(lexicon=mock_lexicon, n_lexicon_words=3, embedding=embedding_model)
+    print(model.pooling)
+    pipeline = Pipeline([
+        ('simon', model),
+    ])
+    pipeline.fit(mock_input, [1, 0])
+
+    print(pipeline.steps)
+
+    steps = pipeline.steps
+    assert isinstance(steps, list)
+    assert len(steps) > 0
+

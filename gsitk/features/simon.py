@@ -32,7 +32,7 @@ class Simon(TransformerMixin, BaseEstimator):
 
         self._lexicon_split = lexicon
         self.n_lexicon_words = n_lexicon_words
-        self._pooling = pooling if callable(pooling) else None
+        self.pooling = pooling if callable(pooling) else None
         if embedding is None:
             assert wordnet_metric is not None
         else:
@@ -56,7 +56,7 @@ class Simon(TransformerMixin, BaseEstimator):
 
         count = Counter(itertools.chain.from_iterable(self._text))
         count_sum = np.sum(list(count.values()))
-        
+
         lexicon = list()
         for lexicon_split in self._lexicon_split:
             lex_words = sorted([(word_i, count[word_i]) for word_i in lexicon_split],
@@ -155,10 +155,10 @@ class Simon(TransformerMixin, BaseEstimator):
 
             if self.weighting:
                 M_i = self.W * M_i
-            if self._pooling is None:
+            if self.pooling is None:
                 M.append(M_i)
             else:
-                M.append(self._pooling(M_i, axis=0))
+                M.append(self.pooling(M_i, axis=0))
         return np.array(M)
 
     def _fetch_from_cache(self, word):
@@ -177,10 +177,10 @@ class Simon(TransformerMixin, BaseEstimator):
                 #m_i_j = self._fetch_from_cache(word)
                 M_i[j] = np.array(m_i_j)
 
-            if self._pooling is None:
+            if self.pooling is None:
                 M.append(M_i)
             else:
-                M.append(self._pooling(M_i, axis=0))
+                M.append(self.pooling(M_i, axis=0))
         return np.array(M)
 
     def _remove_stopwords(self, x):
