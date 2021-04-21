@@ -15,6 +15,9 @@
   <link rel="stylesheet" href="../css/theme.css" />
   <link rel="stylesheet" href="../css/theme_extra.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" />
+  <link href="../css/ansi-colours.css" rel="stylesheet" />
+  <link href="../css/jupyter-cells.css" rel="stylesheet" />
+  <link href="../css/pandas-dataframe.css" rel="stylesheet" />
   
   <script>
     // Current page data
@@ -39,11 +42,7 @@
     <div class="wy-side-scroll">
       <div class="wy-side-nav-search">
         <a href=".." class="icon icon-home"> GSItk Documentation</a>
-        <div role="search">
-  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
-  </form>
-</div>
+        
       </div>
 
       <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
@@ -53,6 +52,10 @@
                 </ul>
                 <ul>
                     <li class="toctree-l1"><a class="reference internal" href="../publications/">Publications</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../Tutorial/">Tutorial</a>
                     </li>
                 </ul>
                 <p class="caption"><span class="caption-text">User guide</span></p>
@@ -125,18 +128,17 @@ In this sense, <em>gsitk</em> offers a number of functionalities to aid practiti
 In fact, the we work with the evaluation interfaces as we do with these Pipelines.
 Let's perform a simple evaluation with <em>gsitk</em> from the beginning.
 First, we load the evaluation datasets:</p>
-<pre><code class="python">from gsitk.datasets.datasets import DatasetManager
+<pre><code class="language-python">from gsitk.datasets.datasets import DatasetManager
 
 dm = DatasetManager()
 data = dm.prepare_datasets(['vader', 'pl05'])
 </code></pre>
-
 <p>Following, we define the models we want to evaluate.
 We define two pipelines (<code>pipeline</code> and <code>pipeline2</code>) that use scikit components.
 Observe that we are naming the pipelines and the pipelines' steps through the <code>name</code> property. 
 This will be useful to locate each model.
 For <code>pipeline2</code>, we do not name the pipeline's steps.</p>
-<pre><code class="python">from sklearn.pipeline import Pipeline
+<pre><code class="language-python">from sklearn.pipeline import Pipeline
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfTransformer
 from sklearn.linear_model import SGDClassifier
@@ -165,14 +167,12 @@ pipeline2.fit(data_ready['pl05']['text'].values,
               data_ready['pl05']['polarity'].values.astype(int))
 pipeline2.name = 'pipeline_trained2'
 </code></pre>
-
 <p>At this point, we may need to adapt the datasets so that the text is represented by a string, not a list of tokens:</p>
-<pre><code class="python">data_ready = {}
+<pre><code class="language-python">data_ready = {}
 for data_k, data_v in data.items():
     data_ready[data_k] = data_v.copy()
     data_ready[data_k]['text'] = data_v['text'].apply(' '.join).values
 </code></pre>
-
 <p>At this point we are ready to perform the evaluation.
 For this purpose, we use the <code>Evaluation</code> class, which is defined by the following parameters:</p>
 <ul>
@@ -180,7 +180,7 @@ For this purpose, we use the <code>Evaluation</code> class, which is defined by 
 <li><code>datasets</code>: a <code>dict</code> of the datasets to use for the evaluation.</li>
 <li><code>pipelines</code>: a <code>list</code> of scikit pipelines that represent the models to evaluate.</li>
 </ul>
-<pre><code class="python">from gsitk.evaluation.evaluation import Evaluation
+<pre><code class="language-python">from gsitk.evaluation.evaluation import Evaluation
 
 # define datasets for evaluation
 datasets_evaluation = {
@@ -199,7 +199,6 @@ ev.evaluate()
 # results are stored in ev, and are in pandas DataFrame format
 ev.results
 </code></pre>
-
 <p>The output is shown below:</p>
 <pre><code>|   | Dataset | Features | Model                    | CV    | accuracy | precision_macro | recall_macro | f1_weighted | f1_micro | f1_macro | Description                                       |
 |---|---------|----------|--------------------------|-------|----------|-----------------|--------------|-------------|----------|----------|---------------------------------------------------|
@@ -208,7 +207,6 @@ ev.results
 | 2 | pl05    | None     | pipeline_trained__pl05   | False | 0.578962 | 0.585842        | 0.579002     | 0.570405    | 0.578962 | 0.570422 | vect(myvect) --&gt; tfidf(mytfidf) --&gt; clf(mylogi... |
 | 3 | pl05    | None     | pipeline_trained2__pl05  | False | 0.926788 | 0.926838        | 0.926787     | 0.926786    | 0.926788 | 0.926786 | vect --&gt; tfidf --&gt; clf                            |
 </code></pre>
-
 <p>In the results table we can observe how the designed models obtain different metrics in the evaluation datasets.
 Also, the names we used when defining the models are used to identify each pipeline.</p>
 <p>When configured as in the example, <code>Evaluation</code> uses already trained models to predict on the defined datasets.
@@ -218,7 +216,7 @@ For a more configurable framework, see <a href="#advanced-evaluation">Advanced E
 For this, <em>gsitk</em>'s evaluation framework has a more advanced interface.</p>
 <p>Internally, the evaluation process uses evaluation tuples (<code>EvalTuple</code>), which are a method for specifying which datasets, features and classifiers we want to evaluate. For evaluating a set of models that predict from a set of features, a `EvalTuple`` are specified. The next example evaluates a simple logistic regressions model that uses word2vec features to predict the sentiment of the IMDB dataset.</p>
 <p>We prepare the data and extract the features we want to evaluate:</p>
-<pre><code class="python">
+<pre><code class="language-python">
 from gsitk.datasets.datasets import DatasetManager
 from gsitk.features.word2vec import Word2VecFeatures
 
@@ -228,9 +226,8 @@ data = dm.prepare_datasets(['imdb',])
 w2v_feat = Word2VecFeatures(w2v_model_path='/data/w2vmodel_500d_5mc')
 transformed = w2v_feat.transform(data['imdb']['text'].values)
 </code></pre>
-
 <p>We define the machine learning model to use:</p>
-<pre><code class="python">from sklearn.linear_model import SGDClassifier
+<pre><code class="language-python">from sklearn.linear_model import SGDClassifier
 
 sgd = SGDClassifier()
 
@@ -246,9 +243,8 @@ transformed_test = transformed[test_indices]
 
 sgd.fit(transformed_train, data['imdb']['polarity'][train_indices])
 </code></pre>
-
 <p>After this, we prepare the model, features and EvalTuple for the evaluation:</p>
-<pre><code class="python">from gsitk.pipe import Model, Features, EvalTuple
+<pre><code class="language-python">from gsitk.pipe import Model, Features, EvalTuple
 
 models = [Model(name='sgd', classifier=sgd)]
 
@@ -256,9 +252,8 @@ feats = [Features(name='w2v__imdb_test', dataset='imdb', values=transformed_test
 
 ets = [EvalTuple(classifier='sgd', features='w2v__imdb_test', labels='imdb')]
 </code></pre>
-
 <p>Finally, we just need to perform the evaluation:</p>
-<pre><code class="python">from gsitk.evaluation.evaluation import Evaluation
+<pre><code class="language-python">from gsitk.evaluation.evaluation import Evaluation
 
 ev = Evaluation(datasets=data, features=feats, models=models, tuples=ets)
 
@@ -268,19 +263,17 @@ ev.evaluate()
 # view the results
 ev.results
 </code></pre>
-
 <p>The output is:</p>
 <pre><code>|   | Dataset | Features       | Model | CV    | accuracy | precision_macro | recall_macro | f1_weighted | f1_micro | f1_macro |
 |---|---------|----------------|-------|-------|----------|-----------------|--------------|-------------|----------|----------|
 | 0 | imdb    | w2v__imdb_test | sgd   | False | 0.76164  | 0.782904        | 0.76164      | 0.757075    | 0.76164  | 0.757075 |
 </code></pre>
-
 <p>From the output, we can see how the evaluation has been done.
 Through the shown tools, we can define more complex evaluation procedures, adapting to the needs of practitioners and researchers.</p>
 <p>If we want to perform <a href="https://en.wikipedia.org/wiki/Cross-validation_(statistics)">cross-validation</a>, there is a specific evaluation tuple for that: the <code>CrossEvalTuple</code>, which has the same interface as the <code>EvalTuple</code>.</p>
 <hr />
 <p>The full example is shown below:</p>
-<pre><code class="python">from gsitk.datasets.datasets import DatasetManager
+<pre><code class="language-python">from gsitk.datasets.datasets import DatasetManager
 from gsitk.features.word2vec import Word2VecFeatures
 from sklearn.linear_model import SGDClassifier
 from gsitk.pipe import Model, Features, EvalTuple
@@ -364,7 +357,6 @@ ev.results
 </div>
     <script>var base_url = '..';</script>
     <script src="../js/theme.js" defer></script>
-      <script src="../search/main.js" defer></script>
     <script defer>
         window.onload = function () {
             SphinxRtdTheme.Navigation.enable(true);

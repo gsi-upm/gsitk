@@ -15,6 +15,9 @@
   <link rel="stylesheet" href="../css/theme.css" />
   <link rel="stylesheet" href="../css/theme_extra.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" />
+  <link href="../css/ansi-colours.css" rel="stylesheet" />
+  <link href="../css/jupyter-cells.css" rel="stylesheet" />
+  <link href="../css/pandas-dataframe.css" rel="stylesheet" />
   
   <script>
     // Current page data
@@ -39,11 +42,7 @@
     <div class="wy-side-scroll">
       <div class="wy-side-nav-search">
         <a href=".." class="icon icon-home"> GSItk Documentation</a>
-        <div role="search">
-  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
-  </form>
-</div>
+        
       </div>
 
       <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
@@ -53,6 +52,10 @@
                 </ul>
                 <ul>
                     <li class="toctree-l1"><a class="reference internal" href="../publications/">Publications</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../Tutorial/">Tutorial</a>
                     </li>
                 </ul>
                 <p class="caption"><span class="caption-text">User guide</span></p>
@@ -123,7 +126,7 @@ A classifier is a model that can be trained, or be already prepared to make pred
 It follows the lexicon's annotation schema.
 Normalizes the output to the range [-1, 0, 1].
 The following example shows its use:</p>
-<pre><code class="python">from gsitk.classifiers import LexiconSum
+<pre><code class="language-python">from gsitk.classifiers import LexiconSum
 
 # use a custom-lexicon
 ls = LexiconSum({'good': 1, 'bad': -1, 'happy': 1, 'sad': -1, 'mildly': -0.1})
@@ -136,15 +139,13 @@ text = [
 
 ls.predict(text)
 </code></pre>
-
-<pre><code class="python"># output
+<pre><code class="language-python"># output
 array([ 1., -1.,  0.])
 </code></pre>
-
 <h2 id="vader">Vader</h2>
 <p>Wrapper around the <a href="https://github.com/cjhutto/vaderSentiment">implementation</a> of the original author.
 This module does not need the text tokenized, as seen in the following example:</p>
-<pre><code class="python">from gsitk.classifiers import VaderClassifier
+<pre><code class="language-python">from gsitk.classifiers import VaderClassifier
 
 text = [
     'my dog is a good and happy pet',
@@ -154,8 +155,7 @@ text = [
 
 VaderClassifier().predict(text)
 </code></pre>
-
-<pre><code class="python"># output
+<pre><code class="language-python"># output
 array([ 1.,  0., -1.])
 </code></pre>
               
@@ -199,7 +199,6 @@ array([ 1.,  0., -1.])
 </div>
     <script>var base_url = '..';</script>
     <script src="../js/theme.js" defer></script>
-      <script src="../search/main.js" defer></script>
     <script defer>
         window.onload = function () {
             SphinxRtdTheme.Navigation.enable(true);

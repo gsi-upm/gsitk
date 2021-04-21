@@ -15,6 +15,9 @@
   <link rel="stylesheet" href="../css/theme.css" />
   <link rel="stylesheet" href="../css/theme_extra.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" />
+  <link href="../css/ansi-colours.css" rel="stylesheet" />
+  <link href="../css/jupyter-cells.css" rel="stylesheet" />
+  <link href="../css/pandas-dataframe.css" rel="stylesheet" />
   
   <script>
     // Current page data
@@ -39,11 +42,7 @@
     <div class="wy-side-scroll">
       <div class="wy-side-nav-search">
         <a href=".." class="icon icon-home"> GSItk Documentation</a>
-        <div role="search">
-  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
-  </form>
-</div>
+        
       </div>
 
       <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
@@ -53,6 +52,10 @@
                 </ul>
                 <ul>
                     <li class="toctree-l1"><a class="reference internal" href="../publications/">Publications</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../Tutorial/">Tutorial</a>
                     </li>
                 </ul>
                 <p class="caption"><span class="caption-text">User guide</span></p>
@@ -116,25 +119,22 @@ This allows researchers to work seamlessly with common datasets without delving 
 <h2 id="dataset-manager-interface">Dataset Manager interface</h2>
 <p>Datasets can be accessed through the <code>DatasetManager</code>, an interface for dataset functionalities.
 The manager is accessed in the following manner:</p>
-<pre><code class="python3">from gsitk.datasets.datasets import DatasetManager
+<pre><code class="language-python3">from gsitk.datasets.datasets import DatasetManager
 
 dm = DatasetManager()
 </code></pre>
-
 <p>Dataset preparation includes downloading the data (if necessary) and pre-processing it.
 This is the main functionality of the <code>DatasetManager</code>, and can be accessed in this way:</p>
-<pre><code class="python3">data = dm.prepare_datasets()
+<pre><code class="language-python3">data = dm.prepare_datasets()
 </code></pre>
-
 <p>The <code>prepare_datasets</code> methods downloads <strong>all</strong> available datasets (if necessary) and pre-process them, loading them into memory.
 Alternatively, it is possible to load a selection of datasets specifying theirs names:</p>
-<pre><code class="python3">data = dm.prepare_datasets(['vader', 'pl05'])
+<pre><code class="language-python3">data = dm.prepare_datasets(['vader', 'pl05'])
 </code></pre>
-
 <p>This example loads the <a href="https://github.com/cjhutto/vaderSentiment"><em>vader</em></a> and <a href="http://www.cs.cornell.edu/people/pabo/movie-review-data/"><em>PL05</em></a> datasets.
 The <code>prepare_datasets</code> method returns a <em>dict</em> that contains the datasets.
 Each key corresponds the a dataset name, and the value is a <a href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html">pandas Dataframe</a>.</p>
-<pre><code class="python3">&gt;&gt;&gt; data = dm.prepare_datasets(['vader', 'pl05'])
+<pre><code class="language-python3">&gt;&gt;&gt; data = dm.prepare_datasets(['vader', 'pl05'])
 
 &gt;&gt;&gt; type(data)
 &lt;class 'dict'&gt;
@@ -153,14 +153,12 @@ pandas.core.frame.DataFrame
 3         1            [lmao, allcaps, ,, amazing, allcaps, !]
 4        -1  [two, words, that, should, die, this, year, :,...
 </code></pre>
-
 <p>Datasets are stored in pandas format, all operations are so you can make all pandas-related operations:</p>
-<pre><code class="python3">&gt;&gt;&gt; data['vader']['polarity'].value_counts()
+<pre><code class="language-python3">&gt;&gt;&gt; data['vader']['polarity'].value_counts()
  1    2901
 -1    1299
 Name: polarity, dtype: int64
 </code></pre>
-
 <h2 id="available-datasets">Available datasets</h2>
 <p>Here we publish a list of the available datasets in <em>gsitk</em>.</p>
 <ul>
@@ -236,7 +234,7 @@ Name: polarity, dtype: int64
         <a href="../preprocessing/" class="btn btn-neutral float-right" title="Preprocessing">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
-        <a href="../publications/" class="btn btn-neutral" title="Publications"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../Tutorial/" class="btn btn-neutral" title="Tutorial"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -262,7 +260,7 @@ Name: polarity, dtype: int64
     <span class="rst-current-version" data-toggle="rst-current-version">
       
       
-        <span><a href="../publications/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../Tutorial/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
         <span style="margin-left: 15px"><a href="../preprocessing/" style="color: #fcfcfc">Next &raquo;</a></span>
@@ -271,7 +269,6 @@ Name: polarity, dtype: int64
 </div>
     <script>var base_url = '..';</script>
     <script src="../js/theme.js" defer></script>
-      <script src="../search/main.js" defer></script>
     <script defer>
         window.onload = function () {
             SphinxRtdTheme.Navigation.enable(true);

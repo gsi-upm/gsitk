@@ -1,0 +1,1241 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Tutorial - GSItk Documentation</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../css/theme.css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" />
+  <link href="../css/ansi-colours.css" rel="stylesheet" />
+  <link href="../css/jupyter-cells.css" rel="stylesheet" />
+  <link href="../css/pandas-dataframe.css" rel="stylesheet" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Tutorial";
+    var mkdocs_page_input_path = "Tutorial.ipynb";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> GSItk Documentation</a>
+        
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../publications/">Publications</a>
+                    </li>
+                </ul>
+                <ul class="current">
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Tutorial</a>
+    <ul class="current">
+    </ul>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">User guide</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../datasets/">Datasets</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../preprocessing/">Preprocessing</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../features/">Feature extraction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../evaluation/">Evaluation</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../classifiers/">Classifiers</a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">GSItk Documentation</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Tutorial</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script>
+(function() {
+  function addWidgetsRenderer() {
+    var mimeElement = document.querySelector('script[type="application/vnd.jupyter.widget-view+json"]');
+    var scriptElement = document.createElement('script');
+    var widgetRendererSrc = 'https://unpkg.com/@jupyter-widgets/html-manager@*/dist/embed-amd.js';
+    var widgetState;
+
+    // Fallback for older version:
+    try {
+      widgetState = mimeElement && JSON.parse(mimeElement.innerHTML);
+
+      if (widgetState && (widgetState.version_major < 2 || !widgetState.version_major)) {
+        widgetRendererSrc = 'jupyter-js-widgets@*/dist/embed.js';
+      }
+    } catch(e) {}
+
+    scriptElement.src = widgetRendererSrc;
+    document.body.appendChild(scriptElement);
+  }
+
+  document.addEventListener('DOMContentLoaded', addWidgetsRenderer);
+}());
+</script>
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="tutorial">Tutorial</h1>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>This short tutorial will teach you how to use the <em>gsitk</em> library for Sentiment Analysis.</p>
+<p>Concretely, it covers:
+- Managing datasets with the <a href="https://gsi-upm.github.io/gsitk/datasets/#dataset-manager-interface"><code>DatasetManager</code></a> utility
+- Preprocessing textual data (although included datasets are already preprocessed)
+- Extract features with models that are implemented in <em>gsitk</em>
+- Persist to disk extracted features, and load them from disk
+- Prepare an evaluation using the <a href="https://gsi-upm.github.io/gsitk/evaluation/"><code>Evaluation</code></a> interface</p>
+<p>This tutorial has been generated using a <a href="https://jupyter.org/">jupyter notebook</a> that you may download and run locally, from <a href="https://github.com/gsi-upm/gsitk/blob/master/docs/Tutorial.ipynb">here</a>.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="requirements">Requirements</h1>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>For running this tutorial, you need to have <em>gsitk</em> installed. You can install using pip:</p>
+<pre><code>pip install gsitk
+</code></pre>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Also, you need to set a default data path. This is where <em>gsitk</em> will save all the datasets.
+You can do so by setting an environment variable. If you do not specify a <code>$DATA_PATH</code>, the default path is <code>/data</code>.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+
+<pre><code class="language-python">%env DATA_PATH=/tmp
+</code></pre>
+
+
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>
+<code>env: DATA_PATH=/tmp
+</code>
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Finally, you need to download some NLTK resources:</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+
+<pre><code class="language-python">import nltk
+nltk.download('punkt')
+nltk.download('stopwords')
+nltk.download('opinion_lexicon')
+</code></pre>
+
+
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>
+<code>[nltk_data] Downloading package punkt to /home/oaraque/nltk_data...
+[nltk_data]   Package punkt is already up-to-date!
+[nltk_data] Downloading package stopwords to
+[nltk_data]     /home/oaraque/nltk_data...
+[nltk_data]   Package stopwords is already up-to-date!
+[nltk_data] Downloading package opinion_lexicon to
+[nltk_data]     /home/oaraque/nltk_data...
+[nltk_data]   Package opinion_lexicon is already up-to-date!
+</code>
+</pre>
+</div>
+</div>
+<div class="output_area">
+<div class="output_text output_subarea output_execute_result">
+<pre>
+<code>True</code>
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="dataset-management">Dataset management</h1>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><em>gsitk</em> largely simplifies dataset management, as it has several commonly used datasets for Sentiment Analysis.
+You can view the available datasets <a href="https://gsi-upm.github.io/gsitk/datasets/#available-datasets">here</a>.
+For this tutorial, we will download two datasets:</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+
+<pre><code class="language-python">from gsitk.datasets.datasets import DatasetManager
+
+dm = DatasetManager()
+data = dm.prepare_datasets(['vader', 'imdb'])
+</code></pre>
+
+
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><code>prepare_datasets</code> downloads the data form their original sources, preprocesses the text and labels, and saves all to disk (in <code>$DATA_PATH</code>).
+In this way, next time you call <code>prepare_datasets</code>, it will run quickly.</p>
+<p>The <code>data</code> variable has now a python <code>dict</code> that contains two keys: <em>vader</em> and <em>imdb</em>.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+
+<pre><code class="language-python">print('type of data:', type(data))
+print('datasets prepared',  data.keys())
+</code></pre>
+
+
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>
+<code>type of data: &lt;class &#39;dict&#39;&gt;
+datasets prepared dict_keys([&#39;vader&#39;, &#39;imdb&#39;])
+</code>
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The datasets are saved in a pandas DataFrame:</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+
+<pre><code class="language-python">data['vader'].head()
+</code></pre>
+
+
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="scoped">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+<thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>polarity</th>
+      <th>text</th>
+    </tr>
+  </thead>
+<tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>[somehow, i, was, blessed, with, some, really,...</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>[yay, ., another, good, phone, interview, .]</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>1</td>
+      <td>[we, were, number, deep, last, night, amp, the...</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1</td>
+      <td>[lmao, allcaps, ,, amazing, allcaps, !]</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>-1</td>
+      <td>[two, words, that, should, die, this, year, :,...</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+
+<pre><code class="language-python">data['vader']['polarity'].value_counts()
+</code></pre>
+
+
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="output_text output_subarea output_execute_result">
+<pre>
+<code> 1    2901
+-1    1299
+Name: polarity, dtype: int64</code>
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>All available datasets in <em>gsitk</em> can be seen <a href="https://gsi-upm.github.io/gsitk/datasets/#available-datasets">here</a>.
+This tool eases the replicability of sentiment analysis methods, offering a common ground for researchers to use.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="preprocessing">Preprocessing</h1>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><em>gsitk</em> includes several functionalities for preprocessing text.
+Although all the included datasets are loaded through <em>gsitk</em> already processed, users may want to preprocess their own datasets.
+With the funcionalities presented below, they can do so.</p>
+<p><em>gsitk</em> includes three types of preprocessers:</p>
+<ul>
+<li>Simple: the simple and more efficient pre-processor.</li>
+<li>Pre-process Twitter: a processor indicated for parsing Twitter text.</li>
+<li>Normalize: An all-purpose pre-processor. </li>
+</ul>
+<p>For more information, please check the <a href="https://gsi-upm.github.io/gsitk/preprocessing/">documentation</a>.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="direct-use">Direct use</h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The most direct way to preprocess is as shown below:</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+
+<pre><code class="language-python">from gsitk.preprocess import simple, pprocess_twitter, normalize
+
+text = &quot;The earth is not flat, but almost. Please, believe me!&quot;
+twitter_text = &quot;@POTUS can I have a selfie? #thanks&quot;
+
+print('simple', simple.preprocess(text))
+print('twitter', pprocess_twitter.preprocess(twitter_text))
+print('normalize', normalize.preprocess(text))
+</code></pre>
+
+
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>
+<code>simple [&#39;the&#39;, &#39;earth&#39;, &#39;is&#39;, &#39;not&#39;, &#39;flat&#39;, &#39;,&#39;, &#39;but&#39;, &#39;almost&#39;, &#39;.&#39;, &#39;please&#39;, &#39;,&#39;, &#39;believe&#39;, &#39;me&#39;, &#39;!&#39;]
+twitter &lt;user&gt; can i have a selfie? &lt;hastag&gt; thanks
+normalize [&#39;the&#39;, &#39;earth&#39;, &#39;is&#39;, &#39;not&#39;, &#39;flat&#39;, &#39;,&#39;, &#39;but&#39;, &#39;almost&#39;, &#39;.&#39;, &#39;please&#39;, &#39;,&#39;, &#39;believe&#39;, &#39;me&#39;, &#39;!&#39;]
+</code>
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="preprocesser-interface">Preprocesser interface</h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>All preprocessing utilities implement the <code>preprocess</code> method, which can be useful for integrating these methods into your work pipeline. Nevertheless, <em>gsitk</em> offers the <code>Preprocesser</code> interface to facilitate the use of preprocessers into its philosophy; as well as to include preprocessing into scikit-learn <a href="https://scikit-learn.org/stable/modules/compose.html">Pipelines</a>. A simple example is shown below:</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+
+<pre><code class="language-python">from gsitk.preprocess import pprocess_twitter, Preprocesser
+
+texts = [
+    &quot;@POTUS can I have a selfie? #thanks&quot;,
+    &quot;If only Bradley's arm was longer. Best photo ever. #oscars&quot;
+]
+Preprocesser(pprocess_twitter).transform(texts)
+</code></pre>
+
+
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="output_text output_subarea output_execute_result">
+<pre>
+<code>array([&#39;&lt;user&gt; can i have a selfie? &lt;hastag&gt; thanks&#39;,
+       &#34;if only bradley&#39;s arm was longer. best photo ever. &lt;hastag&gt; oscars&#34;],
+      dtype=&#39;&lt;U66&#39;)</code>
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>As mentioned, the <code>Preprocesser</code> utility has full compatibility with scikit-learn's Pipelines. For example:</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+
+<pre><code class="language-python">from sklearn.pipeline import Pipeline
+from gsitk.preprocess import normalize, Preprocesser, JoinTransformer
+
+texts = [
+    &quot;This cat is crazy, he is not on the mat!&quot;,
+    &quot;Will no one rid me of this turbulent priest?&quot;
+]
+
+preprocessing_pipe = Pipeline([
+    ('twitter', Preprocesser(normalize)),
+    ('join', JoinTransformer())
+])
+
+preprocessing_pipe.fit_transform(texts)
+</code></pre>
+
+
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="output_text output_subarea output_execute_result">
+<pre>
+<code>[&#39;this cat is crazy , he is not on the mat !&#39;,
+ &#39;will no one rid me of this turbulent priest ?&#39;]</code>
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="stop-words-removal">Stop words removal</h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Removing stopwords is a common task in NLP. <em>gsitk</em> includes a functionality (<code>StopWordsRemover</code>) that performs this task, using NLTK's stopword lists.
+As before, <code>StopWordsRemover</code> is compatible with scikit-learn's Pipelines.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+
+<pre><code class="language-python">from gsitk.preprocess.stopwords import StopWordsRemover
+
+texts = [
+    &quot;this cat is crazy , he is not on the mat !&quot;,
+    &quot;will no one rid me of this turbulent priest ?&quot;
+]
+
+StopWordsRemover().fit_transform(texts)
+</code></pre>
+
+
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="output_text output_subarea output_execute_result">
+<pre>
+<code>[&#39;cat crazy , mat !&#39;, &#39;one rid turbulent priest ?&#39;]</code>
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>As it uses the NLTK stop word collections, several languages can be parsed, as in this Spanish example.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+
+<pre><code class="language-python">from gsitk.preprocess.stopwords import StopWordsRemover
+
+texts = [
+    &quot;entre el clavel blanco y la rosa roja , su majestad escoja&quot;,
+    &quot;con diez cañones por banda viento en popa a toda vela&quot;,
+]
+
+StopWordsRemover(language='spanish').fit_transform(texts)
+</code></pre>
+
+
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="output_text output_subarea output_execute_result">
+<pre>
+<code>[&#39;clavel blanco rosa roja , majestad escoja&#39;,
+ &#39;diez cañones banda viento popa toda vela&#39;]</code>
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="feature-extraction">Feature extraction</h1>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><em>gsitk</em> has several useful feature extractors. It includes the implementation of some models proposed in research works, which aids in replicability and comparison tasks.
+These techniques have been recently published in peer-reviewed publications, and are oriented to foster research.
+We show an example of the use an embedding model, M_G (<a href="https://doi.org/10.1016/j.eswa.2017.02.002">paper here</a>) for Sentiment Analysis.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>First, you need to use a <a href="https://en.wikipedia.org/wiki/Word_embedding">word embedding</a> model.
+The <a href="https://radimrehurek.com/gensim/index.html">gensim library</a> includes some downloadable models, that can be accessed as shown:</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+
+<pre><code class="language-python">import gensim.downloader as api
+
+embedding_model = api.load(&quot;glove-wiki-gigaword-50&quot;)
+</code></pre>
+
+
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Also, the embedding model uses a lexicon of the domain to analyze; in this case, Sentiment Analysis. We can use the <a href="https://dl.acm.org/citation.cfm?id=1014073">Bing Liu lexicon</a>, accessible from NLTK:</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+
+<pre><code class="language-python">from nltk.corpus import opinion_lexicon
+
+lexicon = [list(opinion_lexicon.positive()), list(opinion_lexicon.negative())]
+</code></pre>
+
+
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Finally, we need to </p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+
+<pre><code class="language-python">from gsitk.features import simon
+
+simon_transformer = simon.Simon(lexicon=lexicon, n_lexicon_words=50, embedding=embedding_model)
+</code></pre>
+
+
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Now, we can extract features using the simon model. The implementation has also support for scikit-learn's Pipelines. For example:</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+
+<pre><code class="language-python">text = [
+    ['my', 'dog', 'is', 'very', 'happy'],
+    ['my', 'cat', 'is', 'instead', 'very', 'sad'],
+]
+
+simon_features_test = simon_transformer.fit_transform(text)
+simon_features_test
+</code></pre>
+
+
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="output_text output_subarea output_execute_result">
+<pre>
+<code>array([[22.64666   ,  5.5705223 ,  2.2850964 , 10.810273  , 13.582376  ,
+        15.125259  ,  8.218765  ,  9.00664   , -0.6937979 ,  3.9982183 ,
+         6.4370413 ,  9.553367  , -0.5632133 , 13.165003  , 14.947266  ,
+        12.059111  , 12.084166  , 16.94381   , 14.256762  ,  9.00737   ,
+        13.533313  , 12.647817  ,  6.6219416 , 10.682739  ,  6.4929757 ,
+        15.598402  ,  6.787737  ,  9.797682  ,  8.292459  , 12.26892   ,
+        12.590726  ,  7.692454  ,  7.1737566 ,  2.7645953 , 10.165642  ,
+         8.804068  ,  8.408757  ,  6.1955237 ,  2.0015996 ,  2.2309947 ,
+         1.2787244 ,  4.7324104 , -3.376121  , 13.01586   , 15.482267  ,
+        18.318289  , 11.544971  ,  5.715289  ,  1.1589067 ,  2.513846  ,
+         2.0361245 ,  7.6383333 ,  3.632421  , -1.3370285 , -3.1686149 ,
+        10.457821  ,  8.004176  ,  9.27165   ,  0.26848498, 13.7307205 ,
+         0.66586924,  3.258816  , 13.448561  ,  6.2063417 ,  7.4360647 ,
+        13.86675   , 11.382271  ,  8.852619  , 10.839699  ,  4.0306945 ,
+         3.5801606 ,  5.652316  ,  7.7164745 ,  0.18364441,  0.35577607,
+         8.836479  , 10.631449  ,  6.5578055 ,  4.9766135 ,  7.304039  ,
+         1.4824042 ,  6.420419  , -0.29708278, 11.140987  , 11.104248  ,
+        14.517608  , 14.589582  ,  2.9442854 ],
+       [22.64666   ,  5.5705223 ,  5.0429745 , 10.810273  , 13.582375  ,
+        15.125259  ,  8.218765  ,  9.006639  , -0.1227181 ,  3.9982183 ,
+         6.4370413 ,  9.553365  , -0.43892786, 13.165003  , 14.947266  ,
+        12.059112  , 12.084166  , 16.94381   , 14.256763  ,  9.00737   ,
+        13.533313  , 12.647815  ,  6.6219416 , 10.682737  ,  6.4929757 ,
+        15.598401  ,  6.8988657 ,  9.797681  ,  8.292459  , 12.26892   ,
+        12.590726  ,  7.692454  ,  7.1737566 ,  5.890463  , 10.281912  ,
+         7.938674  ,  8.35267   ,  5.9062653 ,  2.0015996 ,  2.2309947 ,
+         1.2787243 ,  4.7324104 , -0.23842043, 13.015857  , 15.482265  ,
+        25.534483  , 11.544971  ,  7.4026384 ,  4.7278094 ,  2.8091795 ,
+         6.284559  ,  8.126308  ,  4.070155  ,  0.0385592 , -2.4845915 ,
+        10.457822  ,  8.004177  ,  9.27165   , -0.4482143 , 13.730719  ,
+         1.4019574 ,  5.206396  , 13.44856   ,  8.668956  ,  7.4360642 ,
+        13.86675   , 11.382271  ,  8.85262   , 10.839697  ,  7.406282  ,
+         3.5801613 ,  5.652316  ,  6.559163  , -0.39882052,  2.5723372 ,
+         8.836479  , 10.631447  ,  7.5776615 ,  5.649705  ,  8.961614  ,
+         2.4668307 ,  6.4204206 ,  1.1060963 , 11.383308  , 11.104248  ,
+        14.517608  , 14.589582  ,  6.9521146 ]], dtype=float32)</code>
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="persist-the-features">Persist the features</h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><em>gsitk</em> allows to save features to disk, just using one line of code.
+This is useful if the feature extraction process takes too long, and it is not practical to repeat it.
+Thus, you can just save the features to disk, to use them later.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+
+<pre><code class="language-python">from gsitk.features import features
+
+features.save_features(simon_features_test, 'simon_features_test') # you need to give the features an unique name
+</code></pre>
+
+
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Now, the features are saved in disk, under the <code>$DATA_PATH/features</code> directory. In our example, in here:</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+
+<pre><code class="language-python">!ls /tmp/features
+</code></pre>
+
+
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>
+<code>simon_features_test.npy
+</code>
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>To load them from disk, we use the same name as before:</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+
+<pre><code class="language-python">my_feats = features.load_features('simon_features_test')
+(my_feats == simon_features_test).all() # check if they are the same features
+</code></pre>
+
+
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="output_text output_subarea output_execute_result">
+<pre>
+<code>True</code>
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="evaluation">Evaluation</h1>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>As mentioned, <em>gsitk</em> has useful utilities that allow you to easily configure a Sentiment Analysis evaluation.
+In this example, we show a demo on how to do that. For more information on evaluation using <em>gsitk</em>, please read the <a href="https://gsi-upm.github.io/gsitk/evaluation/">documentation</a>.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>As in all evaluation methodologies, we need some datasets from which we can evaluate our models.
+We have already loaded two datasets, so let's use one of them: the <em>IMDB</em> dataset.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+
+<pre><code class="language-python">data['imdb'].head()
+</code></pre>
+
+
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="scoped">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+<thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>id</th>
+      <th>fold</th>
+      <th>text</th>
+      <th>polarity</th>
+      <th>rating</th>
+    </tr>
+  </thead>
+<tbody>
+    <tr>
+      <th>0</th>
+      <td>4677</td>
+      <td>train</td>
+      <td>[i, understand, this, film, to, be, a, debut, ...</td>
+      <td>1</td>
+      <td>9</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>7632</td>
+      <td>train</td>
+      <td>[getting, to, work, on, this, film, when, it, ...</td>
+      <td>1</td>
+      <td>10</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>1181</td>
+      <td>train</td>
+      <td>[rachel, griffiths, writes, and, directs, this...</td>
+      <td>1</td>
+      <td>9</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>5050</td>
+      <td>train</td>
+      <td>[we, really, enjoyed, grey, owl, :, a, simple,...</td>
+      <td>1</td>
+      <td>7</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>832</td>
+      <td>train</td>
+      <td>[interesting, how, much, more, realistic, bros...</td>
+      <td>1</td>
+      <td>8</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Next, we need to declare some feature extraction methods, as we want to compare them. In this example, we compare SIMON to an straight-forward 1-gram method. We prepare the 1-gram method below. Also, we prepare a full pipeline, including the classifier:</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+
+<pre><code class="language-python">from gsitk.preprocess import JoinTransformer
+from sklearn.pipeline import Pipeline
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.linear_model import LogisticRegression
+from sklearn.preprocessing import StandardScaler
+
+pipelineA = Pipeline([
+    ('join', JoinTransformer()), # needed to use CountVectorizer
+    ('vect', CountVectorizer(max_features=50)),
+    ('scale', StandardScaler(with_mean=False)),
+    ('clf', LogisticRegression()),
+])
+pipelineA.name = '1-gram'
+
+simon_transformer = simon.Simon(lexicon=lexicon, n_lexicon_words=50, embedding=embedding_model)
+pipelineB = Pipeline([
+    ('simon', simon_transformer),
+    ('scale', StandardScaler()),
+    ('clf', LogisticRegression(solver='liblinear')),
+])
+pipelineB.name = 'simon'
+</code></pre>
+
+
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Now, we train our two methods using the dataset. We select the <code>train</code> fold from the data:</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+
+<pre><code class="language-python">pipelineA.fit(
+    data['imdb'][data['imdb']['fold'] == 'train']['text'],
+    data['imdb'][data['imdb']['fold'] == 'train']['polarity'].values.astype(int),
+)
+
+pipelineB.fit(
+    data['imdb'][data['imdb']['fold'] == 'train']['text'],
+    data['imdb'][data['imdb']['fold'] == 'train']['polarity'].values.astype(int),
+)
+print('Finished!')
+</code></pre>
+
+
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>
+<code>Finished!
+</code>
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The evaluation is performed as follows:</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+
+<pre><code class="language-python">from gsitk.evaluation.evaluation import Evaluation
+
+# define datasets for evaluation: select test fold
+datasets_evaluation = {'imdb': data['imdb'][data['imdb']['fold'] == 'test']}
+
+# configure evaluation
+ev = Evaluation(tuples=None,
+                datasets=datasets_evaluation,
+                pipelines=[pipelineA, pipelineB])
+
+# perform evaluation, this can take a little long
+ev.evaluate()
+
+# results are stored in ev, and are in pandas DataFrame format
+ev.results
+</code></pre>
+
+
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="scoped">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+<thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Dataset</th>
+      <th>Features</th>
+      <th>Model</th>
+      <th>CV</th>
+      <th>accuracy</th>
+      <th>precision_macro</th>
+      <th>recall_macro</th>
+      <th>f1_weighted</th>
+      <th>f1_micro</th>
+      <th>f1_macro</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+<tbody>
+    <tr>
+      <th>0</th>
+      <td>imdb</td>
+      <td>None</td>
+      <td>1-gram__imdb</td>
+      <td>False</td>
+      <td>0.64408</td>
+      <td>0.644085</td>
+      <td>0.64408</td>
+      <td>0.644077</td>
+      <td>0.64408</td>
+      <td>0.644077</td>
+      <td>join --&gt; vect --&gt; scale --&gt; clf</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>imdb</td>
+      <td>None</td>
+      <td>simon__imdb</td>
+      <td>False</td>
+      <td>0.74892</td>
+      <td>0.749377</td>
+      <td>0.74892</td>
+      <td>0.748805</td>
+      <td>0.74892</td>
+      <td>0.748805</td>
+      <td>simon --&gt; scale --&gt; clf</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>In this way, we have performed a full evaluation on our data, comparing the two approaches.
+It can be seen the details of the results table and how the names of the methods are formed.
+Please note that the word embedding model and hyperparameters of the rest of methods are not normally used in a real evaluation, but are just set for the example.
+The same situation occurs for the metrics obtained.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="learn-more">Learn more</h1>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>This tutorial has shown how to use the main functionalities of <em>gsitk</em>. For more information, please check the <a href="https://gsi-upm.github.io/gsitk/">documentation</a>.</p>
+</div>
+</div>
+</div>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../datasets/" class="btn btn-neutral float-right" title="Datasets">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../publications/" class="btn btn-neutral" title="Publications"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../publications/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../datasets/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

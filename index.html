@@ -15,6 +15,9 @@
   <link rel="stylesheet" href="css/theme.css" />
   <link rel="stylesheet" href="css/theme_extra.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" />
+  <link href="css/ansi-colours.css" rel="stylesheet" />
+  <link href="css/jupyter-cells.css" rel="stylesheet" />
+  <link href="css/pandas-dataframe.css" rel="stylesheet" />
   
   <script>
     // Current page data
@@ -39,11 +42,7 @@
     <div class="wy-side-scroll">
       <div class="wy-side-nav-search">
         <a href="." class="icon icon-home"> GSItk Documentation</a>
-        <div role="search">
-  <form id ="rtd-search-form" class="wy-form" action="./search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
-  </form>
-</div>
+        
       </div>
 
       <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
@@ -55,6 +54,10 @@
                 </ul>
                 <ul>
                     <li class="toctree-l1"><a class="reference internal" href="publications/">Publications</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="Tutorial/">Tutorial</a>
                     </li>
                 </ul>
                 <p class="caption"><span class="caption-text">User guide</span></p>
@@ -112,7 +115,6 @@ It is designed to be compatible with scikit-learn's <a href="https://scikit-lear
 <p><em>gsitk</em> can be installed via pip, which is the recommended way:</p>
 <pre><code>pip install gsitk
 </code></pre>
-
 <p>Alternatively, gsitk can be installed by cloning this repository.</p>
 <h2 id="using-gsitk">Using <em>gsitk</em></h2>
 <p><em>gsitk</em> saves into disk the datasets and some other necessary resources.
@@ -127,7 +129,7 @@ To use it, two things are needed:</p>
 <li>A word embeddings model that is <a href="https://radimrehurek.com/gensim/"><em>gensim</em></a> compatible.</li>
 </ul>
 <p>For example, using only the lexicon from <a href="https://dl.acm.org/citation.cfm?id=1014073">Bing Liu</a> and a <a href="https://code.google.com/archive/p/word2vec/">embeddings model</a> that is in the current directory:</p>
-<pre><code class="python">from gsitk.features import simon
+<pre><code class="language-python">from gsitk.features import simon
 from nltk.corpus import opinion_lexicon
 from gensim.models.keyedvectors import KeyedVectors
 
@@ -139,20 +141,18 @@ simon_transformer = simon.Simon(lexicon=lexicon, n_lexicon_words=200, embedding=
 
 # simon_transformer has the fit() and transform() methods, so it can be used in a Pipeline
 </code></pre>
-
 <p>To enhance performance, it is recommendable to use a more complete scikit-learn pipe that implements normalization and feature selection in conjuction with the SIMON feature extraction.</p>
-<pre><code class="python">from gsitk.features import simon
+<pre><code class="language-python">from gsitk.features import simon
 
 simon_model = simon.Simon(lexicon=lexicon, n_lexicon_words=200, embedding=embedding_model)
 model = simon.simon_pipeline(simon_transformer=simon_model, percentile=25)
 
 # model also implements fit() and transform()
 </code></pre>
-
 <h2 id="word2vecfeatures">Word2VecFeatures</h2>
 <p>This feature extractor implements the generic word vector model presented in <a href="https://doi.org/10.1016/j.eswa.2017.02.002">this paper</a>.
 An example of use is shown below:</p>
-<pre><code class="python">from gsitk.features.word2vec import Word2VecFeatures
+<pre><code class="language-python">from gsitk.features.word2vec import Word2VecFeatures
 
 
 text = [
@@ -167,43 +167,38 @@ w2v_extractor = Word2VecFeatures(w2v_model_path=path, w2v_format='google_txt', c
 X = model.transform(text)
 # X is and array containing extrated features
 </code></pre>
-
 <h1 id="cite">Cite</h1>
 <p>In you use this module, please cite the following papers:</p>
 <ul>
 <li>Enhancing Deep Learning Sentiment Analysis with Ensemble Techniques in Social Applications</li>
 </ul>
-<pre><code>@article{ARAQUE2017236,
-title = &quot;Enhancing deep learning sentiment analysis with ensemble techniques in social applications&quot;,
-journal = &quot;Expert Systems with Applications&quot;,
-volume = &quot;77&quot;,
-pages = &quot;236 - 246&quot;,
-year = &quot;2017&quot;,
-issn = &quot;0957-4174&quot;,
-doi = &quot;https://doi.org/10.1016/j.eswa.2017.02.002&quot;,
-url = &quot;http://www.sciencedirect.com/science/article/pii/S0957417417300751&quot;,
-author = &quot;Oscar Araque and Ignacio Corcuera-Platas and J. Fernando Sánchez-Rada and Carlos A. Iglesias&quot;,
-keywords = &quot;Ensemble, Deep learning, Sentiment analysis, Machine learning, Natural language processing&quot;
-}
-</code></pre>
-
+<blockquote>
+<blockquote>
+<p>Oscar Araque, Ignacio Corcuera-Platas, J. Fernando Sánchez-Rada, Carlos A. Iglesias.
+Enhancing deep learning sentiment analysis with ensemble techniques in social applications,
+Expert Systems with Applications,
+Volume 77,
+2017,
+Pages 236-246,
+ISSN 0957-4174.</p>
+<p><a href="https://doi.org/10.1016/j.eswa.2017.02.002">https://doi.org/10.1016/j.eswa.2017.02.002</a>.</p>
+</blockquote>
+</blockquote>
 <ul>
 <li>A Semantic Similarity-based Perspective of Affect Lexicons for Sentiment Analysis</li>
 </ul>
-<pre><code>@article{ARAQUE2019346,
-title = &quot;A semantic similarity-based perspective of affect lexicons for sentiment analysis&quot;,
-journal = &quot;Knowledge-Based Systems&quot;,
-volume = &quot;165&quot;,
-pages = &quot;346 - 359&quot;,
-year = &quot;2019&quot;,
-issn = &quot;0950-7051&quot;,
-doi = &quot;https://doi.org/10.1016/j.knosys.2018.12.005&quot;,
-url = &quot;http://www.sciencedirect.com/science/article/pii/S0950705118305926&quot;,
-author = &quot;Oscar Araque and Ganggao Zhu and Carlos A. Iglesias&quot;,
-keywords = &quot;Sentiment analysis, Sentiment lexicon, Semantic similarity, Word embeddings&quot;,
-}
-</code></pre>
-
+<blockquote>
+<blockquote>
+<p>Oscar Araque, Ganggao Zhu, Carlos A. Iglesias.
+A semantic similarity-based perspective of affect lexicons for sentiment analysis,
+Knowledge-Based Systems,
+Volume 165,
+2019,
+Pages 346-359,
+ISSN 0950-7051.</p>
+<p><a href="https://doi.org/10.1016/j.knosys.2018.12.005">https://doi.org/10.1016/j.knosys.2018.12.005</a>.</p>
+</blockquote>
+</blockquote>
 <h1 id="support">Support</h1>
 <p>If you find bugs or want to make feature requests, please post an issue <a href="https://github.com/gsi-upm/gsitk/issues/">here</a>.
 This project is under active development.</p>
@@ -253,7 +248,6 @@ and by MOSI-AGIL-CM (grant P2013/ICE-3019, co-funded by EU Structural Funds FSE 
 </div>
     <script>var base_url = '.';</script>
     <script src="js/theme.js" defer></script>
-      <script src="search/main.js" defer></script>
     <script defer>
         window.onload = function () {
             SphinxRtdTheme.Navigation.enable(true);
@@ -265,5 +259,5 @@ and by MOSI-AGIL-CM (grant P2013/ICE-3019, co-funded by EU Structural Funds FSE 
 
 <!--
 MkDocs version : 1.1.2
-Build Date UTC : 2021-01-26 16:47:43.623050+00:00
+Build Date UTC : 2021-04-21 17:10:11.122506+00:00
 -->

@@ -15,6 +15,9 @@
   <link rel="stylesheet" href="../css/theme.css" />
   <link rel="stylesheet" href="../css/theme_extra.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" />
+  <link href="../css/ansi-colours.css" rel="stylesheet" />
+  <link href="../css/jupyter-cells.css" rel="stylesheet" />
+  <link href="../css/pandas-dataframe.css" rel="stylesheet" />
   
   <script>
     // Current page data
@@ -39,11 +42,7 @@
     <div class="wy-side-scroll">
       <div class="wy-side-nav-search">
         <a href=".." class="icon icon-home"> GSItk Documentation</a>
-        <div role="search">
-  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
-  </form>
-</div>
+        
       </div>
 
       <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
@@ -53,6 +52,10 @@
                 </ul>
                 <ul>
                     <li class="toctree-l1"><a class="reference internal" href="../publications/">Publications</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../Tutorial/">Tutorial</a>
                     </li>
                 </ul>
                 <p class="caption"><span class="caption-text">User guide</span></p>
@@ -125,7 +128,7 @@ In order to ease this kind of operation, <em>gsitk</em> offers the following typ
 </ul>
 <h2 id="direct-use">Direct use</h2>
 <p>The more straight-forward way to use the pre-processing utilities is presented as follows:</p>
-<pre><code class="python3">from gsitk.preprocess import simple, pprocess_twitter, normalize
+<pre><code class="language-python3">from gsitk.preprocess import simple, pprocess_twitter, normalize
 
 text = &quot;My grandmother is an apple. Please, believe me!&quot;
 twitter_text = &quot;@POTUS please let me enter to the USA #thanks&quot;
@@ -134,17 +137,15 @@ print('simple', simple.preprocess(text))
 print('twitter', pprocess_twitter.preprocess(twitter_text))
 print('normalize', normalize.preprocess(text))
 </code></pre>
-
 <p>These lines of code would output the following. Note how the Twitter data is transformed, normalizing the mention to an user and a hashtag.</p>
 <pre><code>simple ['my', 'grandmother', 'is', 'an', 'apple', '.', 'please', ',', 'believe', 'me', '!']
 twitter &lt;user&gt; please let me enter to the usa &lt;allcaps&gt; &lt;hastag&gt; thanks
 normalize ['my', 'grandmother', 'is', 'an', 'apple', '.', 'please', ',', 'believe', 'me', '!']
 </code></pre>
-
 <h2 id="preprocesser-interface">Preprocesser interface</h2>
 <p>To facilitate the use of the preprocessing functions, <em>gsitk</em> offers an interface that is compatible with <a href="https://scikit-learn.org/stable/modules/compose.html">scikit-learn Pipelines</a>: the <code>Preprocesser</code>.
 A simple script using this interface is:</p>
-<pre><code class="python3">from gsitk.preprocess import pprocess_twitter, Preprocesser
+<pre><code class="language-python3">from gsitk.preprocess import pprocess_twitter, Preprocesser
 
 texts = [
     &quot;@POTUS please let me enter to the USA #thanks&quot;,
@@ -152,16 +153,14 @@ texts = [
 ]
 Preprocesser(pprocess_twitter).transform(texts)
 </code></pre>
-
 <pre><code># output:
 array(['&lt;user&gt; please let me enter to the usa &lt;allcaps&gt; &lt;hastag&gt; thanks',
        &quot;if only bradley's arm was longer. best photo ever. &lt;hastag&gt; oscars&quot;],
       dtype='&lt;U66')
 </code></pre>
-
 <p>The compatibility with scikit Pipelines can be used to ease the use of preprocessing.
 For example:</p>
-<pre><code class="python3">from sklearn.pipeline import Pipeline
+<pre><code class="language-python3">from sklearn.pipeline import Pipeline
 from gsitk.preprocess import normalize, Preprocesser, JoinTransformer
 
 texts = [
@@ -176,16 +175,14 @@ preprocessing_pipe = Pipeline([
 
 preprocessing_pipe.fit_transform(texts)
 </code></pre>
-
 <pre><code># output:
 ['this cat is crazy , he is not on the mat !',
  'will no one rid me of this turbulent priest ?']
 </code></pre>
-
 <h2 id="stop-word-removal">Stop word removal</h2>
 <p>Removing stop words is a pervasive task in NLP.
 <em>gsitk</em> includes a functionality for this, using the stop word collections in NLTK.</p>
-<pre><code class="python3">from gsitk.preprocess.stopwords import StopWordsRemover
+<pre><code class="language-python3">from gsitk.preprocess.stopwords import StopWordsRemover
 
 texts = [
     &quot;this cat is crazy , he is not on the mat !&quot;,
@@ -194,13 +191,11 @@ texts = [
 
 StopWordsRemover().fit_transform(texts)
 </code></pre>
-
-<pre><code class="python"># output:
+<pre><code class="language-python"># output:
 ['cat crazy , mat !', 'one rid turbulent priest ?']
 </code></pre>
-
 <p>As it uses the NLTK stop word collections, several languages can be parsed, as in this Spanish example.</p>
-<pre><code class="python3">from gsitk.preprocess.stopwords import StopWordsRemover
+<pre><code class="language-python3">from gsitk.preprocess.stopwords import StopWordsRemover
 
 texts = [
     &quot;entre el clavel blanco y la rosa roja , su majestad escoja&quot;,
@@ -209,12 +204,10 @@ texts = [
 
 StopWordsRemover(language='spanish').fit_transform(texts)
 </code></pre>
-
-<pre><code class="python"># output:
+<pre><code class="language-python"># output:
 ['clavel blanco rosa roja , majestad escoja',
  'diez cañones banda viento popa toda vela']
 </code></pre>
-
 <h2 id="embeddings-trick">Embeddings trick</h2>
 <p>The paper <em>DepecheMood++: a Bilingual Emotion Lexicon Built Through Simple Yet Powerful Techniques</em> (<a href="https://doi.org/10.1109/TAFFC.2019.2934444">link here</a>) introduces a technique called the <strong>Embeddings trick</strong>.
 In short, it consists on replacing certain words by others using a word embedding model.
@@ -222,7 +215,7 @@ It is used to expand an existing emotion dictionary.
 In any way, we consider it is an useful technique, and has been implemented in <em>gsitk</em>, making it easier to replicate the mentioned paper.</p>
 <p>This technique is used to avoid OOV (Out Of Vocabulary) issues when using a limited lexicon.
 Consider the following reduces sentiment analysis example:</p>
-<pre><code class="python">from gsitk.preprocess.embeddings_trick import EmbeddingsTricker
+<pre><code class="language-python">from gsitk.preprocess.embeddings_trick import EmbeddingsTricker
 
 et = EmbeddingsTricker(
     model_path='projects/data/WordEmbeddings/eng/GoogleNews-vectors-negative300.bin',
@@ -237,11 +230,9 @@ ex_text = [
 
 et.fit_transform(ex_text)
 </code></pre>
-
 <pre><code># output
 [['my', 'cat', 'is', 'happy'], ['my', 'dog', 'is', 'sad']]
 </code></pre>
-
 <p>For more details on how to load and use the word embeddings for <code>EmbeddingsTricker</code>, see <a href="../features/#word2vecfeatures">features</a>.</p>
               
             </div>
@@ -288,7 +279,6 @@ et.fit_transform(ex_text)
 </div>
     <script>var base_url = '..';</script>
     <script src="../js/theme.js" defer></script>
-      <script src="../search/main.js" defer></script>
     <script defer>
         window.onload = function () {
             SphinxRtdTheme.Navigation.enable(true);
