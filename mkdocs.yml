@@ -3,9 +3,13 @@ theme: readthedocs
 nav:
   - Home: index.md
   - Publications: publications.md
+  - Tutorial: Tutorial.ipynb
   - User guide:
       - Datasets: datasets.md
       - Preprocessing: preprocessing.md
       - Feature extraction: features.md
       - Evaluation : evaluation.md
       - Classifiers: classifiers.md
+
+plugins:
+  - mknotebooks

@@ -129,3 +129,7 @@ This research work is supported by the EC through the H2020 project MixedEmotion
 the Spanish Ministry of Economy under the R&D project Semola (TEC2015-68284-R)
 and the project EmoSpaces (RTC-2016-5053-7); by ITEA3 project SOMEDI (15011);
 and by MOSI-AGIL-CM (grant P2013/ICE-3019, co-funded by EU Structural Funds FSE and FEDER).
+
+# Contact 
+
+If you want to contact the developer, please send an email to `o.araque@upm`.
