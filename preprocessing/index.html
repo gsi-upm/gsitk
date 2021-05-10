@@ -66,7 +66,7 @@
     <ul class="current">
     <li class="toctree-l2"><a class="reference internal" href="#direct-use">Direct use</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#preprocesser-interface">Preprocesser interface</a>
+    <li class="toctree-l2"><a class="reference internal" href="#preprocessor-interface">Preprocessor interface</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#stop-word-removal">Stop word removal</a>
     </li>
@@ -142,16 +142,16 @@ print('normalize', normalize.preprocess(text))
 twitter &lt;user&gt; please let me enter to the usa &lt;allcaps&gt; &lt;hastag&gt; thanks
 normalize ['my', 'grandmother', 'is', 'an', 'apple', '.', 'please', ',', 'believe', 'me', '!']
 </code></pre>
-<h2 id="preprocesser-interface">Preprocesser interface</h2>
-<p>To facilitate the use of the preprocessing functions, <em>gsitk</em> offers an interface that is compatible with <a href="https://scikit-learn.org/stable/modules/compose.html">scikit-learn Pipelines</a>: the <code>Preprocesser</code>.
+<h2 id="preprocessor-interface">Preprocessor interface</h2>
+<p>To facilitate the use of the preprocessing functions, <em>gsitk</em> offers an interface that is compatible with <a href="https://scikit-learn.org/stable/modules/compose.html">scikit-learn Pipelines</a>: the <code>Preprocessor</code>.
 A simple script using this interface is:</p>
-<pre><code class="language-python3">from gsitk.preprocess import pprocess_twitter, Preprocesser
+<pre><code class="language-python3">from gsitk.preprocess import pprocess_twitter, Preprocessor
 
 texts = [
     &quot;@POTUS please let me enter to the USA #thanks&quot;,
     &quot;If only Bradley's arm was longer. Best photo ever. #oscars&quot;
 ]
-Preprocesser(pprocess_twitter).transform(texts)
+Preprocessor(pprocess_twitter).transform(texts)
 </code></pre>
 <pre><code># output:
 array(['&lt;user&gt; please let me enter to the usa &lt;allcaps&gt; &lt;hastag&gt; thanks',
@@ -161,7 +161,7 @@ array(['&lt;user&gt; please let me enter to the usa &lt;allcaps&gt; &lt;hastag&g
 <p>The compatibility with scikit Pipelines can be used to ease the use of preprocessing.
 For example:</p>
 <pre><code class="language-python3">from sklearn.pipeline import Pipeline
-from gsitk.preprocess import normalize, Preprocesser, JoinTransformer
+from gsitk.preprocess import normalize, Preprocessor, JoinTransformer
 
 texts = [
     &quot;This cat is crazy, he is not on the mat!&quot;,
@@ -169,7 +169,7 @@ texts = [
 ]
 
 preprocessing_pipe = Pipeline([
-    ('twitter', Preprocesser(normalize)),
+    ('twitter', Preprocessor(normalize)),
     ('join', JoinTransformer())
 ])
 

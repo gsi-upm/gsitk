@@ -143,12 +143,14 @@
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>This short tutorial will teach you how to use the <em>gsitk</em> library for Sentiment Analysis.</p>
-<p>Concretely, it covers:
-- Managing datasets with the <a href="https://gsi-upm.github.io/gsitk/datasets/#dataset-manager-interface"><code>DatasetManager</code></a> utility
-- Preprocessing textual data (although included datasets are already preprocessed)
-- Extract features with models that are implemented in <em>gsitk</em>
-- Persist to disk extracted features, and load them from disk
-- Prepare an evaluation using the <a href="https://gsi-upm.github.io/gsitk/evaluation/"><code>Evaluation</code></a> interface</p>
+<p>Concretely, it covers:</p>
+<ul>
+<li>Managing datasets with the <a href="https://gsi-upm.github.io/gsitk/datasets/#dataset-manager-interface"><code>DatasetManager</code></a> utility</li>
+<li>Preprocessing textual data (although included datasets are already preprocessed)</li>
+<li>Extract features with models that are implemented in <em>gsitk</em></li>
+<li>Persist to disk extracted features, and load them from disk</li>
+<li>Prepare an evaluation using the <a href="https://gsi-upm.github.io/gsitk/evaluation/"><code>Evaluation</code></a> interface</li>
+</ul>
 <p>This tutorial has been generated using a <a href="https://jupyter.org/">jupyter notebook</a> that you may download and run locally, from <a href="https://github.com/gsi-upm/gsitk/blob/master/docs/Tutorial.ipynb">here</a>.</p>
 </div>
 </div>
@@ -485,14 +487,14 @@ normalize [&#39;the&#39;, &#39;earth&#39;, &#39;is&#39;, &#39;not&#39;, &#39;fla
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="preprocesser-interface">Preprocesser interface</h2>
+<h2 id="preprocessor-interface">Preprocessor interface</h2>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>All preprocessing utilities implement the <code>preprocess</code> method, which can be useful for integrating these methods into your work pipeline. Nevertheless, <em>gsitk</em> offers the <code>Preprocesser</code> interface to facilitate the use of preprocessers into its philosophy; as well as to include preprocessing into scikit-learn <a href="https://scikit-learn.org/stable/modules/compose.html">Pipelines</a>. A simple example is shown below:</p>
+<p>All preprocessing utilities implement the <code>preprocess</code> method, which can be useful for integrating these methods into your work pipeline. Nevertheless, <em>gsitk</em> offers the <code>Preprocessor</code> interface to facilitate the use of preprocessers into its philosophy; as well as to include preprocessing into scikit-learn <a href="https://scikit-learn.org/stable/modules/compose.html">Pipelines</a>. A simple example is shown below:</p>
 </div>
 </div>
 </div>
@@ -500,13 +502,13 @@ normalize [&#39;the&#39;, &#39;earth&#39;, &#39;is&#39;, &#39;not&#39;, &#39;fla
 <div class="input">
 
 
-<pre><code class="language-python">from gsitk.preprocess import pprocess_twitter, Preprocesser
+<pre><code class="language-python">from gsitk.preprocess import pprocess_twitter, Preprocessor
 
 texts = [
     &quot;@POTUS can I have a selfie? #thanks&quot;,
     &quot;If only Bradley's arm was longer. Best photo ever. #oscars&quot;
 ]
-Preprocesser(pprocess_twitter).transform(texts)
+Preprocessor(pprocess_twitter).transform(texts)
 </code></pre>
 
 
@@ -528,7 +530,7 @@ Preprocesser(pprocess_twitter).transform(texts)
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>As mentioned, the <code>Preprocesser</code> utility has full compatibility with scikit-learn's Pipelines. For example:</p>
+<p>As mentioned, the <code>Preprocessor</code> utility has full compatibility with scikit-learn's Pipelines. For example:</p>
 </div>
 </div>
 </div>
@@ -537,7 +539,7 @@ Preprocesser(pprocess_twitter).transform(texts)
 
 
 <pre><code class="language-python">from sklearn.pipeline import Pipeline
-from gsitk.preprocess import normalize, Preprocesser, JoinTransformer
+from gsitk.preprocess import normalize, Preprocessor, JoinTransformer
 
 texts = [
     &quot;This cat is crazy, he is not on the mat!&quot;,
@@ -545,7 +547,7 @@ texts = [
 ]
 
 preprocessing_pipe = Pipeline([
-    ('twitter', Preprocesser(normalize)),
+    ('twitter', Preprocessor(normalize)),
     ('join', JoinTransformer())
 ])
 
@@ -658,15 +660,29 @@ StopWordsRemover(language='spanish').fit_transform(texts)
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><em>gsitk</em> has several useful feature extractors. It includes the implementation of some models proposed in research works, which aids in replicability and comparison tasks.
 These techniques have been recently published in peer-reviewed publications, and are oriented to foster research.
-We show an example of the use an embedding model, M_G (<a href="https://doi.org/10.1016/j.eswa.2017.02.002">paper here</a>) for Sentiment Analysis.</p>
+We show an example of the use an embedding model, extracting word2vec features (<a href="https://doi.org/10.1016/j.eswa.2017.02.002">paper here</a>) for Sentiment Analysis, and the SIMilarity-based sentiment projectiON (SIMON) model (<a href="https://doi.org/10.1016/j.knosys.2018.12.005">paper here</a>).</p>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>First, you need to use a <a href="https://en.wikipedia.org/wiki/Word_embedding">word embedding</a> model.
-The <a href="https://radimrehurek.com/gensim/index.html">gensim library</a> includes some downloadable models, that can be accessed as shown:</p>
+<h2 id="word-embedding-model-word2vecfeatures">Word embedding model (Word2VecFeatures)</h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>This model performs an aggregation of the individual word vectors, computing an unified representation that can be used directly by a classfical machine learning classifier.
+It uses a pre-trained word embedding model to extract a vector for each word, and then applies a pooling function to all words, obtaining document-level representation. By default, the pooling function is the average.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>As a first step, import a word embedding model. Using <a href="https://radimrehurek.com/gensim/">gensim</a> makes this step easier:</p>
 </div>
 </div>
 </div>
@@ -680,6 +696,86 @@ embedding_model = api.load(&quot;glove-wiki-gigaword-50&quot;)
 </code></pre>
 
 
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+
+<pre><code class="language-python">from gsitk.features.word2vec import Word2VecFeatures
+
+w2v_transformer = Word2VecFeatures(model=embedding_model)
+</code></pre>
+
+
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+
+<pre><code class="language-python">text = [
+    ['my', 'dog', 'is', 'very', 'happy'],
+    ['my', 'cat', 'is', 'instead', 'very', 'sad'],
+]
+
+w2v_features_test = w2v_transformer.fit_transform(text)
+w2v_features_test
+</code></pre>
+
+
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="output_text output_subarea output_execute_result">
+<pre>
+<code>array([[ 0.2236732 ,  0.25583891, -0.487614  , -0.301236  ,  0.86721801,
+         0.08720819, -0.48012703,  0.03669201,  0.099744  ,  0.0686424 ,
+         0.05496354,  0.44522   , -0.11925981,  0.0202894 ,  0.58847399,
+         0.292354  ,  0.25116399,  0.470316  , -0.15011139, -0.544134  ,
+        -0.553544  ,  0.51258399,  0.36928921,  0.41198533,  0.81134399,
+        -1.76617999, -0.923298  ,  0.54818199,  0.5961172 , -0.42874679,
+         3.04592001,  0.29102398, -0.22677599,  0.087812  , -0.0293142 ,
+        -0.072712  ,  0.1456914 ,  0.24413   ,  0.05948399, -0.600286  ,
+        -0.1608764 ,  0.012316  , -0.39915799,  0.3701636 ,  0.3432422 ,
+        -0.1038574 , -0.074668  , -0.441143  ,  0.2592026 ,  0.569796  ],
+       [ 0.28759499,  0.22734876, -0.42304934, -0.26260117,  0.64443667,
+         0.12306683, -0.13500085,  0.05503167, -0.14429333,  0.1364975 ,
+         0.011965  ,  0.34951501, -0.09140483,  0.01189917,  0.49902666,
+         0.3094525 ,  0.022184  ,  0.38554393, -0.05209548, -0.37077501,
+        -0.54204166,  0.40015333,  0.29457433,  0.30822928,  0.70403166,
+        -1.60760001, -0.93711665,  0.63221   ,  0.59509267, -0.38296766,
+         2.95400006,  0.14456332, -0.09737834, -0.003224  , -0.06279167,
+         0.050218  ,  0.14238633,  0.131965  ,  0.14213333, -0.493325  ,
+        -0.159679  ,  0.1110655 , -0.28615333,  0.25916317,  0.1393735 ,
+         0.07512983,  0.0305865 , -0.33857917,  0.189849  ,  0.43066502]])</code>
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="simon-model">SIMON model</h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The main idea of the SIMON method is that given a domain lexicon, the input text is measured against it, computing a vector that encodes the similarity between the input text and the lexicon. Such a vector encodes the similarity, as given by the word embedding model, of each of the words of the analyzed text to the lexicon words. For more information, please check <a href="https://gsi-upm.github.io/gsitk/features/#simon">the documentation section</a> and the <a href="https://doi.org/10.1016/j.knosys.2018.12.005">original publication</a>.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>For using SIMON, first, you need to use a <a href="https://en.wikipedia.org/wiki/Word_embedding">word embedding</a> model.
+The <a href="https://radimrehurek.com/gensim/index.html">gensim library</a> includes some downloadable models, that can be accessed as shown:</p>
+</div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered">
@@ -704,7 +800,7 @@ lexicon = [list(opinion_lexicon.positive()), list(opinion_lexicon.negative())]
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Finally, we need to </p>
+<p>Finally, we need to configure the SIMON feature extractor. You can do this like this:</p>
 </div>
 </div>
 </div>
@@ -878,6 +974,73 @@ features.save_features(simon_features_test, 'simon_features_test') # you need to
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="classifiers">Classifiers</h1>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><em>gsitk</em> includes functionalities to predict sentiment directly from text.
+In this line of work, one of the most common approaches in Sentiment Analysis is to use a sentiment lexicon -that directly encodes subjective sentiment information- by matching the lexicon's word to those of the analyzed texts.
+<em>gsitk</em> implements this approach in the <code>LexiconSum</code> implementation.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+
+<pre><code class="language-python">from gsitk.classifiers import LexiconSum
+
+# use the existing Bing Liu's lexicon, 
+bingliu_pos = {word: 1 for word in opinion_lexicon.positive()}
+bingliu_neg = {word: -1 for word in opinion_lexicon.negative()}
+bingliu_pos.update(bingliu_neg)
+
+ls = LexiconSum(bingliu_pos)
+</code></pre>
+
+
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+
+<pre><code class="language-python">text = [
+    ['my', 'dog', 'is', 'a', 'good', 'and', 'happy', 'pet'],
+    ['my', 'cat', 'is', 'not', 'sad', 'just', 'mildly', 'bad'],
+    ['today' , 'i', 'am', 'sad'],
+]
+
+ls.predict(text)
+</code></pre>
+
+
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="output_text output_subarea output_execute_result">
+<pre>
+<code>array([ 1., -1., -1.])</code>
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>This implementation greatly eases the early stages of development, allowing users to quickly develop prototypes.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <h1 id="evaluation">Evaluation</h1>
 </div>
 </div>
@@ -1017,6 +1180,14 @@ pipelineB = Pipeline([
     ('clf', LogisticRegression(solver='liblinear')),
 ])
 pipelineB.name = 'simon'
+
+w2v_transformer = Word2VecFeatures(model=embedding_model)
+pipelineC = Pipeline([
+    ('w2v', w2v_transformer),
+    ('scale', StandardScaler()),
+    ('clf', LogisticRegression(solver='liblinear')),
+])
+pipelineC.name = 'w2v'
 </code></pre>
 
 
@@ -1039,6 +1210,11 @@ pipelineB.name = 'simon'
 )
 
 pipelineB.fit(
+    data['imdb'][data['imdb']['fold'] == 'train']['text'],
+    data['imdb'][data['imdb']['fold'] == 'train']['polarity'].values.astype(int),
+)
+
+pipelineC.fit(
     data['imdb'][data['imdb']['fold'] == 'train']['text'],
     data['imdb'][data['imdb']['fold'] == 'train']['polarity'].values.astype(int),
 )
@@ -1079,7 +1255,7 @@ datasets_evaluation = {'imdb': data['imdb'][data['imdb']['fold'] == 'test']}
 # configure evaluation
 ev = Evaluation(tuples=None,
                 datasets=datasets_evaluation,
-                pipelines=[pipelineA, pipelineB])
+                pipelines=[pipelineA, pipelineB, pipelineC])
 
 # perform evaluation, this can take a little long
 ev.evaluate()
@@ -1153,6 +1329,20 @@ ev.results
       <td>0.74892</td>
       <td>0.748805</td>
       <td>simon --&gt; scale --&gt; clf</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>imdb</td>
+      <td>None</td>
+      <td>w2v__imdb</td>
+      <td>False</td>
+      <td>0.75284</td>
+      <td>0.752973</td>
+      <td>0.75284</td>
+      <td>0.752807</td>
+      <td>0.75284</td>
+      <td>0.752807</td>
+      <td>w2v --&gt; scale --&gt; clf</td>
     </tr>
   </tbody>
 </table>
