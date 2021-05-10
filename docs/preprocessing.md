@@ -31,19 +31,19 @@ twitter <user> please let me enter to the usa <allcaps> <hastag> thanks
 normalize ['my', 'grandmother', 'is', 'an', 'apple', '.', 'please', ',', 'believe', 'me', '!']
 ```
 
-## Preprocesser interface
+## Preprocessor interface
 
-To facilitate the use of the preprocessing functions, _gsitk_ offers an interface that is compatible with [scikit-learn Pipelines](https://scikit-learn.org/stable/modules/compose.html): the `Preprocesser`.
+To facilitate the use of the preprocessing functions, _gsitk_ offers an interface that is compatible with [scikit-learn Pipelines](https://scikit-learn.org/stable/modules/compose.html): the `Preprocessor`.
 A simple script using this interface is:
 
 ```python3
-from gsitk.preprocess import pprocess_twitter, Preprocesser
+from gsitk.preprocess import pprocess_twitter, Preprocessor
 
 texts = [
     "@POTUS please let me enter to the USA #thanks",
     "If only Bradley's arm was longer. Best photo ever. #oscars"
 ]
-Preprocesser(pprocess_twitter).transform(texts)
+Preprocessor(pprocess_twitter).transform(texts)
 ```
 
 ```
@@ -58,7 +58,7 @@ For example:
 
 ```python3
 from sklearn.pipeline import Pipeline
-from gsitk.preprocess import normalize, Preprocesser, JoinTransformer
+from gsitk.preprocess import normalize, Preprocessor, JoinTransformer
 
 texts = [
     "This cat is crazy, he is not on the mat!",
@@ -66,7 +66,7 @@ texts = [
 ]
 
 preprocessing_pipe = Pipeline([
-    ('twitter', Preprocesser(normalize)),
+    ('twitter', Preprocessor(normalize)),
     ('join', JoinTransformer())
 ])
 
