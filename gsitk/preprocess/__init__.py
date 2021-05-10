@@ -15,7 +15,7 @@
 from sklearn.base import TransformerMixin
 import numpy as np
 
-class Preprocesser(TransformerMixin):
+class Preprocessor(TransformerMixin):
     def __init__(self, preprocessor):
         self.preprocessor = preprocessor
 

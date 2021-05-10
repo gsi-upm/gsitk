@@ -15,7 +15,7 @@
 import pytest
 from sklearn.pipeline import Pipeline
 
-from gsitk.preprocess import normalize, simple, Preprocesser, embeddings_trick, stopwords, JoinTransformer
+from gsitk.preprocess import normalize, simple, Preprocessor, embeddings_trick, stopwords, JoinTransformer
 
 
 @pytest.fixture
@@ -41,15 +41,15 @@ def test_clean_str(text_df):
     assert clean[1] == ['my','dog','is','running','through','the','garden',',','he','is','so','happy','!',')']
 
 
-def test_preprocesser(text_df):
-    # test preprocesser with normalize functionality
-    pp = Preprocesser(normalize)
+def test_preprocessor(text_df):
+    # test preprocessor with normalize functionality
+    pp = Preprocessor(normalize)
     preprocessed = pp.fit_transform(text_df['text'].values)
     assert preprocessed[0] ==  ['the', 'cat', 'is', 'on', 'the', 'mat', '.']
     assert preprocessed[1] == ['my','dog','is','running','through','the','garden',',','he','is','so','happy','!','smile']
 
-    # test preprocesser with simple functionality
-    pp = Preprocesser(simple)
+    # test preprocessor with simple functionality
+    pp = Preprocessor(simple)
     preprocessed = pp.fit_transform(text_df['text'].values)
     assert preprocessed[0] ==  ['the', 'cat', 'is', 'on', 'the', 'mat', '.']
     assert preprocessed[1] == ['my','dog','is','running','through','the','garden',',','he','is','so','happy','!',')']
@@ -83,7 +83,7 @@ def test_jointransformer():
 
 def test_preprocess_pipeline(text_df):
     pipe = Pipeline([
-        ('simple', Preprocesser(simple)),
+        ('simple', Preprocessor(simple)),
         ('join', JoinTransformer())
     ])
     preprocessed = pipe.fit_transform(text_df['text'].values)
