@@ -79,6 +79,20 @@ def test_word2vec(norm_text, embedding_model):
     assert x.shape == (2, model.size)
     assert (x != 0).all()
 
+def test_word2vec_load(norm_text, embedding_model):
+    model = word2vec.Word2VecFeatures(model=embedding_model)
+    assert isinstance(model.model, Word2Vec) or \
+        isinstance(model.model, KeyedVectors)
+    assert isinstance(model.model.key_to_index, dict)
+    assert isinstance(model.model.index_to_key, list)
+    assert len(model.model.key_to_index) > 0
+    assert len(model.model.index_to_key) > 0
+
+    x = model.transform(norm_text)
+    assert isinstance(x, np.ndarray)
+    assert x.shape == (2, model.size)
+    assert (x != 0).all()
+
 
 def test_sswe(norm_text):
     model = sswe.SSWE(download=False)

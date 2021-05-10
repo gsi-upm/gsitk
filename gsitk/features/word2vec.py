@@ -37,12 +37,15 @@ class Word2VecFeatures(Embedding, TransformerMixin):
     """
     Implements the word2vec operations.
     """
-    def __init__(self, w2v_model_path, w2v_format='gensim',
+    def __init__(self, w2v_model_path=None, w2v_format='gensim', model=None,
                  convolution=[1, 0, 0]):
         super(Word2VecFeatures, self).__init__(convolution)
-        self.w2v_model_path = w2v_model_path
-        self.w2v_format = w2v_format
-        self.model = self.load_w2v()
+        if not w2v_model_path is None and not w2v_format is None:
+            self.w2v_model_path = w2v_model_path
+            self.w2v_format = w2v_format
+            self.model = self.load_w2v()
+        elif not model is None:
+            self.model = model
         self.size = self._size()
 
 
