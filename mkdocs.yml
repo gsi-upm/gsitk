@@ -8,8 +8,8 @@ nav:
       - Datasets: datasets.md
       - Preprocessing: preprocessing.md
       - Feature extraction: features.md
-      - Evaluation : evaluation.md
       - Classifiers: classifiers.md
+      - Evaluation : evaluation.md
 
 plugins:
   - mknotebooks
