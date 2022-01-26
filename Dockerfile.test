@@ -11,6 +11,7 @@ RUN python -m nltk.downloader averaged_perceptron_tagger
 RUN python -m nltk.downloader wordnet
 RUN python -m nltk.downloader vader_lexicon
 RUN python -m nltk.downloader wordnet_ic
+RUN python -m nltk.downloader omw-1.4
 
 ENV DATA_PATH=/usr/src/app/tests/data
 

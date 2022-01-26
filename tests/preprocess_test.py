@@ -15,7 +15,10 @@
 import pytest
 from sklearn.pipeline import Pipeline
 
-from gsitk.preprocess import normalize, simple, Preprocessor, embeddings_trick, stopwords, JoinTransformer
+from gsitk.preprocess import (
+    normalize, simple, pprocess_twitter, Preprocessor, embeddings_trick, \
+    stopwords, JoinTransformer
+)
 
 
 @pytest.fixture
@@ -40,20 +43,37 @@ def test_clean_str(text_df):
     assert clean[0] ==  ['the', 'cat', 'is', 'on', 'the', 'mat', '.']
     assert clean[1] == ['my','dog','is','running','through','the','garden',',','he','is','so','happy','!',')']
 
+def test_pprocess_twitter_light(text_df):
+    for text in text_df.text:
+        pprocess_twitter.preprocess(text, light=True)
 
-def test_preprocessor(text_df):
+def test_preprocessor_normalize(text_df):
     # test preprocessor with normalize functionality
     pp = Preprocessor(normalize)
     preprocessed = pp.fit_transform(text_df['text'].values)
     assert preprocessed[0] ==  ['the', 'cat', 'is', 'on', 'the', 'mat', '.']
     assert preprocessed[1] == ['my','dog','is','running','through','the','garden',',','he','is','so','happy','!','smile']
 
+def test_preprocessor_simple(text_df):
     # test preprocessor with simple functionality
     pp = Preprocessor(simple)
     preprocessed = pp.fit_transform(text_df['text'].values)
     assert preprocessed[0] ==  ['the', 'cat', 'is', 'on', 'the', 'mat', '.']
     assert preprocessed[1] == ['my','dog','is','running','through','the','garden',',','he','is','so','happy','!',')']
 
+def test_preprocessor_pprocess_twitter(text_df):
+    # test preprocessor with twitter functionality
+    pp = Preprocessor(pprocess_twitter)
+    preprocessed = pp.fit_transform(text_df['text'].values)
+    assert preprocessed[0] == 'the cat is on the mat.'
+    assert preprocessed[1] == 'my dog is running through the garden, he is so happy! <smile>'
+
+def test_preprocessor_pprocess_twitter_light(text_df):
+    # test preprocessor with twitter functionality
+    pp = Preprocessor(pprocess_twitter)
+    preprocessed = pp.fit_transform(text_df['text'].values)
+    assert preprocessed[0] == 'the cat is on the mat.'
+    assert preprocessed[1] == 'my dog is running through the garden, he is so happy! <smile>'
 
 def test_embeddings_tricker():
     et = embeddings_trick.EmbeddingsTricker(model_path='tests/data/w2v_model', w2v_format='google_txt',

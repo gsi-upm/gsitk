@@ -36,7 +36,7 @@ def hashtag(text):
     if hashtag_body.isupper():
         result = "<hashtag> {} <allcaps>".format(hashtag_body)
     else:
-        result = "<hastag> {}".format(hashtag_body)
+        result = "<hashtag> {}".format(hashtag_body)
     return result
 
 def allcaps(text):
@@ -72,13 +72,42 @@ def tokenize(text):
 
     return text.lower()
 
+def tokenize_light(text):
+    '''
+    Light version of the tokenizer, oriented to simpler preprocessing tasks.
+    Includes anonimization, hashtag and smileys parsing.
+    '''
+
+    # Different regex parts for smiley faces
+    eyes = r"[8:=;]"
+    nose = r"['`\-]?"
+
+    # function so code less repetitive
+    def re_sub(pattern, repl):
+        return re.sub(pattern, repl, text, flags=FLAGS)
+
+    text = re_sub(r"https?:\/\/\S+\b|www\.(\w+\.)+\S*", "<url>")
+    text = re_sub(r"/"," / ")
+    text = re_sub(r"@\w+", "<user>")
+    text = re_sub(r"{}{}[)dD]+|[)dD]+{}{}".format(eyes, nose, nose, eyes), "<smile>")
+    text = re_sub(r"{}{}p+".format(eyes, nose), "<lolface>")
+    text = re_sub(r"{}{}\(+|\)+{}{}".format(eyes, nose, nose, eyes), "<sadface>")
+    text = re_sub(r"{}{}[\/|l*]".format(eyes, nose), "<neutralface>")
+    text = re_sub(r"<3","<heart>")
+    text = re_sub(r"[-+]?[.\d]*[\d]+[:,.\d]*", "<number>")
+    text = text.lower()
+
+    return text
+
 
 def normalize_text(data):
     text_data = data['text'].apply(tokenize)
     return text_data
 
 
-def preprocess(text):
+def preprocess(text, light=False):
+    if light:
+        return tokenize_light(text)
     return tokenize(text)
 
 
