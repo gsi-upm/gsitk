@@ -5,6 +5,8 @@ It uses _numpy_, _pandas_ and related libraries to easy the development.
 
 _gsitk_ manages datasets, features, classifiers and evaluation techniques, so that writing an evaluation pipeline results fast and simple.
 
+Full documentation can be found [here](https://gsi-upm.github.io/gsitk/).
+
 # Installation and use
 
 ## Installation
