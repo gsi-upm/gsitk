@@ -6,6 +6,8 @@ It uses _numpy_, _pandas_ and related libraries to easy the development.
 _gsitk_ manages datasets, features, classifiers and evaluation techniques, so that writing an evaluation pipeline results fast and simple.
 It is designed to be compatible with scikit-learn's [Pipeline](https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline).
 
+Full documentation can be found [here](https://gsi-upm.github.io/gsitk/).
+
 # Installation and use
 
 ## Installation

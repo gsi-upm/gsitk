@@ -41,7 +41,7 @@ w2v_extractor = Word2VecFeatures(
     w2v_format='google_txt',
     convolution=[1,0,0])
 X = model.transform(text)
-# X is and array containing extrated features
+# X is an array containing extracted features
 ```
 
 The parameters are configured as follows:
@@ -175,7 +175,7 @@ array([[-0.03692475,  0.69433968, -0.10123377, -0.20750073, -0.4521742 ,
 
 Saving an already extracted feature set to load it later is very useful.
 There are times when extracting features takes a long time, and we need to persist those valuable features to disk.
-For this, use the persistence utility in _gistk_.
+For this, use the persistence utility in _gsitk_.
 See the example:
 
 ```python
